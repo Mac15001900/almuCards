@@ -5,4 +5,3 @@ let testCardData = {
     "value": 17,
     "image": "atomBomb"
 };
-
