@@ -35,7 +35,13 @@ let Card = new Phaser.Class({
 
     initialize:
     function Card(scene, data, x, y) {
-        this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5);
+        switch (data.element)
+        {
+            case 'fire': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
+            case 'forest': this.sprite = scene.add.image(x, y, 'card_forest').setScale(0.5); break;
+            case 'water': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
+        }  
+        
         this.data = data;
 
         this.image = scene.add.image(x, y - this.sprite.height / 4 + 32 + 32, data.image);
