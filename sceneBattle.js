@@ -12,10 +12,12 @@ let SceneBattle = new Phaser.Class({
         this.load.image('testCard', 'assets/testCard.png');
         this.load.image('testCardFire', 'assets/testCardFire.png');
         this.load.image('atomBomb', 'assets/atomBomb.png');
+        this.load.image('card_forest', 'assets/card_forest.png');
     },
 
     create: function () {
         this.testCard = new Card(this, testCardData, 200, 200);
+        this.testCard = new Card(this, forest_1, 400, 200);
     },
 
     update: function (timestep, dt) {
