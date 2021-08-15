@@ -11,5 +11,5 @@ let forest_1 = {
     "name": "Zoledz",
     "element": "forest",
     "value": 1,
-    "image": "forest_1"
+    "image": "im_forest_1"
 };
