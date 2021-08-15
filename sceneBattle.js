@@ -54,7 +54,7 @@ let Card = new Phaser.Class({
 
         this.valueText = scene.add.text(0, 0, data.value, { font: "32px Arial", fill: "#000000", wordWrap: { width: this.sprite.width - 20 } });
         this.valueText.setOrigin(0.5, 0.5);
-        this.valueText.x = x + this.sprite.width / 2;
+        this.valueText.x = x;
         this.valueText.y = y + this.sprite.height / 4 - 28;
 
         // this.name
