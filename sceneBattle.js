@@ -17,7 +17,7 @@ let SceneBattle = new Phaser.Class({
 
     create: function () {
         //this.testCard = new Card(this, testCardData, 200, 200);
-        this.forest_Card = new Card(this, testCardData, 400, 200);
+        //this.forest_Card = new Card(this, testCardData, 400, 200);
     },
 
     update: function (timestep, dt) {
