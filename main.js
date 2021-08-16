@@ -11,6 +11,39 @@ const DOM = {
 
 var gs = { received: false, }; //GameState, this is shared with any player that joins the game
 
+class Effect_data  //Because I think in C
+{
+    constructor(type, value, target, start_condition, end_condition)
+    {
+        this.type = type;
+        this.value = value;
+        this.target = target;
+        this.start_condition = start_condition;
+        this.end_condition = end_condition;
+    }
+}
+
+class Card_data
+{
+    constructor(ID, name, element, value, effect, flavour_text, image)
+    {
+        this.ID = ID;
+        this.name = name;
+        this.element = element;
+        this.value = value;
+        this.effect = effect;
+        this.flavour_text = flavour_text;
+        this.image = image;
+    }
+}
+
+class Deck_data
+{
+    constructor(cards_array)
+    {
+        this.cards_array = cards_array;
+    }
+}
 
 //Name and room selection
 function getUsername() {
@@ -203,19 +236,16 @@ function receiveMessage(data, serverMember) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function Check_who_wins(card_a, card_b, current_effects)
+{
+    if (card_a.element === 'Water' && card_b.element === 'Fire' || card_a.element === 'Fire' && card_b.element === 'Forest' || card_a.element === 'Forest' && card_b.element === 'Water')
+        return 1;
+    if (card_a.element === 'Water' && card_b.element === 'Forest' || card_a.element === 'Fire' && card_b.element === 'Water' || card_a.element === 'Forest' && card_b.element === 'Fire')
+        return -1;
+    if (card_a.value > card_b.value)
+        return 1;
+    if (card_a.value < card_b.value)
+        return -1;
+    return 0;
+}
 
