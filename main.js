@@ -249,3 +249,32 @@ function Check_who_wins(card_a, card_b, current_effects)
     return 0;
 }
 
+function Get_effect_string(effect)
+{
+    if (effect === "")
+        return "";
+    var ret = "";
+    switch (effect.start_condition)
+    {
+        case "next_turn": ret += "W nastepnej turze "; break;
+        case "after_turn": ret += "Na koncu tej tury "; break;
+    }
+    switch (effect.target)
+    {
+        case "player_card": ret += "twoja karta "; break;
+        case "enemy_card": ret += "karta przeciwnika "; break;
+        case "player": ret += "mozesz "; break;
+    }
+    switch (effect.type)
+    {
+        case "value_change": ret += "otrzymuje ";
+            if (effect.value > 0)
+                ret += "+";
+            break;
+        case "card_replace": ret += "odrzucic karty i dobrac nowe w ilosci: "; break;
+    }
+    if (effect.value != 0)
+        ret += effect.value;
+    return ret;
+}
+
