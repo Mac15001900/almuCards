@@ -12,7 +12,8 @@ let forest_1 =
     "name": "Zoledz",
     "element": "forest",
     "value": 1,
-    "image": "im_forest_1"
+    "image": "im_forest_1",
+    "effect": ""
 };
 
 let forest_13 =
@@ -21,7 +22,8 @@ let forest_13 =
     "name": "Apokalipsa baobabow",
     "element": "forest",
     "value": 13,
-    "image": "im_forest_13"
+    "image": "im_forest_13",
+    "effect": ""
 };
 
 let fire_1 =
@@ -30,7 +32,8 @@ let fire_1 =
     "name": "Zapalka",
     "element": "fire",
     "value": 1,
-    "image": "im_fire_1"
+    "image": "im_fire_1",
+    "effect": ""
 };
 
 let fire_12 =
@@ -40,7 +43,8 @@ let fire_12 =
     "flavour": "Calkiem jeszcze nowa",
     "element": "fire",
     "value": 12,
-    "image": "im_fire_12"
+    "image": "im_fire_12",
+    "effect": ""
 };
 
 let water_1 =
@@ -49,5 +53,37 @@ let water_1 =
     "name": "Rosa",
     "element": "water",
     "value": 1,
-    "image": "im_water_1"
+    "image": "im_water_1",
+    "effect": ""
 };
+
+let plus5_forest =
+{
+    "ID": 39,
+    "name": "Plantacja",
+    "element": "forest",
+    "value": 4,
+    "image": "im_plus5_forest",
+    "effect": plus5
+};
+
+let minus5_fire =
+{
+    "ID": 43,
+    "name": "Polano",
+    "element": "fire",
+    "value": 4,
+    "image": "im_minus5_fire",
+    "effect": minus5
+};
+
+let replace1_water =
+{
+    "ID": 47,
+    "name": "Starorzecze",
+    "element": "water",
+    "value": 4,
+    "image": "im_replace1_water",
+    "effect": replace1
+};
+
