@@ -19,6 +19,9 @@ let SceneBattle = new Phaser.Class({
         this.load.image('im_forest_1', 'assets/forest_1.png');
         this.load.image('im_forest_13', 'assets/forest_13.png');
         this.load.image('im_water_1', 'assets/water_1.png');
+        this.load.image('im_plus5_forest', 'assets/plus5_forest.png');
+        this.load.image('im_minus5_fire', 'assets/minus5_fire.png');
+        this.load.image('im_replace1_water', 'assets/replace1_water.png');
     },
 
     create: function ()
@@ -28,6 +31,9 @@ let SceneBattle = new Phaser.Class({
         this.water_1 = new Card(this, water_1, 600, 200);
         this.forest_13 = new Card(this, forest_13, 800, 200);
         this.fire_12 = new Card(this, fire_12, 1000, 200);
+        this.plus5_forest = new Card(this, plus5_forest, 200, 500);
+        this.minus5_fire = new Card(this, minus5_fire, 400, 500);
+        this.replace1_water = new Card(this, replace1_water, 600, 500);
     },
 
     update: function (timestep, dt)
@@ -72,78 +78,19 @@ let Card = new Phaser.Class({
             this.valueText.x = x;
             this.valueText.y = y + 585 * this.scale;
 
+            this.effectTextfont = (60 * this.scale).toString() + "px Arial";
+            this.effectText = scene.add.text(0, 0, Get_effect_string(data.effect), { font: this.effectTextfont, fill: "#000000", wordWrap: { width: 700 * this.scale }, align: 'left'});
+            this.effectText.setOrigin(0, 0);
+            this.effectText.x = x - 325 * this.scale;
+            this.effectText.y = y + 75 * this.scale;
+
             this.flavourTextfont = "italic " + (60 * this.scale).toString() + "px Arial";
-            this.flavourText = scene.add.text(0, 0, data.flavour, { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 750 * this.scale }, align: 'left' });
-            this.flavourText.setOrigin(0, 0.5);
-            this.flavourText.x = x - 350 * this.scale;
-            this.flavourText.y = y + 440 * this.scale;
+            this.flavourText = scene.add.text(0, 0, data.flavour, { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 700 * this.scale }, align: 'left'});
+            this.flavourText.setOrigin(0, 0);
+            this.flavourText.x = x - 325 * this.scale;
+            this.flavourText.y = y + 400 * this.scale;
 
             // this.name
         },
 
 });
-
-/*let SceneBattle = new Phaser.Class({
-
-    Extends: Phaser.Scene,
-
-    initialize:
-    function SceneBattle() {
-        Phaser.Scene.call(this, { key: 'SceneBattle' });
-    },
-
-    preload: function () {
-        console.log('Preload in battle scene');
-        this.load.image('testCard', 'assets/testCard.png');
-        this.load.image('testCardFire', 'assets/testCardFire.png');
-        this.load.image('atomBomb', 'assets/atomBomb.png');
-        this.load.image('card_forest', 'assets/card_forest.png');
-        this.load.image('im_forest_1', 'assets/forest_1.png');
-    },
-
-    create: function () {
-        this.testCard = new Card(this, testCardData, 200, 200);
-        this.testCard = new Card(this, forest_1, 400, 200);
-    },
-
-    update: function (timestep, dt) {
-
-    },
-
-    receiveMessage: function (data) {
-        console.log(data);
-    },
-
-});
-
-
-let Card = new Phaser.Class({
-
-    initialize:
-        function Card(scene, data, x, y)
-        {
-            this.data = data;
-            switch (data.element)
-            {
-                case 'fire': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
-                case 'forest': this.sprite = scene.add.image(x, y, 'card_forest').setScale(0.5); break;
-                case 'water': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
-            }  
-
-            this.image = scene.add.image(x, y - this.sprite.height / 4 + 32 + 32, data.image);
-            this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
-
-            this.nameText = scene.add.text(0, 0, data.name, { font: "16px Arial", fill: "#ff0000", wordWrap: { width: this.sprite.width - 20 } });
-            this.nameText.setOrigin(0.5, 0.5);
-            this.nameText.x = x;
-            this.nameText.y = y - this.sprite.height / 4 + 16;
-
-            this.valueText = scene.add.text(0, 0, data.value, { font: "32px Arial", fill: "#ffffff", wordWrap: { width: this.sprite.width - 20 } });
-            this.valueText.setOrigin(0.5, 0.5);
-            this.valueText.x = x + this.sprite.width / 2;
-            this.valueText.y = y + this.sprite.height / 4 - 28;
-
-            // this.name
-        },
-
-});*/
