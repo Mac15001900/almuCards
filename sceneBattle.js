@@ -35,29 +35,30 @@ let SceneBattle = new Phaser.Class({
 let Card = new Phaser.Class({
 
     initialize:
-    function Card(scene, data, x, y) {
-        this.data = data;
-        switch (data.element)
+        function Card(scene, data, x, y)
         {
-            case 'fire': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
-            case 'forest': this.sprite = scene.add.image(x, y, 'card_forest').setScale(0.2); break;
-            case 'water': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
-        }
+            this.data = data;
+            switch (data.element)
+            {
+                case 'fire': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
+                case 'forest': this.sprite = scene.add.image(x, y, 'card_forest').setScale(0.5); break;
+                case 'water': this.sprite = scene.add.image(x, y, 'testCardFire').setScale(0.5); break;
+            }  
 
-        this.image = scene.add.image(x + 2, y + 10, data.image).setScale(0.2);
-        //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
+            this.image = scene.add.image(x, y - this.sprite.height / 4 + 32 + 32, data.image);
+            this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
-        this.nameText = scene.add.text(0, 0, data.name, { font: "16px Arial", fill: "#ff0000", wordWrap: { width: this.sprite.width - 20 } });
-        this.nameText.setOrigin(0.5, 0.5);
-        this.nameText.x = x;
-        this.nameText.y = y - this.sprite.height / 4 + 16;
+            this.nameText = scene.add.text(0, 0, data.name, { font: "16px Arial", fill: "#ff0000", wordWrap: { width: this.sprite.width - 20 } });
+            this.nameText.setOrigin(0.5, 0.5);
+            this.nameText.x = x;
+            this.nameText.y = y - this.sprite.height / 4 + 16;
 
-        this.valueText = scene.add.text(0, 0, data.value, { font: "32px Arial", fill: "#000000", wordWrap: { width: this.sprite.width - 20 } });
-        this.valueText.setOrigin(0.5, 0.5);
-        this.valueText.x = x;
-        this.valueText.y = y + this.sprite.height / 4 - 28;
+            this.valueText = scene.add.text(0, 0, data.value, { font: "32px Arial", fill: "#ffffff", wordWrap: { width: this.sprite.width - 20 } });
+            this.valueText.setOrigin(0.5, 0.5);
+            this.valueText.x = x + this.sprite.width / 2;
+            this.valueText.y = y + this.sprite.height / 4 - 28;
 
-        // this.name
-    },
+            // this.name
+        },
 
 });
