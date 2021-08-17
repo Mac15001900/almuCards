@@ -240,15 +240,21 @@ function Check_who_wins(card_a, card_b, current_effects)
 {
     effects_table = Give_effects_table(card_a, card_b, current_effects);    //translate effects to simple table
     //elements check
-    if (card_a.element === 'Water' && card_b.element === 'Fire' || card_a.element === 'Fire' && card_b.element === 'Forest' || card_a.element === 'Forest' && card_b.element === 'Water')
-        return 1;
-    if (card_a.element === 'Water' && card_b.element === 'Forest' || card_a.element === 'Fire' && card_b.element === 'Water' || card_a.element === 'Forest' && card_b.element === 'Fire')
-        return -1;
+    if (!effects_table[7])
+    {
+        if (card_a.element === 'Water' && card_b.element === 'Fire' || card_a.element === 'Fire' && card_b.element === 'Forest' || card_a.element === 'Forest' && card_b.element === 'Water')
+            return 1 * effects_table[4];
+        if (card_a.element === 'Water' && card_b.element === 'Forest' || card_a.element === 'Fire' && card_b.element === 'Water' || card_a.element === 'Forest' && card_b.element === 'Fire')
+            return -1 * effects_table[4];
+    }
     //value check
-    if ((card_a.value + effects_table[0]) * effects_table[2] > (card_b.value + effects_table[1]) * effects_table[3])
-        return 1;
-    if ((card_a.value + effects_table[0]) * effects_table[2] < (card_b.value + effects_table[1]) * effects_table[3])
-        return -1;
+    if (!effects_table[8])
+    {
+        if ((card_a.value + effects_table[0]) * effects_table[2] > (card_b.value + effects_table[1]) * effects_table[3])
+            return 1 * effects_table[5];
+        if ((card_a.value + effects_table[0]) * effects_table[2] < (card_b.value + effects_table[1]) * effects_table[3])
+            return -1 * effects_table[5];
+    }
     return 0;
 }
 
@@ -298,7 +304,7 @@ function Update_current_effects(card_a, card_b, score, current_effects)
 
 function Give_effects_table(card_a, card_b, current_effects)
 {
-    var ret = [0, 0, 1, 1];
+    var ret = [0, 0, 1, 1, 1, 1, 0, 0];
     if (card_a.effect != "")
         ret = Translate_effect(card_a.effect, ret);
     if (card_b.effect != "")
@@ -320,6 +326,10 @@ function Translate_effect(effect, table)
                 else
                     table[1] += effect.value;
                 break;
+            case "weaker_element": table[4] = -1; break;
+            case "lower_value": table[5] = -1; break;
+            case "only_elements": table[6] = 1; break;
+            case "only_values": table[7] = 1; break;
         }
     }
     return table;
@@ -355,6 +365,10 @@ function Get_effect_string(effect)
                 ret += "+";
             break;
         case "card_replace": ret += "odrzucic karty i dobrac nowe w ilosci: "; break;
+        case "weaker_element": ret += "wygrywa slabszy zywiol "; break;
+        case "weaker_value": ret += "przy tych samych zywiolach wygrywa nizsza wartosc "; break;
+        case "only_elements": ret += "licza sie tylko zywioly "; break;
+        case "only_values": ret += "licza sie tylko wartosci "; break;
     }
     if (effect.value != 0)
         ret += effect.value;
