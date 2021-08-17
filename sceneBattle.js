@@ -22,6 +22,8 @@ let SceneBattle = new Phaser.Class({
         this.load.image('im_plus5_forest', 'assets/plus5_forest.png');
         this.load.image('im_minus5_fire', 'assets/minus5_fire.png');
         this.load.image('im_replace1_water', 'assets/replace1_water.png');
+        this.load.image('im_weaker_fire', 'assets/weaker_fire.png');
+        this.load.image('im_only_values', 'assets/only_values.png');
     },
 
     create: function ()
@@ -34,8 +36,9 @@ let SceneBattle = new Phaser.Class({
         this.plus5_forest = new Card(this, plus5_forest, 200, 500);
         this.minus5_fire = new Card(this, minus5_fire, 400, 500);
         this.replace1_water = new Card(this, replace1_water, 600, 500);
+        this.weaker_fire = new Card(this, weaker_fire, 800, 500);
+        this.only_values_forest = new Card(this, only_values_forest, 1000, 500);
     },
-
     update: function (timestep, dt)
     {
 
