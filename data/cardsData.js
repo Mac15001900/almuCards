@@ -87,3 +87,24 @@ let replace1_water =
     "effect": replace1
 };
 
+let weaker_fire =
+{
+    "ID": 49,
+    "name": "Grecki ogien",
+    "element": "fire",
+    "value": 2,
+    "image": "im_weaker_fire",
+    "effect": weaker_element
+};
+
+let only_values_forest =
+{
+    "ID": 57,
+    "name": "Kosci",
+    "flavour": "Zostaly rzucone",
+    "element": "forest",
+    "value": 6,
+    "image": "im_only_values",
+    "effect": only_values
+};
+
