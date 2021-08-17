@@ -27,3 +27,43 @@ let replace1 =
     "start_condition": "",
     "end_condition": "one_use"
 };
+
+let weaker_element =
+{
+    "type": "weaker_element",
+    "value": 0,
+    "target": "",
+    "activation": "next_turn",
+    "start_condition": "",
+    "end_condition": "one_use"
+};
+
+let lower_value =
+{
+    "type": "lower_value",
+    "value": 0,
+    "target": "",
+    "activation": "next_turn",
+    "start_condition": "",
+    "end_condition": "one_use"
+};
+
+let only_elements =
+{
+    "type": "only_elements",
+    "value": 0,
+    "target": "",
+    "activation": "next_turn",
+    "start_condition": "",
+    "end_condition": "one_use"
+};
+
+let only_values =
+{
+    "type": "only_values",
+    "value": 0,
+    "target": "",
+    "activation": "next_turn",
+    "start_condition": "",
+    "end_condition": "one_use"
+};
