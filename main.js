@@ -11,7 +11,7 @@ const DOM = {
 
 var gs = { received: false, }; //GameState, this is shared with any player that joins the game
 
-class Effect_data  //Because I think in C
+/*class Effect_data  //Because I think in C
 {
     constructor(type, value, target, start_condition, end_condition)
     {
@@ -43,7 +43,7 @@ class Deck_data
     {
         this.cards_array = cards_array;
     }
-}
+}*/
 
 //Name and room selection
 function getUsername() {
@@ -238,15 +238,91 @@ function receiveMessage(data, serverMember) {
 
 function Check_who_wins(card_a, card_b, current_effects)
 {
+    effects_table = Give_effects_table(card_a, card_b, current_effects);    //translate effects to simple table
+    //elements check
     if (card_a.element === 'Water' && card_b.element === 'Fire' || card_a.element === 'Fire' && card_b.element === 'Forest' || card_a.element === 'Forest' && card_b.element === 'Water')
         return 1;
     if (card_a.element === 'Water' && card_b.element === 'Forest' || card_a.element === 'Fire' && card_b.element === 'Water' || card_a.element === 'Forest' && card_b.element === 'Fire')
         return -1;
-    if (card_a.value > card_b.value)
+    //value check
+    if ((card_a.value + effects_table[0]) * effects_table[2] > (card_b.value + effects_table[1]) * effects_table[3])
         return 1;
-    if (card_a.value < card_b.value)
+    if ((card_a.value + effects_table[0]) * effects_table[2] < (card_b.value + effects_table[1]) * effects_table[3])
         return -1;
     return 0;
+}
+
+function Update_current_effects(card_a, card_b, score, current_effects)
+{
+    var updated_effects;
+    for (var i = 0; i < current_effects.length; i++)    //checking if any current effects tranfer to next rund
+    {
+        switch (current_effects[i].end_condition)
+        {
+            case "two_use":
+                updated_effects.push(current_effects[i]);
+                updated_effects[updated_effects.length - 1].end_condition = "one_use";
+                break;
+            case "until_win":
+                if (score != 1)
+                    updated_effects.push(current_effects[i]);
+                break;
+            case "until_lose":
+                if (score != -1)
+                    updated_effects.push(current_effects[i]);
+                break;
+        }
+    }
+    if (card_a.effect != "")    //adding effects from current cards
+    {
+        if (card_a.effect.start_condition === "" || (card_a.effect.start_condition === "if_win" && score === 1) ||
+            (card_a.effect.start_condition === "if_lose" && score === -1) || (card_a.effect.start_condition === "if_draw" && score === 0))
+        {
+            updated_effects.push(card_a.effect);
+            if (updated_effects[updated_effects.length - 1].activation === "next_turn")
+                updated_effects[updated_effects.length - 1].activation = "this_turn";
+        }
+    }
+    if (card_b.effect != "")
+    {
+        if (card_b.effect.start_condition === "" || (card_b.effect.start_condition === "if_win" && score === 1) ||
+            (card_b.effect.start_condition === "if_lose" && score === -1) || (card_b.effect.start_condition === "if_draw" && score === 0))
+        {
+            updated_effects.push(card_b.effect);
+            if (updated_effects[updated_effects.length - 1].activation === "next_turn")
+                updated_effects[updated_effects.length - 1].activation = "this_turn";
+        }
+    }
+    return updated_effects;
+}
+
+function Give_effects_table(card_a, card_b, current_effects)
+{
+    var ret = [0, 0, 1, 1];
+    if (card_a.effect != "")
+        ret = Translate_effect(card_a.effect, ret);
+    if (card_b.effect != "")
+        ret = Translate_effect(card_b.effect, ret);
+    for (var i = 0; i < current_effects.length; i++)
+        ret = Translate_effect(current_effects[i], ret);
+    return ret;
+}
+
+function Translate_effect(effect, table)
+{
+    if (effect.activation === "this_turn")
+    {
+        switch (effect.type)
+        {
+            case "value_change":
+                if (effect.target === "player_card")
+                    table[0] += effect.value;
+                else
+                    table[1] += effect.value;
+                break;
+        }
+    }
+    return table;
 }
 
 function Get_effect_string(effect)
@@ -256,8 +332,15 @@ function Get_effect_string(effect)
     var ret = "";
     switch (effect.start_condition)
     {
-        case "next_turn": ret += "W nastepnej turze "; break;
-        case "after_turn": ret += "Na koncu tej tury "; break;
+        case "if_win": ret += "jesli ta karta wygra "; break;
+        case "if_lose": ret += "jesli ta karta przegra "; break;
+        case "if_draw": ret += "jesli ta karta zremisuje "; break;
+    }
+    switch (effect.activation)
+    {
+        case "this_turn": ret += "podczas tej tury "; break;
+        case "next_turn": ret += "w nastepnej turze "; break;
+        case "after_turn": ret += "pod koniec tej tury "; break;
     }
     switch (effect.target)
     {
@@ -275,6 +358,7 @@ function Get_effect_string(effect)
     }
     if (effect.value != 0)
         ret += effect.value;
+    ret = ret.charAt(0).toUpperCase() + ret.slice(1);   //making first letter big
     return ret;
 }
 
