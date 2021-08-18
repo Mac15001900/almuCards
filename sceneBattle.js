@@ -109,7 +109,7 @@ let Card = new Phaser.Class({
             this.visual.setScale(1.05);
             this.visual.y -= 10;
             this.outline.setVisible(true);
-            //TODO Zmiana 'depth', przy ręce z wieloma kartami
+            //TODO Zmiana 'depth', przy ręce z wieloma kartami nachodzącymi na siebie
         });
         this.sprite.on('pointerout', () => {
             this.visual.setScale(1);
@@ -136,32 +136,37 @@ let Hand = new Phaser.Class({
         this.size = size;
         this.cards = [];
         this.deck = deck;
+        this.scene = scene;
         this.cardY = scene.sys.game.canvas.height - this.params.cardBaseHeight * this.params.cardScale / 2 - this.params.bottomPadding;
         console.assert(size > 0);
         console.assert(deck.length >= size);
+        this.drawUntilLimit();
+    },
+
+    drawCard: function () {
+        this.cards.push(new Card(this.scene, this.deck.pop(), 0, this.cardY, this.params.cardScale));
+        this.repositionCards(this.scene);
+    },
+
+    drawUntilLimit: function () {
         while (this.cards.length < this.size) {
             this.drawCard(scene);
         }
     },
 
-    drawCard: function (scene) {
-        this.cards.push(new Card(scene, this.deck.pop(), 0, this.cardY, this.params.cardScale));
-        this.repositionCards(scene);
-    },
-
-    removeCard: function (scene, card) {
+    removeCard: function (card) {
         let i = this.cards.indexOf(card);
         console.assert(i >= 0);
         let removed = this.cards.splice(i, 1);
         removed[0].visual.removeAll(true); //Usuwa wszystkie obrazki i tekst należące do karty
-        this.repositionCards(scene);
+        this.repositionCards();
     },
 
-    repositionCards: function (scene) {
+    repositionCards: function () {
         let cardWidth = this.params.cardBaseWidth * this.params.cardScale;
         let padding = this.params.cardPadding;
         let fullWidth = this.cards.length * cardWidth + (this.cards.length - 1) * padding;
-        let screenWidth = scene.sys.game.canvas.width;
+        let screenWidth = this.scene.sys.game.canvas.width;
         if (fullWidth <= screenWidth) {
             for (let i = 0; i < this.cards.length; i++) {
                 this.cards[i].visual.x = screenWidth / 2 - fullWidth / 2 + i * (cardWidth + padding) + cardWidth / 2;
