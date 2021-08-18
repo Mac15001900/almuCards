@@ -10,7 +10,7 @@ let cardData = {
     forest_1: {
         "ID": 0,
         "name": "forest_1",
-        "displayName": "Zoledz",
+        "displayName": "Żolędź",
         "element": ELEMENT.FOREST,
         "value": 1,
         "image": "im_forest_1",
@@ -42,7 +42,7 @@ let cardData = {
     }, forest_5: {
         "ID": 4,
         "name": "forest_5",
-        "displayName": "Sosna karlowata",
+        "displayName": "Sosna karłowata",
         "element": ELEMENT.FOREST,
         "value": 5,
         "image": "im_forest_5",
@@ -50,7 +50,7 @@ let cardData = {
     }, forest_6: {
         "ID": 5,
         "name": "forest_6",
-        "displayName": "Dab",
+        "displayName": "Dąb",
         "element": ELEMENT.FOREST,
         "value": 6,
         "image": "im_forest_6",
@@ -66,7 +66,7 @@ let cardData = {
     }, forest_13: {
         "ID": 12,
         "name": "forest_13",
-        "displayName": "Apokalipsa baobabow",
+        "displayName": "Apokalipsa baobabów",
         "element": ELEMENT.FOREST,
         "value": 13,
         "image": "im_forest_13",
@@ -74,7 +74,7 @@ let cardData = {
     }, fire_1: {
         "ID": 13,
         "name": "fire_1",
-        "displayName": "Zapalka",
+        "displayName": "Zapałka",
         "element": ELEMENT.FIRE,
         "value": 1,
         "image": "im_fire_1",
@@ -82,7 +82,7 @@ let cardData = {
     }, fire_2: {
         "ID": 14,
         "name": "fire_2",
-        "displayName": "Swieczka",
+        "displayName": "Świeczka",
         "element": ELEMENT.FIRE,
         "value": 2,
         "image": "im_fire_2",
@@ -106,7 +106,7 @@ let cardData = {
     }, fire_5: {
         "ID": 17,
         "name": "fire_5",
-        "displayName": "Male ognisko",
+        "displayName": "Małe ognisko",
         "element": ELEMENT.FIRE,
         "value": 5,
         "image": "im_fire_5",
@@ -114,7 +114,7 @@ let cardData = {
     }, fire_6: {
         "ID": 18,
         "name": "fire_6",
-        "displayName": "Duze ognisko",
+        "displayName": "Duże ognisko",
         "element": ELEMENT.FIRE,
         "value": 6,
         "image": "im_fire_6",
@@ -155,7 +155,7 @@ let cardData = {
     }, water_3: {
         "ID": 28,
         "name": "water_3",
-        "displayName": "Kaluza",
+        "displayName": "Kałuża",
         "element": ELEMENT.WATER,
         "value": 3,
         "image": "im_water_3",
@@ -227,7 +227,7 @@ let cardData = {
     }, only_values_forest: {
         "ID": 57,
         "name": "only_values_forest",
-        "displayName": "Kosci",
+        "displayName": "Kości",
         "flavour": "Zostaly rzucone",
         "element": ELEMENT.FOREST,
         "value": 6,

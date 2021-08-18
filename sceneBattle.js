@@ -117,7 +117,7 @@ let Card = new Phaser.Class({
 
         //this.nameTextfont = (100 * scale).toString() + "px Arial";
         this.nameTextfont = ((100 * 12 / (Math.max(data.name.length - 12, 0) + 12)) * scale) + "px Arial";
-        this.nameText = scene.add.text(0, 0, data.name, { font: this.nameTextfont, fill: "#000000" });
+        this.nameText = scene.add.text(0, 0, data.displayName, { font: this.nameTextfont, fill: "#000000" });
         this.nameText.setOrigin(0.5, 0.5);
         //this.nameText.x = x;
         this.nameText.y = - 525 * scale;
