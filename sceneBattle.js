@@ -29,8 +29,15 @@ let SceneBattle = new Phaser.Class({
         this.load.image('card_forest', 'assets/card_forest.png');
         this.load.image('card_water', 'assets/card_water.png');
 
+        //Obrazki z kart
+        let imagesToLoad = DeckBank.getImages(this.userDeck, this.opponentDeck);
+
+        for (let image in imagesToLoad) {
+            this.load.image(imagesToLoad[image], 'assets/cardImages/' + imagesToLoad[image] + '.png');
+        }
+
         //Obrazki kart
-        this.load.image('im_fire_1', 'assets/fire_1.png');
+        /*this.load.image('im_fire_1', 'assets/fire_1.png');
         this.load.image('im_fire_2', 'assets/fire_2.png');
         this.load.image('im_fire_3', 'assets/fire_3.png');
         this.load.image('im_fire_4', 'assets/fire_4.png');
@@ -57,7 +64,7 @@ let SceneBattle = new Phaser.Class({
         this.load.image('im_minus5_fire', 'assets/minus5_fire.png');
         this.load.image('im_replace1_water', 'assets/replace1_water.png');
         this.load.image('im_weaker_fire', 'assets/weaker_fire.png');
-        this.load.image('im_only_values', 'assets/only_values.png');
+        this.load.image('im_only_values', 'assets/only_values.png');*/
     },
 
     create: function () {
@@ -112,7 +119,7 @@ let Card = new Phaser.Class({
         this.outline.setDepth(-5);
         this.outline.setVisible(false);
 
-        this.image = scene.add.image(0, - 200 * scale, data.image).setScale(scale);
+        this.image = scene.add.image(0, - 200 * scale, data.image || data.name).setScale(scale);
         //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
         //this.nameTextfont = (100 * scale).toString() + "px Arial";

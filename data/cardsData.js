@@ -6,191 +6,169 @@ const ELEMENT =
         WATER: 3
     };
 
+//TODO: Prosty sposób na dodawanie kart, które mają wersję z każdym żywiołem (np. wartość ELEMENT.ALL, i puszczać to przez jakiś konwerter)
 let cardData = {
-    forest_1: {
+    basic_forest_1: {
         "ID": 0,
-        "name": "forest_1",
-        "displayName": "Żolędź",
+        "name": "basic_forest_1",
+        "displayName": "Żołądź",
         "element": ELEMENT.FOREST,
         "value": 1,
-        "image": "im_forest_1",
         "effect": ""
-    }, forest_2: {
+    }, basic_forest_2: {
         "ID": 1,
-        "name": "forest_2",
+        "name": "basic_forest_2",
         "displayName": "Szyszka",
         "element": ELEMENT.FOREST,
         "value": 2,
-        "image": "im_forest_2",
         "effect": ""
-    }, forest_3: {
+    }, basic_forest_3: {
         "ID": 2,
-        "name": "forest_3",
+        "name": "basic_forest_3",
         "displayName": "Sadzonka",
         "element": ELEMENT.FOREST,
         "value": 3,
-        "image": "im_forest_3",
         "effect": ""
-    }, forest_4: {
+    }, basic_forest_4: {
         "ID": 3,
-        "name": "forest_4",
+        "name": "basic_forest_4",
         "displayName": "Krzak",
         "element": ELEMENT.FOREST,
         "value": 4,
-        "image": "im_forest_4",
         "effect": ""
-    }, forest_5: {
+    }, basic_forest_5: {
         "ID": 4,
-        "name": "forest_5",
+        "name": "basic_forest_5",
         "displayName": "Sosna karłowata",
         "element": ELEMENT.FOREST,
         "value": 5,
-        "image": "im_forest_5",
         "effect": ""
-    }, forest_6: {
+    }, basic_forest_6: {
         "ID": 5,
-        "name": "forest_6",
+        "name": "basic_forest_6",
         "displayName": "Dąb",
         "element": ELEMENT.FOREST,
         "value": 6,
-        "image": "im_forest_6",
         "effect": ""
-    }, forest_7: {
+    }, basic_forest_7: {
         "ID": 6,
-        "name": "forest_7",
+        "name": "basic_forest_7",
         "displayName": "Zagajnik",
         "element": ELEMENT.FOREST,
         "value": 7,
-        "image": "im_forest_7",
         "effect": ""
-    }, forest_13: {
+    }, basic_forest_13: {
         "ID": 12,
-        "name": "forest_13",
+        "name": "basic_forest_13",
         "displayName": "Apokalipsa baobabów",
         "element": ELEMENT.FOREST,
         "value": 13,
-        "image": "im_forest_13",
         "effect": ""
-    }, fire_1: {
+    }, basic_fire_1: {
         "ID": 13,
-        "name": "fire_1",
+        "name": "basic_fire_1",
         "displayName": "Zapałka",
         "element": ELEMENT.FIRE,
         "value": 1,
-        "image": "im_fire_1",
         "effect": ""
-    }, fire_2: {
+    }, basic_fire_2: {
         "ID": 14,
-        "name": "fire_2",
+        "name": "basic_fire_2",
         "displayName": "Świeczka",
         "element": ELEMENT.FIRE,
         "value": 2,
-        "image": "im_fire_2",
         "effect": ""
-    }, fire_3: {
+    }, basic_fire_3: {
         "ID": 15,
-        "name": "fire_3",
+        "name": "basic_fire_3",
         "displayName": "Zimne ognie",
         "element": ELEMENT.FIRE,
         "value": 3,
-        "image": "im_fire_3",
         "effect": ""
-    }, fire_4: {
+    }, basic_fire_4: {
         "ID": 16,
-        "name": "fire_4",
+        "name": "basic_fire_4",
         "displayName": "Pochodnia",
         "element": ELEMENT.FIRE,
         "value": 4,
-        "image": "im_fire_4",
         "effect": ""
-    }, fire_5: {
+    }, basic_fire_5: {
         "ID": 17,
-        "name": "fire_5",
+        "name": "basic_fire_5",
         "displayName": "Małe ognisko",
         "element": ELEMENT.FIRE,
         "value": 5,
-        "image": "im_fire_5",
         "effect": ""
-    }, fire_6: {
+    }, basic_fire_6: {
         "ID": 18,
-        "name": "fire_6",
+        "name": "basic_fire_6",
         "displayName": "Duże ognisko",
         "element": ELEMENT.FIRE,
         "value": 6,
-        "image": "im_fire_6",
         "effect": ""
-    }, fire_7: {
+    }, basic_fire_7: {
         "ID": 19,
-        "name": "fire_7",
+        "name": "basic_fire_7",
         "displayName": "Fajerwerki",
         "element": ELEMENT.FIRE,
         "value": 7,
-        "image": "im_fire_7",
         "effect": ""
-    }, fire_12: {
+    }, basic_fire_12: {
         "ID": 24,
-        "name": "fire_12",
+        "name": "basic_fire_12",
         "displayName": "Bomba atomowa",
         "flavour": "Calkiem jeszcze nowa",
         "element": ELEMENT.FIRE,
         "value": 12,
-        "image": "im_fire_12",
         "effect": ""
-    }, water_1: {
+    }, basic_water_1: {
         "ID": 26,
-        "name": "water_1",
+        "name": "basic_water_1",
         "displayName": "Rosa",
         "element": ELEMENT.WATER,
         "value": 1,
-        "image": "im_water_1",
         "effect": ""
-    }, water_2: {
+    }, basic_water_2: {
         "ID": 27,
-        "name": "water_2",
+        "name": "basic_water_2",
         "displayName": "Kropla wody",
         "element": ELEMENT.WATER,
         "value": 2,
-        "image": "im_water_2",
         "effect": ""
-    }, water_3: {
+    }, basic_water_3: {
         "ID": 28,
-        "name": "water_3",
+        "name": "basic_water_3",
         "displayName": "Kałuża",
         "element": ELEMENT.WATER,
         "value": 3,
-        "image": "im_water_3",
         "effect": ""
-    }, water_4: {
+    }, basic_water_4: {
         "ID": 29,
-        "name": "water_4",
+        "name": "basic_water_4",
         "displayName": "Szklanka wody",
         "element": ELEMENT.WATER,
         "value": 4,
-        "image": "im_water_4",
         "effect": ""
-    }, water_5: {
+    }, basic_water_5: {
         "ID": 30,
-        "name": "water_5",
+        "name": "basic_water_5",
         "displayName": "Deszcz",
         "element": ELEMENT.WATER,
         "value": 5,
-        "image": "im_water_5",
         "effect": ""
-    }, water_6: {
+    }, basic_water_6: {
         "ID": 31,
-        "name": "water_6",
+        "name": "basic_water_6",
         "displayName": "Staw",
         "element": ELEMENT.WATER,
         "value": 6,
-        "image": "im_water_6",
         "effect": ""
-    }, water_7: {
+    }, basic_water_7: {
         "ID": 32,
-        "name": "water_7",
+        "name": "basic_water_7",
         "displayName": "Rzeka",
         "element": ELEMENT.WATER,
         "value": 7,
-        "image": "im_water_7",
         "effect": ""
     }, plus5_forest: {
         "ID": 39,
@@ -198,7 +176,6 @@ let cardData = {
         "displayName": "Plantacja",
         "element": ELEMENT.FOREST,
         "value": 4,
-        "image": "im_plus5_forest",
         "effect": plus5
     }, minus5_fire: {
         "ID": 43,
@@ -206,7 +183,6 @@ let cardData = {
         "displayName": "Polano",
         "element": ELEMENT.FIRE,
         "value": 4,
-        "image": "im_minus5_fire",
         "effect": minus5
     }, replace1_water: {
         "ID": 47,
@@ -214,7 +190,6 @@ let cardData = {
         "displayName": "Starorzecze",
         "element": ELEMENT.WATER,
         "value": 4,
-        "image": "im_replace1_water",
         "effect": replace1
     }, weaker_fire: {
         "ID": 49,
@@ -222,7 +197,6 @@ let cardData = {
         "displayName": "Grecki ogien",
         "element": ELEMENT.FIRE,
         "value": 2,
-        "image": "im_weaker_fire",
         "effect": weaker_element
     }, only_values_forest: {
         "ID": 57,
@@ -231,27 +205,27 @@ let cardData = {
         "flavour": "Zostaly rzucone",
         "element": ELEMENT.FOREST,
         "value": 6,
-        "image": "im_only_values",
         "effect": only_values
     }
 };
 
+//TODO: W sumie to można by to przenieść do cardLogic.js jak go stworzymy, tu powinny być dane a nie tyle logiki
 let DeckBank = {
     MIN_DECK_SIZE: 13 + 5,
 
-    //Zwraca listę nazw kart tworzących podstawową talię, zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
+    //Zwraca podstawową talię (w postaci nazw), zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
     getBasicDeck: function (minValue = 1, maxValue = 7) {
         let res = [];
         for (let i = minValue; i <= maxValue; i++) {
-            res.push("fire_" + i);
-            res.push("water_" + i);
-            res.push("forest_" + i);
+            res.push("basic_fire_" + i);
+            res.push("basic_water_" + i);
+            res.push("basic_forest_" + i);
         }
         return res;
     },
 
     getTestDeck: function () {
-        let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "fire_12"];
+        let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "basic_fire_12"];
         return this.getBasicDeck(1, 7).concat(specialCardList);
     },
 
@@ -259,9 +233,21 @@ let DeckBank = {
         return names.map(n => cardData[n]);
     },
 
-    //Sprawdza, czy w talii nie ma czegoś dziwnego
-    validateDeck: function (deck) {
-        console.assert(deck.length >= this.MIN_DECK_SIZE); //Talia musi zawierać minimalną ilość kart
+    //Zwraca listę obrazków na kartach w talii (lub taliach), usuwając duplikaty
+    getImages: function (deck, deck2 = []) {
+        let res = [];
+        let combined = deck.concat(deck2);
+        if (typeof combined[0] === "string") combined = this.getCardsFromNames(combined);
+        for (var i = 0; i < combined.length; i++) {
+            if (combined[i].image) res.push(combined[i].image);
+            else res.push(combined[i].name);
+        }
+        return Array.from(new Set(res)); //Konwersja do Set usuwa duplikaty
+    },
+
+    //Sprawdza, czy w talii nie ma czegoś dziwnego.
+    validateDeck: function (deck, checkLength = true) {
+        if (checkLength) console.assert(deck.length >= this.MIN_DECK_SIZE); //Talia musi zawierać minimalną ilość kart
 
         deck.forEach(function (card) {
             console.assert(card); //Karty muszą istnieć
