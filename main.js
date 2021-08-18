@@ -376,3 +376,34 @@ function Get_effect_string(effect)
     return ret;
 }
 
+function Get_card_by_id(ID)
+{
+    switch (ID)
+    {
+        case 0: return forest_1;
+        case 1: return forest_2;
+        case 2: return forest_3;
+        case 3: return forest_4;
+        case 4: return forest_5;
+        case 5: return forest_6;
+        case 6: return forest_7;
+        //reszta podstawowego lasu
+        case 13: return fire_1;
+        case 14: return fire_2;
+        case 15: return fire_3;
+        case 16: return fire_4;
+        case 17: return fire_5;
+        case 18: return fire_6;
+        case 19: return fire_7;
+        //reszta podstawowego ognia
+        case 26: return water_1;
+        case 27: return water_2;
+        case 28: return water_3;
+        case 29: return water_4;
+        case 30: return water_5;
+        case 31: return water_6;
+        case 32: return water_7;
+    }
+    console.log("Nie ma karty pasujacej do ID " + ID);
+}
+
