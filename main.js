@@ -260,7 +260,7 @@ function Check_who_wins(card_a, card_b, current_effects)
 
 function Update_current_effects(card_a, card_b, score, current_effects)
 {
-    var updated_effects;
+    var updated_effects = [];
     for (var i = 0; i < current_effects.length; i++)    //checking if any current effects tranfer to next rund
     {
         switch (current_effects[i].end_condition)
