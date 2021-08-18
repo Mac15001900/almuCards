@@ -1,3 +1,9 @@
+const PHASE =
+{
+    REST: 0,
+    MOVE: 1
+};
+
 let SceneBattle = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -60,16 +66,16 @@ let SceneBattle = new Phaser.Class({
         this.weaker_fire = new Card(this, weaker_fire, 800, 500, 0.2);
         this.only_values_forest = new Card(this, only_values_forest, 1000, 500, 0.2);*/
 
-        //this.testDeck = [fire_1, forest_1, water_1, forest_13, fire_12, plus5_forest, minus5_fire, replace1_water, weaker_fire, only_values_forest, fire_1, forest_1, water_1, forest_13, fire_12, plus5_forest, minus5_fire, replace1_water, weaker_fire, only_values_forest];
-        //Phaser.Actions.Shuffle(this.testDeck);
-        //this.testHand = new Hand(this, 5, this.testDeck, 600);
+        /*this.testDeck = [fire_1, forest_1, water_1, forest_13, fire_12, plus5_forest, minus5_fire, replace1_water, weaker_fire, only_values_forest, fire_1, forest_1, water_1, forest_13, fire_12, plus5_forest, minus5_fire, replace1_water, weaker_fire, only_values_forest];
+        Phaser.Actions.Shuffle(this.testDeck);
+        this.testHand = new Hand(this, 5, this.testDeck, 600);
         this.deck1 = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, forest_7, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, fire_7, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
         Phaser.Actions.Shuffle(this.deck1);
         this.hand1 = new Hand(this, 5, this.deck1, 600);
         this.deck2 = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, forest_7, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, fire_7, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
         Phaser.Actions.Shuffle(this.deck2);
-        this.hand2 = new Hand(this, 5, this.deck2, 300);
-        this.testBattle = new Battle();
+        this.hand2 = new Hand(this, 5, this.deck2, 300);*/
+        this.testBattle = new Battle(this);
     },
     update: function (timestep, dt)
     {
@@ -86,9 +92,10 @@ let SceneBattle = new Phaser.Class({
 let Card = new Phaser.Class({
 
     initialize:
-        function Card(scene, data, x, y, scale)
+        function Card(scene, data, x, y, scale, hand)
         {
             this.scale = scale;
+            this.hand = hand;
             this.data = data; //Informacje o karcie (żywioł, wartość itp.)
             this.visual = scene.add.container(x, y); //Wizualne elementy karty
 
@@ -135,8 +142,19 @@ let Card = new Phaser.Class({
 
             this.sprite.setInteractive().on('pointerup', () =>
             {
-                console.log("Kilknieto " + this.nameText.text);
-                scene.testBattle.Add_card(this);
+                switch (this.hand.phase)
+                {
+                    case PHASE.MOVE:
+                        console.log("Kilknieto " + this.nameText.text);
+                        this.hand.phase = PHASE.REST;
+                        scene.testBattle.Add_card(this);
+                        this.hand.removeCard(scene, this);
+                        this.hand.drawCard(scene);
+                        break;
+                    case PHASE.REST:
+                        console.log("Juz wybrales swoja karte.");
+                        break;
+                }
             });
 
             this.sprite.on('pointerover', () =>
@@ -175,6 +193,7 @@ let Hand = new Phaser.Class({
             this.size = size;
             this.cards = [];
             this.deck = deck;
+            this.phase = PHASE.MOVE;
             this.cardY = scene.sys.game.canvas.height - this.params.cardBaseHeight * this.params.cardScale / 2 - this.params.bottomPadding;
             console.assert(size > 0);
             console.assert(deck.length >= size);
@@ -186,7 +205,7 @@ let Hand = new Phaser.Class({
 
     drawCard: function (scene)
     {
-        this.cards.push(new Card(scene, this.deck.pop(), 0, this.cardY, this.params.cardScale));
+        this.cards.push(new Card(scene, this.deck.pop(), 0, this.cardY, this.params.cardScale, this));
         this.repositionCards(scene);
     },
 
@@ -227,9 +246,16 @@ let Hand = new Phaser.Class({
 let Battle = new Phaser.Class({
 
     initialize:
-        function Battle()
+        function Battle(scene)
         {
             this.cards = [];
+            this.effects = [];
+            this.playerDeck = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, plus5_forest, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, minus5_fire, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
+            this.enemyDeck = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, plus5_forest, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, minus5_fire, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
+            Phaser.Actions.Shuffle(this.playerDeck);
+            Phaser.Actions.Shuffle(this.enemyDeck);
+            this.playerHand = new Hand(scene, 5, this.playerDeck, 600);
+            this.enemyHand = new Hand(scene, 5, this.enemyDeck, 300);
         },
 
     Add_card: function (new_card)
@@ -237,14 +263,17 @@ let Battle = new Phaser.Class({
         this.cards.push(new_card);
         if (this.cards.length >= 2)
         {
-            var score = Check_who_wins(this.cards[0].data, this.cards[1].data, []);
+            var score = Check_who_wins(this.cards[0].data, this.cards[1].data, this.effects);
+            this.effects = Update_current_effects(this.cards[0].data, this.cards[1].data, score, this.effects);
             switch (score)
             {
                 case 1: console.log(this.cards[0].data.name + " wins!"); break;
                 case -1: console.log(this.cards[1].data.name + " wins!"); break;
-                case 0: console.log("It's draw"); break;
+                case 0: console.log("It's a draw"); break;
             }
             this.cards = [];    //czyszczenie tablicy
+            this.playerHand.phase = PHASE.MOVE;
+            this.enemyHand.phase = PHASE.MOVE;
         }
     }
 });
