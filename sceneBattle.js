@@ -13,6 +13,15 @@ let SceneBattle = new Phaser.Class({
         Phaser.Scene.call(this, { key: 'SceneBattle' });
     },
 
+    init: function (data) {
+        this.userDrone = data.userDrone;
+        this.opponentDrone = data.opponentDrone;
+        this.userDeck = DeckBank.getCardsFromNames(data.userDeck);
+        this.opponentDeck = DeckBank.getCardsFromNames(data.opponentDeck);
+        DeckBank.validateDeck(this.userDeck);
+        DeckBank.validateDeck(this.opponentDeck);
+    },
+
     preload: function () {
         console.log('Preload in battle scene');
         //Bazowe karty. Muszą być rozmiaru 1300x800 (przynajmniej dopóki nie napiszemy Card ładniej)
@@ -72,7 +81,7 @@ let SceneBattle = new Phaser.Class({
         this.deck2 = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, forest_7, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, fire_7, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
         Phaser.Actions.Shuffle(this.deck2);
         this.hand2 = new Hand(this, 5, this.deck2, 300);*/
-        this.testBattle = new Battle(this);
+        this.testBattle = new Battle(this, this.userDeck, this.opponentDeck);
     },
     update: function (timestep, dt) {
 
@@ -107,25 +116,25 @@ let Card = new Phaser.Class({
         //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
         //this.nameTextfont = (100 * scale).toString() + "px Arial";
-        this.nameTextfont = ((100 * 12 / (Math.max(data.name.length - 12, 0) + 12)) * scale).toString() + "px Arial";
+        this.nameTextfont = ((100 * 12 / (Math.max(data.name.length - 12, 0) + 12)) * scale) + "px Arial";
         this.nameText = scene.add.text(0, 0, data.name, { font: this.nameTextfont, fill: "#000000" });
         this.nameText.setOrigin(0.5, 0.5);
         //this.nameText.x = x;
         this.nameText.y = - 525 * scale;
 
-        this.valueTextfont = "bold " + (140 * scale).toString() + "px Arial";
+        this.valueTextfont = "bold " + (140 * scale) + "px Arial";
         this.valueText = scene.add.text(0, 0, data.value, { font: this.valueTextfont, fill: "#000000" });
         this.valueText.setOrigin(0.5, 0.5);
         //this.valueText.x = x;
         this.valueText.y = 585 * scale;
 
-        this.effectTextfont = (60 * scale).toString() + "px Arial";
+        this.effectTextfont = (60 * scale) + "px Arial";
         this.effectText = scene.add.text(0, 0, Get_effect_string(data.effect), { font: this.effectTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
         this.effectText.setOrigin(0, 0);
         this.effectText.x = - 325 * scale;
         this.effectText.y = + 75 * scale;
 
-        this.flavourTextfont = "italic " + (60 * scale).toString() + "px Arial";
+        this.flavourTextfont = "italic " + (60 * scale) + "px Arial";
         this.flavourText = scene.add.text(0, 0, data.flavour, { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
         this.flavourText.setOrigin(0, 0);
         this.flavourText.x = - 325 * scale;
@@ -231,11 +240,11 @@ let Hand = new Phaser.Class({
 let Battle = new Phaser.Class({
 
     initialize:
-    function Battle(scene) {
+    function Battle(scene, userDeck, opponentDeck) {
         this.cards = [];
         this.effects = [];
-        this.playerDeck = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, plus5_forest, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, minus5_fire, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
-        this.enemyDeck = [forest_1, forest_2, forest_3, forest_4, forest_5, forest_6, plus5_forest, fire_1, fire_2, fire_3, fire_4, fire_5, fire_6, minus5_fire, water_1, water_2, water_3, water_4, water_5, water_6, water_7];
+        this.playerDeck = userDeck;
+        this.enemyDeck = opponentDeck;
         Phaser.Actions.Shuffle(this.playerDeck);
         Phaser.Actions.Shuffle(this.enemyDeck);
         this.playerHand = new Hand(scene, 5, this.playerDeck, 600);

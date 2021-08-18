@@ -1,16 +1,6 @@
 if (!debugConfig) window.debugConfig = {}; //If debug config is not present, assume all options are false
 
-//References to dynamic DOM elements
-const DOM = {
-    membersList: document.querySelector('#membersList'),
-    messages: document.querySelector('#messages'),
-    input: document.querySelector('#textInput'),
-    exampleButton: document.querySelector('#exampleButton'),
-    exampleInput: document.querySelector('#exampleInput'),
-};
-
 var gs = { received: false, }; //GameState, this is shared with any player that joins the game
-
 /*class Effect_data  //Because I think in C
 {
     constructor(type, value, target, start_condition, end_condition)
@@ -74,11 +64,11 @@ function getRoomName() {
     var roomFromURL = (new URLSearchParams(window.location.search)).get('room');
     if (roomFromURL) return roomFromURL;
 
-    //If that fails, ask the user for it. If removing DOM, try to make 'shareableLink' accessible another way
+    //If that fails, ask the user for it. 
     var chosenName = prompt(s.enter_room_name);
     while (!chosenName) chosenName = prompt(s.enter_room_name);
     var shareableLink = encodeURI(window.location.origin + window.location.pathname + "?room=" + chosenName);
-    addMessageToListDOM(s.shareable_link + " " + shareableLink);
+    //addMessageToListDOM(s.shareable_link + " " + shareableLink);
     return chosenName;
 }
 
@@ -129,14 +119,24 @@ let game = new Phaser.Game({
             debug: false
         }
     },
-    scene: [SceneBattle],
+    scene: [ScenePreBattle, SceneBattle],
 });
+
+function getActiveScene() {
+    for (var i = 0; i < game.scene.scenes.length; i++) {
+        if (game.scene.scenes[i].scene.settings.active) {
+            return (game.scene.scenes[i]);
+        }
+    }
+    console.error('No active scene found');
+}
 
 
 //Networking
 const ROOM_BASE = 'observable-main-'
 const CHANNEL_ID = 'OQgQpPaAFSHuouGK';
 let roomName = ROOM_BASE + getRoomName();
+let members = [];
 
 function getMember(input) {
     let id = input;
@@ -175,6 +175,8 @@ drone.on('open', error => {
             return console.error(error);
         }
         console.log('Successfully joined room');
+        let activeScene = getActiveScene();
+        if (activeScene.networkConnected) activeScene.networkConnected();
     });
 
     // List of currently online members, emitted once
@@ -184,28 +186,25 @@ drone.on('open', error => {
             //This is what happens when the player joins an empty room
             gs.received = true;
         }
-        //updateMembersDOM();
     });
 
     // User joined the room
     room.on('member_join', member => {
         if (isDebugger(member)) return;
         members.push(member);
-        addMessageToListDOM(s.joined_game, member);
         if (gs.received) {
             gs.memberData = members;
             sendMessage('welcome', gs);
         }
-        //updateMembersDOM();
+        let activeScene = getActiveScene();
+        if (activeScene.memberJoined) activeScene.memberJoined(member);
     });
 
     // User left the room
     room.on('member_leave', ({ id }) => {
         if (!getMember(id)) return; //If they don't exist, it was probably the debugger
-        addMessageToListDOM(s.left_game, getMember(id));
         const index = members.findIndex(member => member.id === id);
         members.splice(index, 1);
-        //updateMembersDOM();
     });
 
     room.on('data', receiveMessage);
@@ -226,7 +225,7 @@ function receiveMessage(data, serverMember) {
                     //This is what happens after the player joins a non-empty room
                     gs = data.content;
                     //'gs' will now contain 'memberData' with all extra info about members; you might want to copy it to 'members'
-                    updateAllUI();
+                    //updateAllUI();
                 }
                 break;
             default: console.error('Unkown message type received: ' + data.type);
@@ -241,8 +240,7 @@ function receiveMessage(data, serverMember) {
 function Check_who_wins(card_a, card_b, current_effects) {
     effects_table = Give_effects_table(card_a, card_b, current_effects);    //translate effects to simple table
     //elements check
-    if (!effects_table[7])
-    {
+    if (!effects_table[7]) {
         if (card_a.element === ELEMENT.WATER && card_b.element === ELEMENT.FIRE || card_a.element === ELEMENT.FIRE && card_b.element === ELEMENT.FOREST || card_a.element === ELEMENT.FOREST && card_b.element === ELEMENT.WATER)
             return 1 * effects_table[4];
         if (card_a.element === ELEMENT.WATER && card_b.element === ELEMENT.FOREST || card_a.element === ELEMENT.FIRE && card_b.element === ELEMENT.WATER || card_a.element === ELEMENT.FOREST && card_b.element === ELEMENT.FIRE)
@@ -258,8 +256,7 @@ function Check_who_wins(card_a, card_b, current_effects) {
     return 0;
 }
 
-function Update_current_effects(card_a, card_b, score, current_effects)
-{
+function Update_current_effects(card_a, card_b, score, current_effects) {
     var updated_effects = [];
     for (var i = 0; i < current_effects.length; i++)    //checking if any current effects tranfer to next rund
     {
@@ -363,10 +360,8 @@ function Get_effect_string(effect) {
     return ret;
 }
 
-function Get_card_by_id(ID)
-{
-    switch (ID)
-    {
+function Get_card_by_id(ID) {
+    switch (ID) {
         case 0: return forest_1;
         case 1: return forest_2;
         case 2: return forest_3;
