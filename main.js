@@ -242,9 +242,9 @@ function Check_who_wins(card_a, card_b, current_effects)
     //elements check
     if (!effects_table[7])
     {
-        if (card_a.element === 'Water' && card_b.element === 'Fire' || card_a.element === 'Fire' && card_b.element === 'Forest' || card_a.element === 'Forest' && card_b.element === 'Water')
+        if (card_a.element === ELEMENT.WATER && card_b.element === ELEMENT.FIRE || card_a.element === ELEMENT.FIRE && card_b.element === ELEMENT.FOREST || card_a.element === ELEMENT.FOREST && card_b.element === ELEMENT.WATER)
             return 1 * effects_table[4];
-        if (card_a.element === 'Water' && card_b.element === 'Forest' || card_a.element === 'Fire' && card_b.element === 'Water' || card_a.element === 'Forest' && card_b.element === 'Fire')
+        if (card_a.element === ELEMENT.WATER && card_b.element === ELEMENT.FOREST || card_a.element === ELEMENT.FIRE && card_b.element === ELEMENT.WATER || card_a.element === ELEMENT.FOREST && card_b.element === ELEMENT.FIRE)
             return -1 * effects_table[4];
     }
     //value check
