@@ -256,11 +256,13 @@ function Check_who_wins(card_a, card_b, current_effects) {
     return 0;
 }
 
-function Update_current_effects(card_a, card_b, score, current_effects) {
+function Update_current_effects(card_a, card_b, score, current_effects)
+{
     var updated_effects = [];
     for (var i = 0; i < current_effects.length; i++)    //checking if any current effects tranfer to next rund
     {
-        switch (current_effects[i].end_condition) {
+        switch (current_effects[i].end_condition)
+        {
             case "two_use":
                 updated_effects.push(current_effects[i]);
                 updated_effects[updated_effects.length - 1].end_condition = "one_use";
@@ -278,24 +280,39 @@ function Update_current_effects(card_a, card_b, score, current_effects) {
     if (card_a.effect != "")    //adding effects from current cards
     {
         if (card_a.effect.start_condition === "" || (card_a.effect.start_condition === "if_win" && score === 1) ||
-            (card_a.effect.start_condition === "if_lose" && score === -1) || (card_a.effect.start_condition === "if_draw" && score === 0)) {
-            updated_effects.push(card_a.effect);
+            (card_a.effect.start_condition === "if_lose" && score === -1) || (card_a.effect.start_condition === "if_draw" && score === 0))
+        {
+            var new_effect = Object.assign({}, card_a.effect);
+            updated_effects.push(new_effect);
             if (updated_effects[updated_effects.length - 1].activation === "next_turn")
                 updated_effects[updated_effects.length - 1].activation = "this_turn";
         }
     }
-    if (card_b.effect != "") {
+    if (card_b.effect != "")
+    {
         if (card_b.effect.start_condition === "" || (card_b.effect.start_condition === "if_win" && score === 1) ||
-            (card_b.effect.start_condition === "if_lose" && score === -1) || (card_b.effect.start_condition === "if_draw" && score === 0)) {
-            updated_effects.push(card_b.effect);
+            (card_b.effect.start_condition === "if_lose" && score === -1) || (card_b.effect.start_condition === "if_draw" && score === 0))
+        {
+            var new_effect = Object.assign({}, card_b.effect);
+            updated_effects.push(new_effect);
             if (updated_effects[updated_effects.length - 1].activation === "next_turn")
                 updated_effects[updated_effects.length - 1].activation = "this_turn";
+            //nawet sobie nie wyobrażasz ile problemów sprawił mi ten fragment (głupie referencje)
+            if (updated_effects[updated_effects.length - 1].target === "player_card")   //przeciwnikowi trzeba odwrócić target, aby sam w siebie nie strzelał
+                updated_effects[updated_effects.length - 1].target = "enemy_card";
+            else if (updated_effects[updated_effects.length - 1].target === "enemy_card")
+                updated_effects[updated_effects.length - 1].target = "player_card";
+            if (updated_effects[updated_effects.length - 1].target === "player")
+                updated_effects[updated_effects.length - 1].target = "enemy";
+            else if (updated_effects[updated_effects.length - 1].target === "enemy")
+                updated_effects[updated_effects.length - 1].target = "player";
         }
     }
     return updated_effects;
 }
 
-function Give_effects_table(card_a, card_b, current_effects) {
+function Give_effects_table(card_a, card_b, current_effects)
+{
     var ret = [0, 0, 1, 1, 1, 1, 0, 0];
     if (card_a.effect != "")
         ret = Translate_effect(card_a.effect, ret);
@@ -306,9 +323,20 @@ function Give_effects_table(card_a, card_b, current_effects) {
     return ret;
 }
 
-function Translate_effect(effect, table) {
-    if (effect.activation === "this_turn") {
-        switch (effect.type) {
+function Give_afterturn_effects_table(current_effects)
+{
+    var ret = [0, 0, 0, 0];
+    for (var i = 0; i < current_effects.length; i++)
+        ret = Translate_afterturn_effect(current_effects[i], ret);
+    return ret;
+}
+
+function Translate_effect(effect, table)
+{
+    if (effect.activation === "this_turn")
+    {
+        switch (effect.type)
+        {
             case "value_change":
                 if (effect.target === "player_card")
                     table[0] += effect.value;
@@ -324,26 +352,48 @@ function Translate_effect(effect, table) {
     return table;
 }
 
-function Get_effect_string(effect) {
+function Translate_afterturn_effect(effect, table)
+{
+    if (effect.activation === "after_turn")
+    {
+        switch (effect.type)
+        {
+            case "card_replace":
+                if (effect.target === "player")
+                    table[0] += effect.value;
+                else
+                    table[1] += effect.value;
+                break;
+        }
+    }
+    return table;
+}
+
+function Get_effect_string(effect)
+{
     if (effect === "")
         return "";
     var ret = "";
-    switch (effect.start_condition) {
+    switch (effect.start_condition)
+    {
         case "if_win": ret += "jesli ta karta wygra "; break;
         case "if_lose": ret += "jesli ta karta przegra "; break;
         case "if_draw": ret += "jesli ta karta zremisuje "; break;
     }
-    switch (effect.activation) {
+    switch (effect.activation)
+    {
         case "this_turn": ret += "podczas tej tury "; break;
         case "next_turn": ret += "w nastepnej turze "; break;
         case "after_turn": ret += "pod koniec tej tury "; break;
     }
-    switch (effect.target) {
+    switch (effect.target)
+    {
         case "player_card": ret += "twoja karta "; break;
         case "enemy_card": ret += "karta przeciwnika "; break;
         case "player": ret += "mozesz "; break;
     }
-    switch (effect.type) {
+    switch (effect.type)
+    {
         case "value_change": ret += "otrzymuje ";
             if (effect.value > 0)
                 ret += "+";
@@ -360,8 +410,10 @@ function Get_effect_string(effect) {
     return ret;
 }
 
-function Get_card_by_id(ID) {
-    switch (ID) {
+/*function Get_card_by_id(ID)
+{
+    switch (ID)
+    {
         case 0: return forest_1;
         case 1: return forest_2;
         case 2: return forest_3;
@@ -387,5 +439,5 @@ function Get_card_by_id(ID) {
         case 32: return water_7;
     }
     console.log("Nie ma karty pasujacej do ID " + ID);
-}
+}*/
 
