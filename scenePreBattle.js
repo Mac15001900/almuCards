@@ -17,6 +17,7 @@ let ScenePreBattle = new Phaser.Class({
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.testDeck = DeckBank.getBasicDeck();
+        //this.testDeck = DeckBank.getTestDeck();
         this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => console.log("Clicked"), false);
     },
 

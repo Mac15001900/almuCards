@@ -214,9 +214,11 @@ let DeckBank = {
     MIN_DECK_SIZE: 13 + 5,
 
     //Zwraca podstawową talię (w postaci nazw), zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
-    getBasicDeck: function (minValue = 1, maxValue = 7) {
+    getBasicDeck: function (minValue = 1, maxValue = 7)
+    {
         let res = [];
-        for (let i = minValue; i <= maxValue; i++) {
+        for (let i = minValue; i <= maxValue; i++)
+        {
             res.push("basic_fire_" + i);
             res.push("basic_water_" + i);
             res.push("basic_forest_" + i);
@@ -224,9 +226,12 @@ let DeckBank = {
         return res;
     },
 
-    getTestDeck: function () {
-        let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "basic_fire_12"];
-        return this.getBasicDeck(1, 7).concat(specialCardList);
+    getTestDeck: function ()
+    {
+        let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
+        return this.getBasicDeck(1, 6).concat(specialCardList);
+        //let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "basic_fire_12"];
+        //return this.getBasicDeck(1, 7).concat(specialCardList);
     },
 
     getCardsFromNames: function (names) {
