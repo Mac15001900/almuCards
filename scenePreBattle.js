@@ -17,6 +17,7 @@ let ScenePreBattle = new Phaser.Class({
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.testDeck = DeckBank.getBasicDeck();
+        this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => console.log("Clicked"), false);
     },
 
     update: function (timestep, dt) {
@@ -36,6 +37,7 @@ let ScenePreBattle = new Phaser.Class({
             if (members[0].id === this.userDrone.id) this.opponentDrone = members[1];
             else this.opponentDrone = members[0];
             this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
+            this.startButton.setActive(true);
         } else {
             this.opponentText.text = "Oczekiwanie na przeciwnika...";
         }
@@ -45,6 +47,7 @@ let ScenePreBattle = new Phaser.Class({
         if (members.length === 2) {
             this.opponentDrone = newMember;
             this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
+            this.startButton.setActive(true);
         }
     },
 
