@@ -18,7 +18,7 @@ let ScenePreBattle = new Phaser.Class({
         this.spectator = false;
         //this.testDeck = DeckBank.getBasicDeck();
         this.testDeck = DeckBank.getTestDeck();
-        this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => console.log("Clicked"), false);
+        this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => sendMessage("startBattle", {}), false);
     },
 
     update: function (timestep, dt) {
@@ -26,7 +26,10 @@ let ScenePreBattle = new Phaser.Class({
     },
 
     receiveMessage: function (data) {
-        console.log(data);
+        switch (data.type) {
+            case "startBattle":
+                this.startBattle();
+        }
     },
 
     networkConnected() {
