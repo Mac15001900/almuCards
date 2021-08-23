@@ -404,9 +404,9 @@ let Battle = new Phaser.Class({
     Check_if_anyone_wins: function () {
         let userVictory = this.checkForVictory(this.points.user);
         let enemyVictory = this.checkForVictory(this.points.enemy);
-        if (userVictory && enemyVictory) console.log("Draw, somehow");
-        else if (userVictory) console.log("The user won!");
-        else if (enemyVictory) console.log("The user lost");
+        if (userVictory && enemyVictory) console.error("Remis 🤔"); //Póki co nie powinno to być możliwe
+        else if (userVictory) this.scene.scene.start('SceneVictory', { victor: this.scene.userDrone, element: userVictory });
+        else if (enemyVictory) this.scene.scene.start('SceneVictory', { victor: this.scene.opponentDrone, element: enemyVictory });
     },
 
     checkForVictory: function (playerPoints) { //Sprawdza, czy dany gracz wygrał. Jeśli tak, zwraca jakim elementem, jeśli nie, zwraca null

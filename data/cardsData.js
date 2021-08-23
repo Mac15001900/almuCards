@@ -13,19 +13,19 @@ ELEMENT.basic = [ELEMENT.FIRE, ELEMENT.WATER, ELEMENT.FOREST];
 ELEMENT.info[ELEMENT.FIRE] = {
     name: "Ogień", //Nazwa, którą może zobaczyć użytkownik
     symbol: "sym_icon_fire", //Nazwa sprite'a symbolu
-    color: 0xff0000, //Powiązany kolor
+    color: 0xFF2A00, //Powiązany kolor
     real: true, //Czy to prawdziwy element, czy coś technicznego co nie ma powiązanych kart itp.
 };
 ELEMENT.info[ELEMENT.WATER] = {
     name: "Woda",
     symbol: "sym_icon_water",
-    color: 0x0000ff,
+    color: 0x0055FF,
     real: true,
 };
 ELEMENT.info[ELEMENT.FOREST] = {
     name: "Las",
     symbol: "sym_icon_forest",
-    color: 0x00ff00,
+    color: 0x00B33C,
     real: true,
 };
 ELEMENT.info[ELEMENT.NONE] = {

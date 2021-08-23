@@ -119,7 +119,7 @@ let game = new Phaser.Game({
             debug: false
         }
     },
-    scene: [ScenePreBattle, SceneBattle],
+    scene: [ScenePreBattle, SceneBattle, SceneVictory],
 });
 
 function getActiveScene() {
