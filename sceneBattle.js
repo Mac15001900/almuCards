@@ -64,6 +64,11 @@ let SceneBattle = new Phaser.Class({
         VICTORY_ICONS_HORIZONTAL_PADDING: 50,
         VICTORY_ICONS_SPACING: 48,
         VICTORY_ICONS_SCALE: 0.45,
+
+        EFFET_ICON_HEIGHT: 250,
+        EFFET_ICON_SPACING: 48,
+        EFFET_ICON_HORIZONTAL_PADDING: 100,
+        EFFET_ICON_SCALE: 0.5,
     },
 
     create: function () {
@@ -78,8 +83,14 @@ let SceneBattle = new Phaser.Class({
         this.enemyWon = new VictoryIcons(this, enemyWonX, layout.VICTORY_ICONS_HEIGHT);
 
         //tworzenie ikonek informujących o istniejących efektach (dotyczących kart, nie ręki)
-        this.plusIcons = [new Icon(this, 1020, 180, 0.5, 'sym_icon_plus'), new Icon(this, 1020, 490, 0.5, 'sym_icon_plus')];
-        this.minusIcons = [new Icon(this, 1020, 230, 0.5, 'sym_icon_minus'), new Icon(this, 1020, 440, 0.5, 'sym_icon_minus')];
+        this.plusIcons = [
+            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_plus'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_plus')
+        ];
+        this.minusIcons = [
+            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'sym_icon_minus'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'sym_icon_minus')
+        ];
 
         this.testBattle = new Battle(this, this.userDeck);
         this.updateIcons(this.testBattle.points, []);
