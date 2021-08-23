@@ -1,10 +1,38 @@
 const ELEMENT =
     {
         NONE: 0,
-        FOREST: 1,
-        FIRE: 2,
-        WATER: 3
+        FIRE: 1,
+        WATER: 2,
+        FOREST: 3,
+
+        info: {} //Informacje o danym żywiole, przydatne w wielu miejscach
     };
+
+ELEMENT.basic = [ELEMENT.FIRE, ELEMENT.WATER, ELEMENT.FOREST];
+
+ELEMENT.info[ELEMENT.FIRE] = {
+    name: "Ogień", //Nazwa, którą może zobaczyć użytkownik
+    symbol: "sym_icon_fire", //Nazwa sprite'a symbolu
+    color: 0xff0000, //Powiązany kolor
+    real: true, //Czy to prawdziwy element, czy coś technicznego co nie ma powiązanych kart itp.
+};
+ELEMENT.info[ELEMENT.WATER] = {
+    name: "Woda",
+    symbol: "sym_icon_water",
+    color: 0x0000ff,
+    real: true,
+};
+ELEMENT.info[ELEMENT.FOREST] = {
+    name: "Las",
+    symbol: "sym_icon_forest",
+    color: 0x00ff00,
+    real: true,
+};
+ELEMENT.info[ELEMENT.NONE] = {
+    name: "Brak",
+    color: 0xaaaaaa,
+    real: false,
+};
 
 //TODO: Prosty sposób na dodawanie kart, które mają wersję z każdym żywiołem (np. wartość ELEMENT.ALL, i puszczać to przez jakiś konwerter)
 let cardData = {
@@ -214,11 +242,9 @@ let DeckBank = {
     MIN_DECK_SIZE: 13 + 5,
 
     //Zwraca podstawową talię (w postaci nazw), zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
-    getBasicDeck: function (minValue = 1, maxValue = 7)
-    {
+    getBasicDeck: function (minValue = 1, maxValue = 7) {
         let res = [];
-        for (let i = minValue; i <= maxValue; i++)
-        {
+        for (let i = minValue; i <= maxValue; i++) {
             res.push("basic_fire_" + i);
             res.push("basic_water_" + i);
             res.push("basic_forest_" + i);
@@ -226,8 +252,7 @@ let DeckBank = {
         return res;
     },
 
-    getTestDeck: function ()
-    {
+    getTestDeck: function () {
         let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
         return this.getBasicDeck(1, 6).concat(specialCardList);
         //let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "basic_fire_12"];

@@ -24,9 +24,14 @@ let SceneBattle = new Phaser.Class({
         DeckBank.validateDeck(this.opponentDeck);
     },
 
+    config: {
+        VICTORY_AMOUNT: 3, //Ilość wygranych kart potrzebna do wygrania gry
+        ALL_ELEMENTS: ELEMENT.basic, //Istniejące żywioły
+    },
+
     preload: function () {
         console.log('Preload in battle scene');
-        //Bazowe karty. Muszą być rozmiaru 1300x800 (przynajmniej dopóki nie napiszemy Card ładniej)
+        //Bazowe karty. Muszą być rozmiaru 800x1300 (przynajmniej dopóki nie napiszemy Card ładniej)
         this.load.image('card_fire', 'assets/card_fire.png');
         this.load.image('card_forest', 'assets/card_forest.png');
         this.load.image('card_water', 'assets/card_water.png');
@@ -39,7 +44,7 @@ let SceneBattle = new Phaser.Class({
         }
 
         //Obrazki symboli
-        this.load.image('sym_icon_forest', 'assets/forest_icon.png');
+        this.load.image('sym_icon_forest', 'assets/forest_icon.png'); //Symbole żywiołów muszą być 100x100
         this.load.image('sym_icon_fire', 'assets/fire_icon.png');
         this.load.image('sym_icon_water', 'assets/water_icon.png');
         this.load.image('sym_icon_plus', 'assets/plus_icon.png');
@@ -51,25 +56,33 @@ let SceneBattle = new Phaser.Class({
         this.load.image('button_cancel', 'assets/button_cancel.png');
     },
 
+    layout: {
+        WIDTH: null, //Będzie znane dopiero przy tworzeniu instancji
+        HEIGHT: null,
+
+        VICTORY_ICONS_HEIGHT: 150,
+        VICTORY_ICONS_HORIZONTAL_PADDING: 50,
+        VICTORY_ICONS_SPACING: 48,
+        VICTORY_ICONS_SCALE: 0.45,
+    },
+
     create: function () {
-        this.testBattle = new Battle(this, this.userDeck, this.opponentDeck);
+        let layout = this.layout; //Będziemy tego tu dużo używać
+        layout.WIDTH = this.sys.game.canvas.width;
+        layout.HEIGHT = this.sys.game.canvas.height;
+
 
         //tworzenie ikonek wskazujących zwycięstwo graczy
-        this.playerWin = [110, 280];
-        this.playerForestWin = [new Icon(this, this.playerWin[0], this.playerWin[1], 0.3, 'sym_icon_forest'), new Icon(this, this.playerWin[0], this.playerWin[1] - 40, 0.3, 'sym_icon_forest'), new Icon(this, this.playerWin[0], this.playerWin[1] - 80, 0.3, 'sym_icon_forest')];
-        this.playerFireWin = [new Icon(this, this.playerWin[0] + 40, this.playerWin[1], 0.3, 'sym_icon_fire'), new Icon(this, this.playerWin[0] + 40, this.playerWin[1] - 40, 0.3, 'sym_icon_fire'), new Icon(this, this.playerWin[0] + 40, this.playerWin[1] - 80, 0.3, 'sym_icon_fire')];
-        this.playerWaterWin = [new Icon(this, this.playerWin[0] + 80, this.playerWin[1], 0.3, 'sym_icon_water'), new Icon(this, this.playerWin[0] + 80, this.playerWin[1] - 40, 0.3, 'sym_icon_water'), new Icon(this, this.playerWin[0] + 80, this.playerWin[1] - 80, 0.3, 'sym_icon_water')];
-        this.enemyWin = [110, 390];
-        this.enemyForestWin = [new Icon(this, this.enemyWin[0], this.enemyWin[1], 0.3, 'sym_icon_forest'), new Icon(this, this.enemyWin[0], this.enemyWin[1] + 40, 0.3, 'sym_icon_forest'), new Icon(this, this.enemyWin[0], this.enemyWin[1] + 80, 0.3, 'sym_icon_forest')];
-        this.enemyFireWin = [new Icon(this, this.enemyWin[0] + 40, this.enemyWin[1], 0.3, 'sym_icon_fire'), new Icon(this, this.enemyWin[0] + 40, this.enemyWin[1] + 40, 0.3, 'sym_icon_fire'), new Icon(this, this.enemyWin[0] + 40, this.enemyWin[1] + 80, 0.3, 'sym_icon_fire')];
-        this.enemyWaterWin = [new Icon(this, this.enemyWin[0] + 80, this.enemyWin[1], 0.3, 'sym_icon_water'), new Icon(this, this.enemyWin[0] + 80, this.enemyWin[1] + 40, 0.3, 'sym_icon_water'), new Icon(this, this.enemyWin[0] + 80, this.enemyWin[1] + 80, 0.3, 'sym_icon_water')];
-        this.winIcons = [this.playerForestWin, this.playerFireWin, this.playerWaterWin, this.enemyForestWin, this.enemyFireWin, this.enemyWaterWin];
+        this.userWon = new VictoryIcons(this, layout.VICTORY_ICONS_HORIZONTAL_PADDING, layout.VICTORY_ICONS_HEIGHT);
+        let enemyWonX = layout.WIDTH - layout.VICTORY_ICONS_HORIZONTAL_PADDING - layout.VICTORY_ICONS_SPACING - layout.VICTORY_ICONS_SCALE * 100;
+        this.enemyWon = new VictoryIcons(this, enemyWonX, layout.VICTORY_ICONS_HEIGHT);
 
         //tworzenie ikonek informujących o istniejących efektach (dotyczących kart, nie ręki)
         this.plusIcons = [new Icon(this, 1020, 180, 0.5, 'sym_icon_plus'), new Icon(this, 1020, 490, 0.5, 'sym_icon_plus')];
         this.minusIcons = [new Icon(this, 1020, 230, 0.5, 'sym_icon_minus'), new Icon(this, 1020, 440, 0.5, 'sym_icon_minus')];
 
-        this.updateIcons([0, 0, 0, 0, 0, 0], []);
+        this.testBattle = new Battle(this, this.userDeck);
+        this.updateIcons(this.testBattle.points, []);
     },
     update: function (timestep, dt) {
 
@@ -83,14 +96,10 @@ let SceneBattle = new Phaser.Class({
     },
 
     updateIcons: function (points, effects) {
-        for (let i = 0; i < 6; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (points[i] > j)
-                    this.winIcons[i][j].visual.visible = true;
-                else
-                    this.winIcons[i][j].visual.visible = false;
-            }
-        }
+        console.log(points)
+        this.userWon.update(points.user);
+        this.enemyWon.update(points.enemy);
+
         let table = Give_effects_table(cardData.basic_fire_1, cardData.basic_fire_1, effects);  //2 pierwsze argumenty to karty bez efektów
         for (let i = 0; i < 2; i++) {
             if (table[i] > 0) {
@@ -219,7 +228,7 @@ let Card = new Phaser.Class({
             }
 
             this.outline.setVisible(true);
-            //TODO Zmiana 'depth', przy ręce z wieloma kartami
+            //TODO Zmiana 'depth', przy ręce ze zbyt wieloma kartami
         });
         this.sprite.on('pointerout', () => {
             this.visual.setScale(1);
@@ -327,17 +336,22 @@ let Hand = new Phaser.Class({
 let Battle = new Phaser.Class({
 
     initialize:
-    function Battle(scene, userDeck, opponentDeck) {
+    function Battle(scene, userDeck) {
         this.scene = scene;
         this.cards = [null, null];
         this.effects = [];
         this.playerDeck = userDeck;
-        this.enemyDeck = opponentDeck;
         Phaser.Actions.Shuffle(this.playerDeck);
-        Phaser.Actions.Shuffle(this.enemyDeck);
         this.playerHand = new Hand(scene, 5, this.playerDeck, 600, 0);
-        //this.enemyHand = new Hand(scene, 5, this.enemyDeck, 300, 1);
-        this.points = [0, 0, 0, 0, 0, 0];   //pierwsze trzy dla gracza, drugie trzy dla przeciwnika
+        this.points = { user: this.getEmptyPoints(), enemy: this.getEmptyPoints() };
+    },
+
+    getEmptyPoints: function () { //Tworzy pusty obiekt do trzymania punktów, w którym każdemu żywiołowi odpowiada '0'
+        let res = {};
+        for (var i = 0; i < ELEMENT.basic.length; i++) {
+            res[ELEMENT.basic[i]] = 0;
+        }
+        return res;
     },
 
     Add_card: function (new_card, user) { //User=true oznacza użytkownika, false przeciwnika
@@ -349,10 +363,10 @@ let Battle = new Phaser.Class({
             switch (score) {
                 case 1:
                     console.log(this.cards[0].displayName + " wins!");
-                    this.points[this.cards[0].element - 1]++;
+                    this.points.user[this.cards[0].element]++;
                     break;
                 case -1: console.log(this.cards[1].displayName + " wins!");
-                    this.points[this.cards[1].element + 2]++;
+                    this.points.enemy[this.cards[1].element]++;
                     break;
                 case 0: console.log("It's a draw"); break;
             }
@@ -373,36 +387,32 @@ let Battle = new Phaser.Class({
                 this.playerHand.replace_cards[1] += afterturn_table[1];
                 this.playerHand.changePhase(PHASE.MUST_REPLACE);
             }
-            /*if (afterturn_table[1] > 0) {
-                this.enemyHand.replace_cards[0] += afterturn_table[1];
-                this.enemyHand.changePhase(PHASE.CAN_REPLACE);
-            }
-            else
-                this.enemyHand.changePhase(PHASE.MOVE);
-            if (afterturn_table[3] > 0) {
-                this.enemyHand.replace_cards[1] += afterturn_table[3];
-                this.enemyHand.changePhase(PHASE.MUST_REPLACE);
-            }*/
         }
     },
 
     Check_if_anyone_wins: function () {
-        for (let i = 0; i < 3; i++) {
-            if (this.points[i] >= 3)
-                console.log("Wygrał gracz pierwszy (player)!");
-        }
-        for (let i = 3; i < 6; i++) {
-            if (this.points[i] >= 3)
-                console.log("Wygrał gracz drugi (enemy)!");
-        }
+        let userVictory = this.checkForVictory(this.points.user);
+        let enemyVictory = this.checkForVictory(this.points.enemy);
+        if (userVictory && enemyVictory) console.log("Draw, somehow");
+        else if (userVictory) console.log("The user won!");
+        else if (enemyVictory) console.log("The user lost");
     },
+
+    checkForVictory: function (playerPoints) { //Sprawdza, czy dany gracz wygrał. Jeśli tak, zwraca jakim elementem, jeśli nie, zwraca null
+        let target = this.scene.config.VICTORY_AMOUNT;
+        let allElements = this.scene.config.ALL_ELEMENTS;
+        for (var i = 0; i < allElements.length; i++) {
+            if (playerPoints[allElements[i]] >= target) return allElements[i];
+        }
+        return null;
+    }
 });
 
 let Icon = new Phaser.Class({
     initialize:
     function Icon(scene, x, y, scale, image) {
         this.scale = scale;
-        this.visual = scene.add.container(x, y); //Wizualne elementy karty
+        this.visual = scene.add.container(x, y);
 
         this.image = scene.add.image(0, 0, image).setScale(scale);
 
@@ -414,13 +424,44 @@ let Icon = new Phaser.Class({
     },
 });
 
+let VictoryIcons = new Phaser.Class({
+    initialize:
+    function VictoryIcons(scene, x, y) {
+        this.icons = {};
+        this.visual = scene.add.container(x, y);
+        this.elements = scene.config.ALL_ELEMENTS;
+
+        let spacing = scene.layout.VICTORY_ICONS_SPACING;
+        let scale = scene.layout.VICTORY_ICONS_SCALE;
+
+        for (let i = 0; i < this.elements.length; i++) {
+            this.icons[this.elements[i]] = [];
+            for (let j = 0; j < 3; j++) {
+                let newIcon = scene.add.image(i * spacing, - j * spacing, ELEMENT.info[this.elements[i]].symbol).setScale(scale);
+                newIcon.alpha = 0.15;
+                this.visual.add(newIcon);
+                this.icons[this.elements[i]].push(newIcon);
+            }
+        }
+    },
+
+    update: function (playerPoints) {
+        console.assert(playerPoints);
+        for (let i = 0; i < this.elements.length; i++) {
+            for (let j = 0; j < 3; j++) {
+                this.icons[this.elements[i]][j].alpha = playerPoints[this.elements[i]] > j ? 1 : 0.15;
+            }
+        }
+    },
+});
+
 let Button = new Phaser.Class({
     initialize:
     function Button(scene, type, x, y, scale, image, hand) {
         this.type = type;
         this.scale = scale;
         this.hand = hand;
-        this.visual = scene.add.container(x, y); //Wizualne elementy karty
+        this.visual = scene.add.container(x, y);
 
         this.sprite = scene.add.image(0, 0, image).setScale(scale);
 
