@@ -65,15 +65,25 @@ let SceneBattle = new Phaser.Class({
         WIDTH: null, //Będzie znane dopiero przy tworzeniu instancji
         HEIGHT: null,
 
-        VICTORY_ICONS_HEIGHT: 150,
+        NAMES_Y: 10,
+        NAMES_H_PADDING: 10,
+
+        VICTORY_ICONS_HEIGHT: 200,
         VICTORY_ICONS_HORIZONTAL_PADDING: 50,
-        VICTORY_ICONS_SPACING: 48,
+        VICTORY_ICONS_SPACING: 50,
         VICTORY_ICONS_SCALE: 0.45,
 
-        EFFET_ICON_HEIGHT: 250,
-        EFFET_ICON_SPACING: 48,
+        EFFET_ICON_HEIGHT: 300,
+        EFFET_ICON_SPACING: 50,
         EFFET_ICON_HORIZONTAL_PADDING: 100,
         EFFET_ICON_SCALE: 0.5,
+
+        CANCEL_BUTTON_X: 150,
+        CANCEL_BUTTON_Y: 350,
+
+        CHOSEN_CARDS_X: 500,
+        CHOSEN_CARDS_Y: 300,
+        CHOSEN_CARDS_SPACING: 200,
     },
 
     create: function ()
@@ -82,6 +92,9 @@ let SceneBattle = new Phaser.Class({
         layout.WIDTH = this.sys.game.canvas.width;
         layout.HEIGHT = this.sys.game.canvas.height;
 
+        this.playerName = this.add.text(layout.NAMES_H_PADDING, layout.NAMES_Y, " " + this.userDrone.clientData.name + " ", { font: "30px Arial", fill: "#000000", align: 'left', backgroundColor: "#DDDDDD" });
+        this.opponentName = this.add.text(layout.WIDTH - layout.NAMES_H_PADDING, layout.NAMES_Y, " " + this.opponentDrone.clientData.name + " ", { font: "30px Arial", fill: "#000000", align: 'right', backgroundColor: "#DDDDDD", boundsAlignH: 'right' });
+        this.opponentName.setOrigin(1, 0);
 
         //tworzenie ikonek wskazujących zwycięstwo graczy
         this.userWon = new VictoryIcons(this, layout.VICTORY_ICONS_HORIZONTAL_PADDING, layout.VICTORY_ICONS_HEIGHT);
@@ -94,8 +107,16 @@ let SceneBattle = new Phaser.Class({
             new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_plus')
         ];
         this.minusIcons = [
-            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'sym_icon_minus'),
-            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'sym_icon_minus')
+            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_minus'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_minus')
+        ];
+        this.replaceCanIcons = [
+            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_replace_can'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_replace_can')
+        ];
+        this.replaceMustIcons = [
+            new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_replace_must'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'sym_icon_replace_must')
         ];
 
         this.testBattle = new Battle(this, this.userDeck, this.opponentDeck);
@@ -123,6 +144,7 @@ let SceneBattle = new Phaser.Class({
         this.enemyWon.update(points.enemy);
 
         let table = Give_effects_table(cardData.basic_fire_1, cardData.basic_fire_1, effects);  //2 pierwsze argumenty to karty bez efektów
+        let afterturn_table = Give_afterturn_effects_table(effects);
         for (let i = 0; i < 2; i++)
         {
             if (table[i] > 0)
@@ -139,6 +161,21 @@ let SceneBattle = new Phaser.Class({
             }
             else
                 this.minusIcons[i].visual.visible = false;
+            if (afterturn_table[i] != 0)
+            {
+                this.replaceCanIcons[i].valueText.text = afterturn_table[i];
+                this.replaceCanIcons[i].visual.visible = true;
+            }
+            else
+                this.replaceCanIcons[i].visual.visible = false;
+            if (afterturn_table[i + 2] != 0)
+            {
+                this.replaceCanIcons[i].visual.visible = false;
+                this.replaceMustIcons[i].valueText.text = afterturn_table[i + 2];
+                this.replaceMustIcons[i].visual.visible = true;
+            }
+            else
+                this.replaceMustIcons[i].visual.visible = false;
         }
     },
 
@@ -153,6 +190,7 @@ let Card = new Phaser.Class({
     initialize:
         function Card(scene, data, x, y, scale, hand)
         {
+            this.interactive = false;
             this.scale = scale;
             this.hand = hand;
             this.data = data; //Informacje o karcie (żywioł, wartość itp.)
@@ -208,7 +246,7 @@ let Card = new Phaser.Class({
 
             this.sprite.setInteractive().on('pointerup', () =>
             {
-                if (!this.reverseImage.visible)
+                if (this.interactive)
                 {
                     switch (this.hand.phase)
                     {
@@ -225,7 +263,7 @@ let Card = new Phaser.Class({
                             this.hand.removeCard(this);
                             this.hand.drawCard();
                             this.hand.replace_cards[0]--;
-                            this.hand.replaceIcons[0].valueText = this.hand.replace_cards[0];
+                            scene.replaceCanIcons[0].valueText.text = this.hand.replace_cards[0];
                             if (hand.replace_cards[0] <= 0)
                                 this.hand.changePhase(PHASE.MOVE);
                             break;
@@ -234,7 +272,7 @@ let Card = new Phaser.Class({
                             this.hand.removeCard(this);
                             this.hand.drawCard();
                             this.hand.replace_cards[1]--;
-                            this.hand.replaceIcons[1].valueText = this.hand.replace_cards[1];
+                            scene.replaceMustIcons[0].valueText.text = this.hand.replace_cards[1];
                             if (hand.replace_cards[1] <= 0)
                             {
                                 if (replace_cards[0] > 0)
@@ -252,7 +290,7 @@ let Card = new Phaser.Class({
 
             this.sprite.on('pointerover', () =>
             {
-                if (!this.reverseImage.visible)
+                if (this.interactive)
                 {
                     this.visual.setScale(1.05);
                     this.visual.y -= 10;
@@ -274,7 +312,7 @@ let Card = new Phaser.Class({
             });
             this.sprite.on('pointerout', () =>
             {
-                if (!this.reverseImage.visible)
+                if (this.interactive)
                 {
                     this.visual.setScale(1);
                     this.visual.y += 10;
@@ -286,8 +324,9 @@ let Card = new Phaser.Class({
             // this.name
         },
 
-    Reverse_card: function ()
+    Reverse_card: function (is_interactive)
     {
+        this.interactive = is_interactive;
         this.reverseImage.setVisible(!this.reverseImage.visible);
     },
 
@@ -317,19 +356,13 @@ let Hand = new Phaser.Class({
             let screenWidth = scene.sys.game.canvas.width;
             let screenHeight = scene.sys.game.canvas.height;
             this.cardY = screenHeight - this.params.cardBaseHeight * this.cardScale / 2 - this.bottomPadding;
-            this.cancelButton = new Button(this.scene, "cancel", screenWidth / 2, screenHeight / 2, 0.5, "button_cancel", this);
-            this.replaceIcons = [
-                new Icon(this.scene, this.cancelButton.visual.x, this.cancelButton.visual.y - 50, 0.5, 'sym_icon_replace_can'),
-                new Icon(this.scene, this.cancelButton.visual.x, this.cancelButton.visual.y - 50, 0.5, 'sym_icon_replace_must')
-            ];
+            this.cancelButton = new Button(this.scene, "cancel", scene.layout.CANCEL_BUTTON_X, scene.layout.CANCEL_BUTTON_Y, 0.5, "button_cancel", this);
 
             console.assert(size > 0);
             console.assert(deck.length >= size);
             this.drawUntilLimit();
             this.phase = PHASE.REST;
             this.changePhase(PHASE.MOVE);
-
-            
         },
 
     drawCard: function ()
@@ -338,7 +371,7 @@ let Hand = new Phaser.Class({
         this.repositionCards(this.scene);
         if (this.index === 0)
         {
-            this.cards[this.cards.length - 1].Reverse_card();
+            this.cards[this.cards.length - 1].Reverse_card(true);
         }
     },
 
@@ -386,19 +419,22 @@ let Hand = new Phaser.Class({
     changePhase: function (new_phase)
     {
         this.phase = new_phase;
-        this.replaceIcons[0].visual.visible = false;
-        this.replaceIcons[1].visual.visible = false;
         this.cancelButton.visual.visible = false;
         switch (this.phase)
         {
-            case PHASE.CAN_REPLACE:
-                this.replaceIcons[0].visual.visible = true;
-                this.replaceIcons[0].valueText.text = this.replace_cards[0];
-                this.cancelButton.visual.visible = true;
+            case PHASE.MOVE:
+                for (var i = 0; i < 2; i++) //ukrywanie ikonek efektów wykonywanych po turze
+                {
+                    this.scene.replaceCanIcons[i].visual.setVisible(false);
+                    this.scene.replaceMustIcons[i].visual.setVisible(false);
+                }
                 break;
-            case PHASE.MUST_REPLACE:
-                this.replaceIcons[1].visual.visible = true;
-                this.replaceIcons[1].valueText.text = this.replace_cards[1];
+            case PHASE.CAN_REPLACE:
+                for (var i = 0; i < 2; i++)
+                {
+                    this.scene.replaceMustIcons[i].visual.setVisible(false);
+                }
+                this.cancelButton.visual.visible = true;
                 break;
         }
     },
@@ -411,6 +447,7 @@ let Battle = new Phaser.Class({
         {
             this.scene = scene;
             this.cards = [null, null];
+            this.cardsObjects = [null, null];
             this.effects = [];
             this.playerDeck = userDeck;
             this.enemyDeck = opponentDeck;
@@ -432,39 +469,49 @@ let Battle = new Phaser.Class({
     Add_card: function (new_card, user)
     { //User=true oznacza użytkownika, false przeciwnika
         this.cards[user ? 0 : 1] = new_card;
+        this.cardsObjects[user ? 0 : 1] = new Card(this.scene, new_card, this.scene.layout.CHOSEN_CARDS_X + (user ? 0 : 1) * this.scene.layout.CHOSEN_CARDS_SPACING, this.scene.layout.CHOSEN_CARDS_Y, 0.175, null);
         if (this.cards[0] != null && this.cards[1] != null)
         {
-            console.log(this.effects);
-            let score = Check_who_wins(this.cards[0], this.cards[1], this.effects);
-            this.effects = Update_current_effects(this.cards[0], this.cards[1], score, this.effects);
-            switch (score)
-            {
-                case 1:
-                    console.log(this.cards[0].displayName + " wins!");
-                    this.points.user[this.cards[0].element]++;
-                    break;
-                case -1: console.log(this.cards[1].displayName + " wins!");
-                    this.points.enemy[this.cards[1].element]++;
-                    break;
-                case 0: console.log("It's a draw"); break;
-            }
-            this.scene.updateIcons(this.points, this.effects);
-            this.Check_if_anyone_wins();
-            this.cards = [null, null];    //czyszczenie tablicy
+            for (var i = 0; i < 2; i++)
+                this.cardsObjects[i].Reverse_card(false);
+            setTimeout(() => { this.Compare_cards(); }, 1000);
+        }
+    },
 
-            let afterturn_table = Give_afterturn_effects_table(this.effects);   //efekty po turze (głównie modyfikujące rękę)
-            if (afterturn_table[0] > 0) //gracz może wymienić karty
-            {
-                this.playerHand.replace_cards[0] += afterturn_table[0]; //zapisanie, ile kart może wymienić
-                this.playerHand.changePhase(PHASE.CAN_REPLACE);  //ustawienie odpowiedniego trybu
-            }
-            else
-                this.playerHand.changePhase(PHASE.MOVE);
-            if (afterturn_table[2] > 0) //gracz musi wymienić karty
-            {
-                this.playerHand.replace_cards[1] += afterturn_table[1];
-                this.playerHand.changePhase(PHASE.MUST_REPLACE);
-            }
+    Compare_cards: function ()
+    {
+        //console.log(this.effects);
+        for (var i = 0; i < 2; i++)
+            this.cardsObjects[i].visual.removeAll(true);
+        let score = Check_who_wins(this.cards[0], this.cards[1], this.effects);
+        this.effects = Update_current_effects(this.cards[0], this.cards[1], score, this.effects);
+        switch (score)
+        {
+            case 1:
+                console.log(this.cards[0].displayName + " wins!");
+                this.points.user[this.cards[0].element]++;
+                break;
+            case -1: console.log(this.cards[1].displayName + " wins!");
+                this.points.enemy[this.cards[1].element]++;
+                break;
+            case 0: console.log("It's a draw"); break;
+        }
+        this.scene.updateIcons(this.points, this.effects);
+        this.Check_if_anyone_wins();
+        this.cards = [null, null];    //czyszczenie tablicy
+
+        let afterturn_table = Give_afterturn_effects_table(this.effects);   //efekty po turze (głównie modyfikujące rękę)
+        if (afterturn_table[0] > 0) //gracz może wymienić karty
+        {
+            this.playerHand.replace_cards[0] += afterturn_table[0]; //zapisanie, ile kart może wymienić
+            this.playerHand.changePhase(PHASE.CAN_REPLACE);  //ustawienie odpowiedniego trybu
+        }
+        else
+            this.playerHand.changePhase(PHASE.MOVE);
+        if (afterturn_table[2] > 0) //gracz musi wymienić karty
+        {
+            this.playerHand.replace_cards[1] += afterturn_table[1];
+            this.playerHand.changePhase(PHASE.MUST_REPLACE);
         }
     },
 
