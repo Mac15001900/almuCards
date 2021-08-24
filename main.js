@@ -76,7 +76,7 @@ function getRoomName() {
 
 //Translation
 
-let lang = 'en'; //Specify default language here (will be used if requested language is not supported)
+let lang = 'pl'; //Specify default language here (will be used if requested language is not supported)
 const languages = { 'en': enStrings, 'pl': plStrings };
 let s = languages[lang];
 
