@@ -28,9 +28,6 @@ let SceneVictory = new Phaser.Class({
         this.background = this.add.rectangle(0, 0, width, height, ELEMENT.info[this.element].color);
         this.background.setOrigin(0, 0);
 
-        this.victoryText = this.add.text(width / 2, height / 2, this.victor.clientData.name + " wygrywa!", { font: "64px Arial", fill: "#ffffff" });
-        this.victoryText.setOrigin(0.5, 0.5);
-
         let particle = this.add.particles(ELEMENT.info[this.element].symbol);
 
         this.emitter = particle.createEmitter({
@@ -42,6 +39,9 @@ let SceneVictory = new Phaser.Class({
         });
         this.emitter.setPosition(width / 2, height);
         this.emitter.on = true;
+
+        this.victoryText = this.add.text(width / 2, height / 2, this.victor.clientData.name + " wygrywa!", { font: "64px Arial", fill: "#ffffff" });
+        this.victoryText.setOrigin(0.5, 0.5);
     },
 
     update: function (timestep, dt) {
