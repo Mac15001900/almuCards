@@ -17,7 +17,11 @@ let ScenePreBattle = new Phaser.Class({
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
         //this.testDeck = DeckBank.getBasicDeck();
-        this.testDeck = DeckBank.getTestDeck();
+        //this.testDeck = DeckBank.getBasicDeck();
+        this.playerDeck = DeckBank.getTestDeck();
+        this.enemyDeck = DeckBank.getTestDeck();
+        Phaser.Actions.Shuffle(this.playerDeck);
+        Phaser.Actions.Shuffle(this.enemyDeck);
         this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => sendMessage("startBattle", {}), false);
     },
 
@@ -56,7 +60,8 @@ let ScenePreBattle = new Phaser.Class({
     },
 
     startBattle() {
-        this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.testDeck, opponentDeck: this.testDeck });
+        this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.playerDeck, opponentDeck: this.enemyDeck });
+        //this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.testDeck, opponentDeck: this.testDeck });
     },
 
 });
