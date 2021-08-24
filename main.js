@@ -59,6 +59,7 @@ function getRoomName() {
     //Check if set by debug options
     if (debugConfig.dev_server) return "dev";
     if (debugConfig.random_server) return (Math.random() * 1000) + "";
+    if (debugConfig.custom_server) return debugConfig.custom_server_name;
 
     //Try to get it from the URL
     var roomFromURL = (new URLSearchParams(window.location.search)).get('room');

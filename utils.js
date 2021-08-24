@@ -14,13 +14,16 @@ let TextButton = new Phaser.Class({
         let width = this.params.width;
         let height = this.params.height;
 
-        this.base = scene.add.rectangle(x, y, width, height, this.getColor());
-        this.outline = scene.add.rectangle(x, y, width * 1.1 + 6, height * 1.1 + 6, 0xffffff);
+        this.base = scene.add.rectangle(0, 0, width, height, this.getColor());
+        this.outline = scene.add.rectangle(0, 0, width + 6, height + 6, 0xffffff);
         this.outline.setDepth(-5);
         this.outline.setVisible(false);
 
-        this.buttonText = scene.add.text(x, y, text, { font: "32px Arial", fill: "#000000", wordWrap: { width: width }, align: 'center' });
+        this.buttonText = scene.add.text(0, 0, text, { font: "32px Arial", fill: "#000000", wordWrap: { width: width }, align: 'center' });
         this.buttonText.setOrigin(0.5, 0.5);
+
+        this.visual = scene.add.container(x, y);
+        this.visual.add([this.outline, this.base, this.buttonText]);
 
         this.base.setInteractive().on('pointerup', function (event) {
             if (this.active) this.callback();
@@ -28,12 +31,12 @@ let TextButton = new Phaser.Class({
 
         this.base.on('pointerover', () => {
             if (this.active) {
-                this.base.setScale(1.1);
+                this.visual.setScale(1.05);
                 this.outline.setVisible(true);
             }
         });
         this.base.on('pointerout', () => {
-            this.base.setScale(1);
+            this.visual.setScale(1);
             this.outline.setVisible(false);
         })
     },
@@ -45,6 +48,7 @@ let TextButton = new Phaser.Class({
 
     setActive: function (active) {
         this.active = active;
+        this.base.setFillStyle(this.getColor());
     },
 
     setDepth: function (depth) {

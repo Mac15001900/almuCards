@@ -40,8 +40,15 @@ let SceneVictory = new Phaser.Class({
         this.emitter.setPosition(width / 2, height);
         this.emitter.on = true;
 
-        this.victoryText = this.add.text(width / 2, height / 2, this.victor.clientData.name + " wygrywa!", { font: "64px Arial", fill: "#ffffff" });
+        this.victoryText = this.add.text(width / 2, height * 0.25 - 75, this.victor.clientData.name + " wygrywa!", { font: "64px Arial", fill: "#ffffff" });
         this.victoryText.setOrigin(0.5, 0.5);
+
+        this.additionalText = this.add.text(width / 2, height * 0.25, "", { font: "32px Arial", fill: "#ffffff" });
+        this.additionalText.setOrigin(0.5, 0.5);
+        this.additionalText.text = this.userWon ? "Gratulacje!" : "Może następnym razem...";
+        if (!this.userWon) this.additionalText.setColor("#bbaa99");
+
+        this.backButton = new TextButton(this, width - 150, height - 100, "Powrót ↩", () => this.goBack());//this.goBack);
     },
 
     update: function (timestep, dt) {
@@ -49,7 +56,11 @@ let SceneVictory = new Phaser.Class({
     },
 
     receiveMessage: function (data) {
-        console.log(data);
+
+    },
+
+    goBack: function () {
+        this.scene.start('ScenePreBattle');
     },
 
 });
