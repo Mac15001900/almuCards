@@ -216,9 +216,9 @@ let Card = new Phaser.Class({
 
         this.flavourTextfont = "italic " + (60 * scale) + "px Arial";
         this.flavourText = scene.add.text(0, 0, data.flavour, { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
-        this.flavourText.setOrigin(0, 0);
+        this.flavourText.setOrigin(0, 1);
         this.flavourText.x = - 325 * scale;
-        this.flavourText.y = + 400 * scale;
+        this.flavourText.y = + 500 * scale;
 
         this.discardFilter = scene.add.rectangle(0, 0, this.sprite.width * scale, this.sprite.height * scale, 0xff0000, 0.4);
         this.discardFilter.setDepth(5);
