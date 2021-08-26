@@ -1,0 +1,115 @@
+Szyszka:
+  Srebrna szyszka --> |
+  Złota szyszka --> | "Najwyższe wyróżnienie OOA"
+  Chcesz szyszkę? --> jeśli wygra przeciwnik dostaje 2 szyszki (las 2) do swojej talii | "Serio wziąłeś!? Nie żyjesz!"
+Sanitariat:
+  Gumowa kaczuszka --> jeśli wygra do twojej talii zostaną dodane 2 nowe kaczuszki o losowych żywiołach |
+  Gorąca woda (woda) --> jest dodawana do ognia przy wygranej | "Uwaga: może wybuchnąć!"
+  Lodowata woda (woda) --> |
+  Nieodklikująca się spłuczka --> | 
+  Kulki do kąpieli --> Jeśli wygra do końca walki twoje karty otrzymują -1 | "Największy przysmak 2k17"
+Stołówka:
+ jedzenie to również napoje (i nie tylko z tej kategorii)
+  Ziemniaki (*) --> wartość = 3 * liczba ziemniaków w całej talii | "Co będzie jutro na obiad?"
+  Ciepły kompot (woda) --> |
+  Nutella --> |
+  Ryż z bitą śmietaną --> | "Nie spóźnij się na dokładkę"
+  Cukier z herbatą --> |
+  Podwieczorek --> jeśli wygra do twojej talii zostanie dodane losowe jedzenie |
+Ćwiartka:
+  Tablica --> |
+  Permanentny pisak --> otrzymujesz bonus +1 do końca walki |
+Inne:
+  Kontrola czystości (ogień) --> jeśli przeciwnik ma więcej lasu (w kartach zwycięskich) niż ty, wygrywasz |
+  Obóz pracy --> |
+  Poranne rozruchy --> Jeśli to pierwsza karta w pojedynku dostaje +10 |
+
+Grzyb:
+ grzyb = każda karta tej grupy
+  Pleśń --> następna karta przeciwnika -8 |
+  Owocnik --> |
+  Grzybnia (1) --> +1 do wartości za każdy zagrany grzyb |
+  Zarodnik --> jeśli wygra do twojej talii zostanie dodany losowy grzyb |
+Komar:
+  Wyssanie krwi --> w następnej rundzie otrzymujesz +3, a przeciwnik -3 | "Lepiej było wykąpać się w offie"
+  Malaria --> jeśli wygra przeciwnik otrzymuje -2 do końca walki |
+Kleszcz:
+  Przyczepienie --> następna karta otrzymuje bonus równy wartości obecnej karty przeciwnika |
+  Borelioza --> jeśli wygra przeciwnik otrzymuje -2 do końca walki |
+Upał:
+  30 stopni w cieniu (ogień) --> | "Pijcie wodę. Pijcie dużo wody! Pijcie wodę, a nie tylko rum!"
+  Żar z nieba --> |
+Wichura:
+  10 w skali Beauforta (10) --> | "Kapitan zaklnął: ech do czołta!"
+  Za połą poła mknie --> | "Ty lepiej proś kadrona, aby coś nie spadło Ci na kark"
+Mróz:
+  10 stopni w nocy --> | "Weź nie przeklinaj!"
+  Śnieg --> |
+  Grad --> |
+Małe trąby powietrzne:
+  Odlatujący namiot --> | "I tyle go widzieli"
+Pandemia:
+  Hiszpanka --> |
+  Czarna śmierć --> |
+  Koronawirus --> przeciwnik musi odrzucić 2 karty z ręki i dobrać nowe |
+  Ospa prawdziwa --> |
+
+Almuinside:
+  Almujka --> |
+  Almukantarat --> |
+  Akumulator --> | "Nazwa słynnego klubu gastronomicznego"
+  Dywergencja pola magnetycznego (0) --> następna karta przeciwnika ma wartość 0 | "Jesteś zerem!"
+  Magnetohydrodynamika (9, woda) --> |
+  Heliomagnetohydrodynamika (11, ogień) --> jeśli wygra możesz ją dodać do ognia, lub wody |
+  Kamień pogodowy --> możesz podglądnąć 2 następne karty ze swojej talii | "Jak mokry, to pada"
+  Palambury (pięć, płomień) --> przy przegranej pomniejsza pojedyńczo przyszłe punkty przeciwnika pięciokrotnie |
+  Bydło (2) --> dodaje do talii 2 nowe karty bydła o losowym żywiole i wartości *=2 | "Release the bydło!"
+  Szybkie kobiety --> |
+  Piękne samochody --> |
+  Kwas chlebowy --> |
+  Widzę cię --> podglądnij 2 losowe karty z ręki przeciwnika | "Widzę Cię!"
+Obsy:
+  Obrotowa mapka nieba --> | "Istnieje również wersja dla Dzietrznik"
+  Nieskolimowany szukacz --> |
+  Białe światło --> w następnej rundzie zostaną rzucone losowe karty z twojej ręki i ręki przeciwnika |
+  Szyk parówkowy --> | "Idealny na obsy meteorów"
+Śpiewnikowe:
+  Sen srebrny w płynie (woda) --> |
+  Jesienne wino (woda) --> jeśli wygra, możesz podejrzeć 2 losowe karty z ręki przeciwnika |
+  Zbroja --> | "Magicznych na niej rytów dziś nie odczyta nikt"
+  Stopy, stopy, stopy --> | "Stopy stooopy, stopy stopy stopy"
+  Marynarze floty wojennej --> | 
+  Złota kula nad wodami --> | "Pod spuchniętymi powiekami"
+  Złodzieje --> | "Przecież wszystko oddałem wam"
+Gra nocna:
+  Niezbalansowana mechanika (50) --> przegrywa z nie swoim żywiołem |
+  Plothole --> do końca gry twoja karta wygrywa przy remisie | "W sumie to nie wiem, dlaczego taki efekt"
+  Tego nie przewidzieli (-1) --> przy tym samym żywiole wygrywa niższa wartość |
+  Losowy quest --> |
+Żywe szachy:
+ pionek nie jest figurą
+  Pionek (1) --> jeśli wygra, to twojej talii zostanie dodana losowa figura (ale nie król) |
+  Skoczek (3) --> możesz podglądnąć 1 losową kartę z ręki przeciwnika |
+  Goniec (3) --> remisuje z gońcami innych żywiołów |
+  Wieża (5) --> następna karta otrzymuje bonus +2 |
+  Hetman (9) --> jeśli wygra, przeciwnik traci losową kartę z ręki i dobiera nową |
+  Król (0) --> jeśli przegra, przegrywasz całą grę |
+  Roszada --> króle w twojej ręce zmieniają się w wieże, a wieże w króle |
+  Stockfish --> jeśli wygra, możesz podejrzeć 3 karty ze swojej talii |
+
+Astrologiczne:
+  Horoskop (*) --> otrzymuje losową wartość od 7 do 13 w chwili zagrania |
+Zodiak:
+  Baran --> w następnej rundzie las wygrywa z ogniem o niższej wartości |
+  Byk --> |
+  Bliźnięta (2) --> w następnej rundzie przy tym samym żywiole parzyste wartości wygrywają z nieparzystymi |
+  Rak --> |
+  Lew --> |
+  Panna --> |
+  Waga --> |
+  Skorpion (ogień) --> w następnej rundzie ogień wygrywa z wodą o niższej wartości |
+  Strzelec --> |
+  Koziorożec --> |
+  Wodnik (woda) --> w następnej rundzie woda wygrywa z lasem o niższej wartości |
+  Ryby (woda) --> |
+  
