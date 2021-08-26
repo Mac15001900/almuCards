@@ -196,7 +196,7 @@ let Card = new Phaser.Class({
         //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
         //this.nameTextfont = (100 * scale).toString() + "px Arial";
-        this.nameTextfont = ((100 * 12 / (Math.max(data.name.length - 12, 0) + 12)) * scale) + "px Arial";
+        this.nameTextfont = ((100 * 12 / (Math.max(data.displayName.length - 12, 0) + 12)) * scale) + "px Arial";
         this.nameText = scene.add.text(0, 0, data.displayName, { font: this.nameTextfont, fill: "#000000" });
         this.nameText.setOrigin(0.5, 0.5);
         //this.nameText.x = x;
