@@ -4,6 +4,7 @@ const ELEMENT =
         FIRE: 1,
         WATER: 2,
         FOREST: 3,
+        ONE_EACH: 4,
 
         info: {} //Informacje o danym żywiole, przydatne w wielu miejscach
     };
@@ -33,56 +34,47 @@ ELEMENT.info[ELEMENT.NONE] = {
     color: 0xaaaaaa,
     real: false,
 };
+ELEMENT.info[ELEMENT.ONE_EACH] = {
+    name: "Po jednym",
+    color: 0xaaaaaa,
+    real: false,
+};
 
 //TODO: Prosty sposób na dodawanie kart, które mają wersję z każdym żywiołem (np. wartość ELEMENT.ALL, i puszczać to przez jakiś konwerter)
 let cardData = {
-    basic_forest_1: {
-        "ID": 0,
-        "name": "basic_forest_1",
-        "displayName": "Żołądź",
-        "element": ELEMENT.FOREST,
+    basic1: {
+        "name": "basic1",
+        "element": ELEMENT.ONE_EACH,
         "value": 1,
         "effect": ""
-    }, basic_forest_2: {
-        "ID": 1,
-        "name": "basic_forest_2",
-        "displayName": "Szyszka",
-        "element": ELEMENT.FOREST,
+    }, basic2: {
+        "name": "basic2",
+        "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": ""
-    }, basic_forest_3: {
-        "ID": 2,
-        "name": "basic_forest_3",
-        "displayName": "Sadzonka",
-        "element": ELEMENT.FOREST,
+    }, basic3: {
+        "name": "basic3",
+        "element": ELEMENT.ONE_EACH,
         "value": 3,
         "effect": ""
-    }, basic_forest_4: {
-        "ID": 3,
-        "name": "basic_forest_4",
-        "displayName": "Krzak",
-        "element": ELEMENT.FOREST,
+    }, basic4: {
+        "name": "basic4",
+        "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": ""
-    }, basic_forest_5: {
-        "ID": 4,
-        "name": "basic_forest_5",
-        "displayName": "Sosna karłowata",
-        "element": ELEMENT.FOREST,
+    }, basic5: {
+        "name": "basic5",
+        "element": ELEMENT.ONE_EACH,
         "value": 5,
         "effect": ""
-    }, basic_forest_6: {
-        "ID": 5,
-        "name": "basic_forest_6",
-        "displayName": "Dąb",
-        "element": ELEMENT.FOREST,
+    }, basic6: {
+        "name": "basic6",
+        "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": ""
-    }, basic_forest_7: {
-        "ID": 6,
-        "name": "basic_forest_7",
-        "displayName": "Zagajnik",
-        "element": ELEMENT.FOREST,
+    }, basic7: {
+        "name": "basic7",
+        "element": ELEMENT.ONE_EACH,
         "value": 7,
         "effect": ""
     }, basic_forest_13: {
@@ -92,55 +84,6 @@ let cardData = {
         "element": ELEMENT.FOREST,
         "value": 13,
         "effect": ""
-    }, basic_fire_1: {
-        "ID": 13,
-        "name": "basic_fire_1",
-        "displayName": "Zapałka",
-        "element": ELEMENT.FIRE,
-        "value": 1,
-        "effect": ""
-    }, basic_fire_2: {
-        "ID": 14,
-        "name": "basic_fire_2",
-        "displayName": "Świeczka",
-        "element": ELEMENT.FIRE,
-        "value": 2,
-        "effect": ""
-    }, basic_fire_3: {
-        "ID": 15,
-        "name": "basic_fire_3",
-        "displayName": "Zimne ognie",
-        "element": ELEMENT.FIRE,
-        "value": 3,
-        "effect": ""
-    }, basic_fire_4: {
-        "ID": 16,
-        "name": "basic_fire_4",
-        "displayName": "Pochodnia",
-        "element": ELEMENT.FIRE,
-        "value": 4,
-        "effect": ""
-    }, basic_fire_5: {
-        "ID": 17,
-        "name": "basic_fire_5",
-        "displayName": "Małe ognisko",
-        "element": ELEMENT.FIRE,
-        "value": 5,
-        "effect": ""
-    }, basic_fire_6: {
-        "ID": 18,
-        "name": "basic_fire_6",
-        "displayName": "Duże ognisko",
-        "element": ELEMENT.FIRE,
-        "value": 6,
-        "effect": ""
-    }, basic_fire_7: {
-        "ID": 19,
-        "name": "basic_fire_7",
-        "displayName": "Fajerwerki",
-        "element": ELEMENT.FIRE,
-        "value": 7,
-        "effect": ""
     }, basic_fire_12: {
         "ID": 24,
         "name": "basic_fire_12",
@@ -148,55 +91,6 @@ let cardData = {
         "flavour": "Calkiem jeszcze nowa",
         "element": ELEMENT.FIRE,
         "value": 12,
-        "effect": ""
-    }, basic_water_1: {
-        "ID": 26,
-        "name": "basic_water_1",
-        "displayName": "Rosa",
-        "element": ELEMENT.WATER,
-        "value": 1,
-        "effect": ""
-    }, basic_water_2: {
-        "ID": 27,
-        "name": "basic_water_2",
-        "displayName": "Kropla wody",
-        "element": ELEMENT.WATER,
-        "value": 2,
-        "effect": ""
-    }, basic_water_3: {
-        "ID": 28,
-        "name": "basic_water_3",
-        "displayName": "Kałuża",
-        "element": ELEMENT.WATER,
-        "value": 3,
-        "effect": ""
-    }, basic_water_4: {
-        "ID": 29,
-        "name": "basic_water_4",
-        "displayName": "Szklanka wody",
-        "element": ELEMENT.WATER,
-        "value": 4,
-        "effect": ""
-    }, basic_water_5: {
-        "ID": 30,
-        "name": "basic_water_5",
-        "displayName": "Deszcz",
-        "element": ELEMENT.WATER,
-        "value": 5,
-        "effect": ""
-    }, basic_water_6: {
-        "ID": 31,
-        "name": "basic_water_6",
-        "displayName": "Staw",
-        "element": ELEMENT.WATER,
-        "value": 6,
-        "effect": ""
-    }, basic_water_7: {
-        "ID": 32,
-        "name": "basic_water_7",
-        "displayName": "Rzeka",
-        "element": ELEMENT.WATER,
-        "value": 7,
         "effect": ""
     }, plus5_forest: {
         "ID": 39,
@@ -244,30 +138,81 @@ let DeckBank = {
     //Zwraca podstawową talię (w postaci nazw), zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
     getBasicDeck: function (minValue = 1, maxValue = 7) {
         let res = [];
-        for (let i = minValue; i <= maxValue; i++) {
-            res.push("basic_fire_" + i);
-            res.push("basic_water_" + i);
-            res.push("basic_forest_" + i);
+        for (let i = minValue; i <= maxValue; i++) 
+        {
+            if (i >= 1 && i <= 7)
+            {
+                res.push("basic" + i);
+                continue;
+            }
+            res.push("basic" + i + "_fire");
+            res.push("basic" + i + "_forest");
+            res.push("basic" + i + "_water");
         }
         return res;
     },
 
-    getTestDeck: function () {
+    getClasicDeck: function ()
+    {
         let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
         return this.getBasicDeck(1, 6).concat(specialCardList);
         //let specialCardList = ["plus5_forest", "replace1_water", "weaker_fire", "basic_fire_12"];
         //return this.getBasicDeck(1, 7).concat(specialCardList);
     },
 
+    getTestDeck: function ()
+    {
+        return this.getClasicDeck();
+    },
+    
+    assemblyDeck: function (names)
+    {
+        Phaser.Actions.Shuffle(names);
+        let new_deck = this.getCardsFromNames(names);
+        Phaser.Actions.Shuffle(new_deck);
+        return new_deck;
+    },
+
     getCardsFromNames: function (names) {
-        return names.map(n => cardData[n]);
+        let ret = [];
+        let prototype = names.map(n => cardData[n]);
+        for (var i = 0; i < prototype.length; i++)
+        {
+            switch (prototype[i].element)
+            {
+                case ELEMENT.ONE_EACH:
+                    ret.push(this.createSingleCard(prototype[i], ELEMENT.FIRE));
+                    ret.push(this.createSingleCard(prototype[i], ELEMENT.FOREST));
+                    ret.push(this.createSingleCard(prototype[i], ELEMENT.WATER));
+                    break;
+                default:
+                    ret.push(prototype[i]);
+            }
+        }
+        return ret;
+    },
+    
+    createSingleCard: function (prototype, element)
+    {
+        var new_card = Object.assign({}, prototype);
+        new_card.element = element;
+        switch (element)
+        {
+            case ELEMENT.FIRE: new_card.name += "_fire"; break;
+            case ELEMENT.FOREST: new_card.name += "_forest"; break;
+            case ELEMENT.WATER: new_card.name += "_water"; break;
+        }
+        new_card.displayName = this.getDisplayName(new_card.name);
+        new_card.flavourText = this.getFlavourText(new_card.name);
+        return new_card;
     },
 
     //Zwraca listę obrazków na kartach w talii (lub taliach), usuwając duplikaty
     getImages: function (deck, deck2 = []) {
         let res = [];
         let combined = deck.concat(deck2);
-        if (typeof combined[0] === "string") combined = this.getCardsFromNames(combined);
+        if (typeof combined[0] === "string") 
+            combined = this.assemblyDeck(combined);
         for (var i = 0; i < combined.length; i++) {
             if (combined[i].image) res.push(combined[i].image);
             else res.push(combined[i].name);
@@ -293,5 +238,41 @@ let DeckBank = {
         }, this);
     },
 
+    getDisplayName: function (name)
+    {
+        switch (name)
+        {
+            case 'basic1_fire': return "Zapałka";
+            case 'basic1_forest': return "Żołądź";
+            case 'basic1_water': return "Rosa";
+            case 'basic2_fire': return "Świeczka";
+            case 'basic2_forest': return "Szyszka";
+            case 'basic2_water': return "Kropla wody";
+            case 'basic3_fire': return "Zimne ognie";
+            case 'basic3_forest': return "Sadzonka";
+            case 'basic3_water': return "Kałuża";
+            case 'basic4_fire': return "Pochodnia";
+            case 'basic4_forest': return "Krzak";
+            case 'basic4_water': return "Szklanka wody";
+            case 'basic5_fire': return "Małe ognisko";
+            case 'basic5_forest': return "Sosna karłowata";
+            case 'basic5_water': return "Deszcz";
+            case 'basic6_fire': return "Duże ognisko";
+            case 'basic6_forest': return "Dąb";
+            case 'basic6_water': return "Staw";
+            case 'basic7_fire': return "Fajerwerki";
+            case 'basic7_forest': return "Zagajnik";
+            case 'basic7_water': return "Rzeka";
+        }
+        return "";
+    },
 
+    getFlavourText: function (name)
+    {
+        switch (name)
+        {
+
+        }
+        return "";
+    },
 }
