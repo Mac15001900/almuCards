@@ -92,27 +92,21 @@ let cardData = {
         "element": ELEMENT.FIRE,
         "value": 12,
         "effect": ""
-    }, plus5_forest: {
-        "ID": 39,
-        "name": "plus5_forest",
-        "displayName": "Plantacja",
-        "element": ELEMENT.FOREST,
+    }, plus5: {
+        "name": "plus5",
+        "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": plus5
-    }, minus5_fire: {
-        "ID": 43,
-        "name": "minus5_fire",
-        "displayName": "Polano",
-        "element": ELEMENT.FIRE,
+        "effect": plus5_effect
+    }, minus5: {
+        "name": "minus5",
+        "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": minus5
-    }, replace1_water: {
-        "ID": 47,
-        "name": "replace1_water",
-        "displayName": "Starorzecze",
-        "element": ELEMENT.WATER,
+        "effect": minus5_effect
+    }, replace1: {
+        "name": "replace1",
+        "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": replace1
+        "effect": replace1_effect
     }, weaker_fire: {
         "ID": 49,
         "name": "weaker_fire",
@@ -173,37 +167,59 @@ let DeckBank = {
         return new_deck;
     },
 
-    getCardsFromNames: function (names) {
+    getCardsFromNames: function (names)
+    {
         let ret = [];
-        let prototype = names.map(n => cardData[n]);
-        for (var i = 0; i < prototype.length; i++)
+        //let prototype = names.map(n => cardData[n]);
+        for (var i = 0; i < names.length; i++)
         {
-            switch (prototype[i].element)
+            var specific_element = ELEMENT.NONE;
+            if (names[i].indexOf("_fire") != -1)    //sprawdzanie, czy nie chodzi o konkretny żywioł
+            {
+                names[i] = names[i].slice(0, names[i].indexOf("_fire"));
+                specific_element = ELEMENT.FIRE;
+            }
+            else if (names[i].indexOf("_forest") != -1)
+            {
+                names[i] = names[i].slice(0, names[i].indexOf("_forest"));
+                specific_element = ELEMENT.FOREST;
+            }
+            else if (names[i].indexOf("_water") != -1)
+            {
+                names[i] = names[i].slice(0, names[i].indexOf("_water"));
+                specific_element = ELEMENT.WATER;
+            }
+            let prototype = cardData[names[i]]; //pobieranie podstawowych danych z bazy
+            if (specific_element != ELEMENT.NONE)   //przypisanie konkretnego żywiołu, jeśli potrzeba
+                prototype.element = specific_element;
+            switch (prototype.element)  //tworzenie kart (dodawanie nazw i flavourText)
             {
                 case ELEMENT.ONE_EACH:
-                    ret.push(this.createSingleCard(prototype[i], ELEMENT.FIRE));
-                    ret.push(this.createSingleCard(prototype[i], ELEMENT.FOREST));
-                    ret.push(this.createSingleCard(prototype[i], ELEMENT.WATER));
+                    ret.push(this.createSingleCard(prototype, ELEMENT.FIRE));
+                    ret.push(this.createSingleCard(prototype, ELEMENT.FOREST));
+                    ret.push(this.createSingleCard(prototype, ELEMENT.WATER));
+                    break;
+                case ELEMENT.NONE:
                     break;
                 default:
-                    ret.push(prototype[i]);
+                    ret.push(this.createSingleCard(prototype, prototype.element));
             }
         }
         return ret;
     },
-    
+
     createSingleCard: function (prototype, element)
     {
-        var new_card = Object.assign({}, prototype);
+        var new_card = Object.assign({}, prototype);    //tworzenie nowego obiektu
         new_card.element = element;
-        switch (element)
+        switch (element)    //zmiana nazwy karty
         {
             case ELEMENT.FIRE: new_card.name += "_fire"; break;
             case ELEMENT.FOREST: new_card.name += "_forest"; break;
             case ELEMENT.WATER: new_card.name += "_water"; break;
         }
-        new_card.displayName = this.getDisplayName(new_card.name);
-        new_card.flavourText = this.getFlavourText(new_card.name);
+        new_card.displayName = this.getDisplayName(new_card.name);  //dodawanie wyświetlanej nazwy
+        new_card.flavourText = this.getFlavourText(new_card.name);  //dodawanie flavour text
         return new_card;
     },
 
@@ -263,16 +279,24 @@ let DeckBank = {
             case 'basic7_fire': return "Fajerwerki";
             case 'basic7_forest': return "Zagajnik";
             case 'basic7_water': return "Rzeka";
+            case 'plus5_fire': return "Pięć świeczek";
+            case 'plus5_forest': return "Plantacja";
+            case 'plus5_water': return "Krople deszczu";
+            case 'minus5_fire': return "Polano";
+            case 'minus5_forest': return "Oset";
+            case 'minus5_water': return "Kostki lodu";
+            case 'replace1_fire': return "Feniks";
+            case 'replace1_forest': return "Torfowisko";
+            case 'replace1_water': return "Starorzecze";
+            default: return " ";
         }
-        return "";
     },
 
     getFlavourText: function (name)
     {
         switch (name)
         {
-
+            default: return " ";
         }
-        return "";
     },
 }
