@@ -192,7 +192,7 @@ let Card = new Phaser.Class({
         this.outline.setDepth(-5);
         this.outline.setVisible(false);
 
-        this.image = scene.add.image(0, - 200 * scale, data.image || data.name).setScale(scale);
+        this.image = scene.add.image(0, - 200 * scale, data.image || data.name).setScale(scale / .3);
         //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
         //this.nameTextfont = (100 * scale).toString() + "px Arial";
