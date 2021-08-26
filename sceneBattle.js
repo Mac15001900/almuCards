@@ -18,8 +18,8 @@ let SceneBattle = new Phaser.Class({
     init: function (data) {
         this.userDrone = data.userDrone;
         this.opponentDrone = data.opponentDrone;
-        this.userDeck = DeckBank.getCardsFromNames(data.userDeck);
-        this.opponentDeck = DeckBank.getCardsFromNames(data.opponentDeck);
+        this.userDeck = DeckBank.assemblyDeck(data.userDeck);
+        this.opponentDeck = DeckBank.assemblyDeck(data.opponentDeck);
         DeckBank.validateDeck(this.userDeck);
         DeckBank.validateDeck(this.opponentDeck);
     },
