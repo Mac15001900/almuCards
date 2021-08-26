@@ -1,4 +1,4 @@
-let plus5 =
+let plus5_effect =
 {
     "type": "value_change",
     "value": 5,
@@ -8,7 +8,7 @@ let plus5 =
     "end_condition": "one_use"
 };
 
-let minus5 =
+let minus5_effect =
 {
     "type": "value_change",
     "value": -5,
@@ -18,7 +18,7 @@ let minus5 =
     "end_condition": "one_use"
 };
 
-let replace1 =
+let replace1_effect =
 {
     "type": "card_replace",
     "value": 1,
