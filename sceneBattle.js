@@ -135,7 +135,7 @@ let SceneBattle = new Phaser.Class({
         this.userWon.update(points.user);
         this.enemyWon.update(points.enemy);
 
-        let table = Give_effects_table(cardData.basic_fire_1, cardData.basic_fire_1, effects);  //2 pierwsze argumenty to karty bez efektów
+        let table = Give_effects_table(cardData.basic1, cardData.basic1, effects);  //2 pierwsze argumenty to karty bez efektów
         let afterturn_table = Give_afterturn_effects_table(effects);
         for (let i = 0; i < 2; i++) {
             if (table[i] > 0) {
