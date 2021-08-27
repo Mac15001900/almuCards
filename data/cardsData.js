@@ -5,7 +5,6 @@ const ELEMENT =
     FOREST: 2,
     WATER: 3,
     ONE_EACH: 4,
-    RANDOM: 5,
 
     info: {} //Informacje o danym żywiole, przydatne w wielu miejscach
 };
@@ -37,11 +36,6 @@ ELEMENT.info[ELEMENT.NONE] = {
 };
 ELEMENT.info[ELEMENT.ONE_EACH] = {
     name: "Po jednym",
-    color: 0xaaaaaa,
-    real: false,
-};
-ELEMENT.info[ELEMENT.RANDOM] = {
-    name: "Wylosowane",
     color: 0xaaaaaa,
     real: false,
 };
@@ -104,20 +98,53 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 7,
         "effect": ""
-    }, basic13_forest: {
-        "ID": 12,
-        "name": "basic_forest_13",
-        "displayName": "Apokalipsa baobabów",
-        "element": ELEMENT.FOREST,
-        "value": 13,
+    }, basic8: {
+        "name": "basic8",
+        "differentNames": true,
+        "displayName": ["Ogniste tronado", "Las", "Jezioro"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 8,
         "effect": ""
-    }, basic12_fire: {
-        "ID": 24,
-        "name": "basic12_fire",
-        "displayName": "Bomba atomowa",
-        "flavour": "Calkiem jeszcze nowa",
-        "element": ELEMENT.FIRE,
+    }, basic9: {
+        "name": "basic9",
+        "differentNames": true,
+        "displayName": ["Pożar domu", "Gęsty las", "Powódź"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 9,
+        "effect": ""
+    }, basic10: {
+        "name": "basic10",
+        "differentNames": true,
+        "displayName": ["Pożar lasu", "Baobab", "Śniardwy"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 10,
+        "effect": ""
+    }, basic11: {
+        "name": "basic11",
+        "differentNames": true,
+        "displayName": ["Wulkan", "Sekwoja olbrzymia", "Morze"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 11,
+        "effect": ""
+    }, basic12: {
+        "name": "basic12",
+        "differentNames": true,
+        "displayName": ["Bomba atomowa", "Puszcza", "Ocean"],
+        "flavour": ["Całkiem jeszcze nowa", "", ""],
+        "element": ELEMENT.ONE_EACH,
         "value": 12,
+        "effect": ""
+    }, basic13: {
+        "name": "basic13",
+        "differentNames": true,
+        "displayName": ["Słońce", "Apokalipsa baobabów", "Wodna planeta"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 13,
         "effect": ""
     }, plus5: {
         "name": "plus5",
@@ -143,19 +170,20 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.replace1
-    }, weaker_fire: {
-        "ID": 49,
-        "name": "weaker_fire",
-        "displayName": "Grecki ogien",
-        "element": ELEMENT.FIRE,
+    }, weaker: {
+        "name": "weaker",
+        "differentNames": true,
+        "displayName": ["Grecki ogień", "Kaktus", "Powódź lasu"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": effectData.weaker_element
-    }, only_values_forest: {
-        "ID": 57,
-        "name": "only_values_forest",
+    }, only_values: {
+        "name": "only_values",
+        "differentNames": false,
         "displayName": "Kości",
         "flavour": "Zostaly rzucone",
-        "element": ELEMENT.FOREST,
+        "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": effectData.only_values
     }
@@ -182,9 +210,11 @@ let DeckBank = {
 
     getClasicDeck: function ()
     {
-        let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
-        //let specialCardList = ["plus5_rand", "replace1_rand", "minus5_rand"];
-        return this.getBasicDeck(1, 6).concat(specialCardList);
+        //let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
+        let specialCardList = ["plus5_rand", "replace1_rand", "minus5_rand"];
+        let clasicDeck = this.getBasicDeck(1, 6).concat(specialCardList);
+        this.transformRandToElements(clasicDeck);
+        return clasicDeck;
     },
 
     getTestDeck: function ()
@@ -194,40 +224,59 @@ let DeckBank = {
 
     assemblyDeck: function (names)
     {
-        Phaser.Actions.Shuffle(names);
         let new_deck = this.getCardsFromNames(names);
         Phaser.Actions.Shuffle(new_deck);
         return new_deck;
+    },
+
+    transformRandToElements: function (names)
+    {
+        Phaser.Actions.Shuffle(names);
+        let ret = [];
+        let randomElement = Math.floor((Math.random() * 3)) + 1;    //jeżeli będzie potrzebne losowanie żywiołów, losowanie początku pętli
+        for (let i = 0; i < names.length; i++)
+        {
+            if (names[i].indexOf("_rand") !== -1)
+            {
+                randomElement++;
+                if (randomElement > 3)
+                    randomElement -= 3;
+                names[i] = names[i].slice(0, names[i].indexOf("_rand"));
+                switch (randomElement)
+                {
+                    case ELEMENT.FIRE: names[i] += "_fire"; break;
+                    case ELEMENT.FOREST: names[i] += "_forest"; break;
+                    case ELEMENT.WATER: names[i] += "_water"; break;
+                }
+            }
+            ret.push(names[i]);
+        }
+        return ret;
     },
 
     getCardsFromNames: function (names)
     {
         let ret = [];
         //let prototype = names.map(n => cardData[n]);
-        for (var i = 0; i < names.length; i++)
+        for (let i = 0; i < names.length; i++)
         {
-            var specyficElement = ELEMENT.NONE;
-            if (names[i].indexOf("_all") != -1)
+            let specyficElement = ELEMENT.NONE;
+            if (names[i].indexOf("_all") !== -1)
             {
                 names[i] = names[i].slice(0, names[i].indexOf("_all"));
                 specyficElement = ELEMENT.ONE_EACH;
             }
-            else if (names[i].indexOf("_rand") != -1)
-            {
-                names[i] = names[i].slice(0, names[i].indexOf("_rand"));
-                specyficElement = ELEMENT.RANDOM;
-            }
-            else if (names[i].indexOf("_fire") != -1)    //sprawdzanie, czy nie chodzi o konkretny żywioł
+            else if (names[i].indexOf("_fire") !== -1)    //sprawdzanie, czy nie chodzi o konkretny żywioł
             {
                 names[i] = names[i].slice(0, names[i].indexOf("_fire"));
                 specyficElement = ELEMENT.FIRE;
             }
-            else if (names[i].indexOf("_forest") != -1)
+            else if (names[i].indexOf("_forest") !== -1)
             {
                 names[i] = names[i].slice(0, names[i].indexOf("_forest"));
                 specyficElement = ELEMENT.FOREST;
             }
-            else if (names[i].indexOf("_water") != -1)
+            else if (names[i].indexOf("_water") !== -1)
             {
                 names[i] = names[i].slice(0, names[i].indexOf("_water"));
                 specyficElement = ELEMENT.WATER;
@@ -235,19 +284,12 @@ let DeckBank = {
             let prototype = cardData[names[i]]; //pobieranie podstawowych danych z bazy
             if (specyficElement != ELEMENT.NONE)   //przypisanie konkretnego żywiołu, jeśli potrzeba
                 prototype.element = specyficElement;
-            var randomElement = Math.floor((Math.random() * 3)) + 1;    //jeżeli będzie potrzebne losowanie żywiołów, losowanie początku pętli
             switch (prototype.element)  //tworzenie kart (dodawanie nazw i flavourText)
             {
                 case ELEMENT.ONE_EACH:
                     ret.push(this.createSingleCard(prototype, ELEMENT.FIRE));
                     ret.push(this.createSingleCard(prototype, ELEMENT.FOREST));
                     ret.push(this.createSingleCard(prototype, ELEMENT.WATER));
-                    break;
-                case ELEMENT.RANDOM:
-                    if (randomElement > 3)  //pętla żywiołów 1 2 3 1
-                        randomElement -= 3;
-                    ret.push(this.createSingleCard(prototype, randomElement));
-                    randomElement++;    //następny żywioł w pętli
                     break;
                 case ELEMENT.NONE:
                     break;
