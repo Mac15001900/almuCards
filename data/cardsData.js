@@ -311,15 +311,15 @@ let DeckBank = {
     {
         var new_card = Object.assign({}, prototype);    //tworzenie nowego obiektu
         new_card.element = element;
-        switch (element)    //zmiana nazwy karty
-        {
-            case ELEMENT.FIRE: new_card.name += "_fire"; break;
-            case ELEMENT.FOREST: new_card.name += "_forest"; break;
-            case ELEMENT.WATER: new_card.name += "_water"; break;
-            default: console.log("Blad: " + new_card.name + " " + element);
-        }
         if (new_card.differentNames)
         {
+            switch (element)    //zmiana nazwy karty
+            {
+              case ELEMENT.FIRE: new_card.name += "_fire"; break;
+              case ELEMENT.FOREST: new_card.name += "_forest"; break;
+              case ELEMENT.WATER: new_card.name += "_water"; break;
+              default: console.log("Blad: " + new_card.name + " " + element);
+            }
             new_card.displayName = new_card.displayName[new_card.element - 1];
             new_card.flavour = new_card.flavour[new_card.element - 1];
         }
