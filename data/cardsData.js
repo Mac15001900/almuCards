@@ -104,20 +104,53 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 7,
         "effect": ""
-    }, basic13_forest: {
-        "ID": 12,
-        "name": "basic_forest_13",
-        "displayName": "Apokalipsa baobabów",
-        "element": ELEMENT.FOREST,
-        "value": 13,
+    }, basic8: {
+        "name": "basic8",
+        "differentNames": true,
+        "displayName": ["Ogniste tronado", "Las", "Jezioro"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 8,
         "effect": ""
-    }, basic12_fire: {
-        "ID": 24,
-        "name": "basic12_fire",
-        "displayName": "Bomba atomowa",
-        "flavour": "Calkiem jeszcze nowa",
-        "element": ELEMENT.FIRE,
+    }, basic9: {
+        "name": "basic9",
+        "differentNames": true,
+        "displayName": ["Pożar domu", "Gęsty las", "Powódź"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 9,
+        "effect": ""
+    }, basic10: {
+        "name": "basic10",
+        "differentNames": true,
+        "displayName": ["Pożar lasu", "Baobab", "Śniardwy"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 10,
+        "effect": ""
+    }, basic11: {
+        "name": "basic11",
+        "differentNames": true,
+        "displayName": ["Wulkan", "Sekwoja olbrzymia", "Morze"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 11,
+        "effect": ""
+    }, basic12: {
+        "name": "basic12",
+        "differentNames": true,
+        "displayName": ["Bomba atomowa", "Puszcza", "Ocean"],
+        "flavour": ["Całkiem jeszcze nowa", "", ""],
+        "element": ELEMENT.ONE_EACH,
         "value": 12,
+        "effect": ""
+    }, basic13: {
+        "name": "basic13",
+        "differentNames": true,
+        "displayName": ["Słońce", "Apokalipsa baobabów", "Wodna planeta"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 13,
         "effect": ""
     }, plus5: {
         "name": "plus5",
@@ -143,19 +176,20 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.replace1
-    }, weaker_fire: {
-        "ID": 49,
-        "name": "weaker_fire",
-        "displayName": "Grecki ogien",
-        "element": ELEMENT.FIRE,
+    }, weaker: {
+        "name": "weaker",
+        "differentNames": true,
+        "displayName": ["Grecki ogień", "Kaktus", "Powódź lasu"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": effectData.weaker_element
-    }, only_values_forest: {
-        "ID": 57,
-        "name": "only_values_forest",
+    }, only_values: {
+        "name": "only_values",
+        "differentNames": false,
         "displayName": "Kości",
         "flavour": "Zostaly rzucone",
-        "element": ELEMENT.FOREST,
+        "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": effectData.only_values
     }
