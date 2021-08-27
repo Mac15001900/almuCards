@@ -10,7 +10,7 @@ let SceneVictory = new Phaser.Class({
     init: function (data) {
         console.log(data);
         this.victor = data.victor; //Gracz, który wygrał
-        this.userWon = this.victor.id === drone.clientId; //Czy wygrał użytkownik
+        this.userWon = Network.isUser(this.victor.id) //Czy wygrał użytkownik
         this.element = data.element; //Element, za pomocą którego nastąpiła wygrana
     },
 

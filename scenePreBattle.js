@@ -18,10 +18,10 @@ let ScenePreBattle = new Phaser.Class({
         this.spectator = false;
         this.playerDeck = DeckBank.getClasicDeck();
         this.enemyDeck = DeckBank.getClasicDeck();
-        this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => sendMessage("startBattle", {}), false);
+        this.startButton = new TextButton(this, this.sys.game.canvas.width / 2, 500, "Start", () => Network.sendMessage("startBattle", {}), false);
 
-        if (drone.clientId) {
-            this.playerDrone = getMember(drone.clientId);
+        if (Network.drone.clientId) {
+            this.userDrone = Network.getUser();
             this.networkConnected();
         }
 
@@ -39,7 +39,8 @@ let ScenePreBattle = new Phaser.Class({
     },
 
     networkConnected() {
-        if (!this.userDrone) this.userDrone = getMember(drone.clientId);
+        let members = Network.members;
+        if (!this.userDrone) this.userDrone = Network.getUser();
         if (members.length > 2) {
             this.opponentText.text = "Pojedynek już trwa pomiędzy " + members[0].clientData.name + " a " + members[1].clientData.name;
             this.spectator = true;
@@ -54,7 +55,7 @@ let ScenePreBattle = new Phaser.Class({
     },
 
     memberJoined(newMember) {
-        if (members.length === 2) {
+        if (Network.members.length === 2) {
             this.opponentDrone = newMember;
             this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
             this.startButton.setActive(true);
