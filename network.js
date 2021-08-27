@@ -1,8 +1,5 @@
-
-
-
 let Network = {
-    ROOM_BASE: 'observable-main-',
+    ROOM_BASE: 'observable-lobby-',
     CHANNEL_ID: 'OQgQpPaAFSHuouGK',
     roomName: null,
     members: [],
@@ -47,6 +44,8 @@ let Network = {
     setup: function () {
         let username = this.getUsername();
         this.roomName = this.ROOM_BASE + this.getRoomName();
+        console.assert(username);
+        console.assert(this.roomName);
 
         this.drone = new ScaleDrone(this.CHANNEL_ID, {
             data: { // Will be sent out as clientData via events
