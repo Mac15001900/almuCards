@@ -281,25 +281,32 @@ let DeckBank = {
                 names[i] = names[i].slice(0, names[i].indexOf("_water"));
                 specyficElement = ELEMENT.WATER;
             }
-            let prototype = cardData[names[i]]; //pobieranie podstawowych danych z bazy
+            let prototype = Object.assign({}, cardData[names[i]]); //pobieranie podstawowych danych z bazy
             if (specyficElement != ELEMENT.NONE)   //przypisanie konkretnego żywiołu, jeśli potrzeba
                 prototype.element = specyficElement;
-            switch (prototype.element)  //tworzenie kart (dodawanie nazw i flavourText)
-            {
-                case ELEMENT.ONE_EACH:
-                    ret.push(this.createSingleCard(prototype, ELEMENT.FIRE));
-                    ret.push(this.createSingleCard(prototype, ELEMENT.FOREST));
-                    ret.push(this.createSingleCard(prototype, ELEMENT.WATER));
-                    break;
-                case ELEMENT.NONE:
-                    break;
-                default:
-                    ret.push(this.createSingleCard(prototype, prototype.element));
-            }
+            ret = ret.concat(this.createCardsFromPrototype(prototype));
         }
         return ret;
     },
 
+    createCardsFromPrototype: function (prototype)
+    {
+        let ret = [];
+        switch (prototype.element)  //tworzenie kart (dodawanie nazw i flavourText)
+        {
+            case ELEMENT.ONE_EACH:
+                ret.push(this.createSingleCard(prototype, ELEMENT.FIRE));
+                ret.push(this.createSingleCard(prototype, ELEMENT.FOREST));
+                ret.push(this.createSingleCard(prototype, ELEMENT.WATER));
+                break;
+            case ELEMENT.NONE:
+                break;
+            default:
+                ret.push(this.createSingleCard(prototype, prototype.element));
+        }
+        return ret;
+    },
+    
     createSingleCard: function (prototype, element)
     {
         var new_card = Object.assign({}, prototype);    //tworzenie nowego obiektu
