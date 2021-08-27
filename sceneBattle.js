@@ -558,6 +558,14 @@ let Button = new Phaser.Class({
                             break;
                     }
                     break;
+                case "galleryLeft":
+                    scene.page--;
+                    scene.createPage();
+                    break;
+                case "galleryRight":
+                    scene.page++;
+                    scene.createPage();
+                    break;
             }
         });
 

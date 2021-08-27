@@ -52,7 +52,7 @@ let game = new Phaser.Game({
             debug: false
         }
     },
-    scene: [ScenePreBattle, SceneBattle, SceneVictory],
+    scene: [ScenePreBattle, SceneBattle, SceneVictory, SceneGallery],
 });
 
 function getActiveScene() {
