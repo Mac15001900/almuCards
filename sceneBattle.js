@@ -362,6 +362,19 @@ let Card = new Phaser.Class({
 
 });
 
+let Hand = new Phaser.Class({
+    params: {
+        cardScale: 0.175,
+        cardBaseWidth: 800,
+        cardBaseHeight: 1000,
+        cardPadding: 16,
+        bottomPadding: 64,
+        topPadding: 32,
+
+        enemyCardScale: 0.175 / 2,
+
+    },
+
 initialize:
         function Hand(scene, size, deckData, enemy = false)
         {
