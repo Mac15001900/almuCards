@@ -404,7 +404,8 @@ let Hand = new Phaser.Class({
     },
 
     drawCard: function () {
-        this.cards.push(new Card(this.scene, this.deck.pop(), 0, this.cardY, this.cardScale, this));
+        //this.cards.push(new Card(this.scene, this.deck.pop(), 0, this.cardY, this.cardScale, this));
+        this.cards.push(this.deck.pop());
         this.repositionCards(this.scene);
         if (!this.enemy) {
             this.cards[this.cards.length - 1].Reverse_card(true);
