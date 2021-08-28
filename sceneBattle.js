@@ -362,63 +362,59 @@ let Card = new Phaser.Class({
 
 });
 
-let Hand = new Phaser.Class({
-    params: {
-        cardScale: 0.175,
-        cardBaseWidth: 800,
-        cardBaseHeight: 1000,
-        cardPadding: 16,
-        bottomPadding: 64,
-        topPadding: 32,
+initialize:
+        function Hand(scene, size, deckData, enemy = false)
+        {
+            this.size = size;
+            this.enemy = enemy;
+            this.cards = [];
+            //this.deck = deckData;
+            this.scene = scene;
+            this.replace_cards = [0, 0];
+            this.cardScale = enemy ? this.params.enemyCardScale : this.params.cardScale;
 
-        enemyCardScale: 0.175 / 2,
+            let screenWidth = scene.sys.game.canvas.width;
+            let screenHeight = scene.sys.game.canvas.height;
+            if (enemy)
+                this.cardY = this.params.topPadding + this.params.cardBaseHeight * this.cardScale / 2;
+            else
+                this.cardY = screenHeight - this.params.cardBaseHeight * this.cardScale / 2 - this.params.bottomPadding;
+            this.cancelButton = new Button(this.scene, "cancel", scene.layout.CANCEL_BUTTON_X, scene.layout.CANCEL_BUTTON_Y, 0.5, "button_cancel", this);
 
-    },
+            this.deck = []; //nie mylić deck z this.deck (pierwsze ma tylko informacje, a drugie całe karty)
+            let deckDataLength = deckData.length;   //linijka obowiązkowa, inaczej pętla nie dojdzie do końca
+            for (let i = 0; i < deckDataLength; i++) //tworzenie talii kart z listy danych
+                this.deck.push(new Card(this.scene, deckData.pop(), 0, this.cardY, this.cardScale, this));
 
-    initialize:
-    function Hand(scene, size, deck, enemy = false) {
-        this.size = size;
-        this.enemy = enemy;
-        this.cards = [];
-        //this.deck = deck;
-        this.scene = scene;
-        this.replace_cards = [0, 0];
-        this.cardScale = enemy ? this.params.enemyCardScale : this.params.cardScale;
+            console.assert(size > 0);
+            //console.assert(deckData.length >= size);
+            console.assert(this.deck.length >= size);
+            this.drawUntilLimit();
+            this.phase = PHASE.REST;
+            this.changePhase(PHASE.MOVE);
+        },
 
-        let screenWidth = scene.sys.game.canvas.width;
-        let screenHeight = scene.sys.game.canvas.height;
-        if (enemy)
-            this.cardY = this.params.topPadding + this.params.cardBaseHeight * this.cardScale / 2;
-        else this.cardY = screenHeight - this.params.cardBaseHeight * this.cardScale / 2 - this.params.bottomPadding;
-        this.cancelButton = new Button(this.scene, "cancel", scene.layout.CANCEL_BUTTON_X, scene.layout.CANCEL_BUTTON_Y, 0.5, "button_cancel", this);
-        
-        this.deck = []; //nie mylić deck z this.deck (pierwsze ma tylko informacje, a drugie całe karty)
-        for (let i = 0; i < deck.length; i++) //tworzenie talii kart z listy danych
-            this.deck.push(new Card(this.scene, deck.pop(), 0, this.cardY, this.cardScale, this));
-        
-        console.assert(size > 0);
-        console.assert(deck.length >= size);
-        this.drawUntilLimit();
-        this.phase = PHASE.REST;
-        this.changePhase(PHASE.MOVE);
-    },
-
-    drawCard: function () {
+    drawCard: function ()
+    {
         //this.cards.push(new Card(this.scene, this.deck.pop(), 0, this.cardY, this.cardScale, this));
         this.cards.push(this.deck.pop());
         this.repositionCards(this.scene);
-        if (!this.enemy) {
+        if (!this.enemy)
+        {
             this.cards[this.cards.length - 1].Reverse_card(true);
         }
     },
 
-    drawUntilLimit: function () {
-        while (this.cards.length < this.size) {
+    drawUntilLimit: function ()
+    {
+        while (this.cards.length < this.size)
+        {
             this.drawCard();
         }
     },
 
-    removeCard: function (card) {
+    removeCard: function (card)
+    {
         let i = this.cards.indexOf(card);
         console.assert(i >= 0);
         let removed = this.cards.splice(i, 1);
@@ -426,26 +422,30 @@ let Hand = new Phaser.Class({
         this.repositionCards();
     },
 
-    repositionCards: function () {
+    repositionCards: function ()
+    {
         let cardWidth = this.params.cardBaseWidth * this.cardScale;
         let padding = this.params.cardPadding;
         let fullWidth = this.cards.length * cardWidth + (this.cards.length - 1) * padding;
         let screenWidth = this.scene.sys.game.canvas.width;
-        if (fullWidth <= screenWidth) 
+        if (fullWidth <= screenWidth)
         {
             for (let i = 0; i < this.deck.length; i++)
             {
                 this.deck[i].visual.x = screenWidth / 2 - fullWidth / 2 - 1.2 * (cardWidth + padding) + cardWidth / 2;
                 this.deck[i].visual.y = this.cardY + 50 * i * (this.enemy ? -1 : 1) * this.deck[i].scale;
             }
-            for (let i = 0; i < this.cards.length; i++) 
+            for (let i = 0; i < this.cards.length; i++)
             {
                 this.cards[i].visual.x = screenWidth / 2 - fullWidth / 2 + i * (cardWidth + padding) + cardWidth / 2;
                 this.cards[i].visual.y = this.cardY;
             }
-        } else {
+        }
+        else
+        {
             console.warn("Ręka nie miejści się na ekranie");
-            for (let i = 0; i < this.cards.length; i++) {
+            for (let i = 0; i < this.cards.length; i++)
+            {
                 this.cards[i].visual.x = cardWidth / 2 + i * (screenWidth - cardWidth) / (this.cards.length - 1);
             }
         }
@@ -453,10 +453,12 @@ let Hand = new Phaser.Class({
 
     },
 
-    changePhase: function (new_phase) {
+    changePhase: function (new_phase)
+    {
         this.phase = new_phase;
         this.cancelButton.visual.visible = false;
-        switch (this.phase) {
+        switch (this.phase)
+        {
             case PHASE.MOVE:
                 for (var i = 0; i < 2; i++) //ukrywanie ikonek efektów wykonywanych po turze
                     this.scene.replaceIcons[i].visual.setVisible(false);
