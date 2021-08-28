@@ -186,7 +186,55 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": effectData.only_values
-    }
+    }, divB: {
+        "name": "divB",
+        "differentNames": false,
+        "displayName": "Dywergencja pola magnetycznego",
+        "flavour": "Jesteś zerem!",
+        "element": ELEMENT.ONE_EACH,
+        "value": 0,
+        "effect": ""
+    }, kontrola_czystosci: {
+        "name": "kontrola_czystosci",
+        "differentNames": false,
+        "displayName": "Kontrola czystości",
+        "flavour": "Zbiórka przed namiotami!",
+        "element": ELEMENT.FOREST,
+        "value": 8,
+        "effect": ""
+    }, goraca_woda: {
+        "name": "goraca_woda",
+        "differentNames": false,
+        "displayName": "Gorąca woda",
+        "flavour": "Uwaga! Może wybuchnąć",
+        "element": ELEMENT.WATER,
+        "value": 3,
+        "effect": ""
+    }, empty_set: {
+        "name": "empty_set",
+        "differentNames": false,
+        "displayName": "Zbiór pusty",
+        "flavour": "Jest podzbiorem Twoich myśli",
+        "element": ELEMENT.ONE_EACH,
+        "value": 4,
+        "effect": effectData.cancel_enemy_effect
+    }, synta: {
+        "name": "synta",
+        "differentNames": false,
+        "displayName": "Synta supernowa",
+        "flavour": "Niebo żyleta, obsy do rana!",
+        "element": ELEMENT.ONE_EACH,
+        "value": 2.54,
+        "effect": effectData.deck_look1
+    }, gumowa_kaczuszka: {
+        "name": "gumowa_kaczuszka",
+        "differentNames": false,
+        "displayName": "Gumowa kaczuszka",
+        "flavour": "Kwa kwa",
+        "element": ELEMENT.WATER,
+        "value": 3,
+        "effect": effectData.add_duck2
+    },
 };
 
 //TODO: W sumie to można by to przenieść do cardLogic.js jak go stworzymy, tu powinny być dane a nie tyle logiki
