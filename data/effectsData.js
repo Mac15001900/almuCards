@@ -49,6 +49,13 @@ let effectData =
         "activation": "next_turn",
         "start_condition": "",
         "end_condition": "one_use"
+    }, only_values: {
+        "type": "only_values",
+        "value": 0,
+        "target": "",
+        "activation": "next_turn",
+        "start_condition": "",
+        "end_condition": "one_use"
     }, cancel_enemy_effect: {
         "type": "cancel_effect",
         "value": 0,
