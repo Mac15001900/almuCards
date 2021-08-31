@@ -42,13 +42,6 @@ let effectData =
         "activation": "next_turn",
         "start_condition": "",
         "end_condition": "one_use"
-    }, only_values: {
-        "type": "only_values",
-        "value": 0,
-        "target": "",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
     }, only_elements: {
         "type": "only_elements",
         "value": 0,
@@ -56,6 +49,35 @@ let effectData =
         "activation": "next_turn",
         "start_condition": "",
         "end_condition": "one_use"
+    }, only_values: {
+        "type": "only_values",
+        "value": 0,
+        "target": "",
+        "activation": "next_turn",
+        "start_condition": "",
+        "end_condition": "one_use"
+    }, cancel_enemy_effect: {
+        "type": "cancel_effect",
+        "value": 0,
+        "target": "enemy_card",
+        "activation": "this_turn",
+        "start_condition": "",
+        "end_condition": "one_use"
+    }, deck_look1: {
+        "type": "deck_look",
+        "value": 1,
+        "target": "player",
+        "activation": "after_turn",
+        "start_condition": "",
+        "end_condition": "one_use"
+    }, add_duck2: {
+        "type": "add_cards",
+        "value": 2,
+        "target": "player",
+        "activation": "after_turn",
+        "start_condition": "",
+        "end_condition": "one_use",
+        "cards": ["gumowa_kaczuszka"]
     },
 };
 
@@ -69,14 +91,14 @@ let EffectBank = {
         var ret = "";
         switch (effect.start_condition)
         {
-            case "if_win": ret += "jesli ta karta wygra "; break;
-            case "if_lose": ret += "jesli ta karta przegra "; break;
-            case "if_draw": ret += "jesli ta karta zremisuje "; break;
+            case "if_win": ret += "jeśli ta karta wygra, "; break;
+            case "if_lose": ret += "jeśli ta karta przegra, "; break;
+            case "if_draw": ret += "jeśli ta karta zremisuje, "; break;
         }
         switch (effect.activation)
         {
             case "this_turn": ret += "podczas tej tury "; break;
-            case "next_turn": ret += "w nastepnej turze "; break;
+            case "next_turn": ret += "w następnej turze "; break;
             case "after_turn": ret += "pod koniec tej tury "; break;
         }
         switch (effect.target)
@@ -92,16 +114,26 @@ let EffectBank = {
                 if (effect.value > 0)
                     ret += "+";
                 break;
-            case "card_replace": ret += "moze odrzucic karty i dobrac nowe w ilosci: "; break;
-            case "card_remove": ret += "musi odrzucic karty i dobrac nowe w ilosci: "; break;
-            case "weaker_element": ret += "wygrywa slabszy zywiol "; break;
-            case "weaker_value": ret += "przy tych samych zywiolach wygrywa nizsza wartosc "; break;
-            case "only_elements": ret += "licza sie tylko zywioly "; break;
-            case "only_values": ret += "licza sie tylko wartosci "; break;
+            case "card_replace": ret += "może odrzucic karty i dobrać nowe w ilości: "; break;
+            case "card_remove": ret += "musi odrzucic karty i dobrać nowe w ilości: "; break;
+            case "deck_look": ret += "może podglądnąć karty ze swojej talii w ilości: "; break;
+            case "add_cards": ret += "otrzumuje do swojej talii "; break;
+            case "weaker_element": ret += "wygrywa słabszy żywioł "; break;
+            case "weaker_value": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
+            case "only_elements": ret += "liczą się tylko żywioły "; break;
+            case "only_values": ret += "liczą się tylko wartości "; break;
+            case "cancel_effect": ret += "traci swój efekt "; break;
         }
         if (effect.value != 0)
             ret += effect.value;
         ret = ret.charAt(0).toUpperCase() + ret.slice(1);   //making first letter big
+        if (effect.type === "add_cards")
+        {
+            switch (effect.cards[0])
+            {
+                case "gumowa_kaczuszka": ret += " razy kartę \"Gumowa kaczuszka\""; break;
+            }
+        }
         return ret;
     },
 

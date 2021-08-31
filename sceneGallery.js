@@ -10,7 +10,7 @@ let SceneGallery = new Phaser.Class({
 
     preload: function ()
     {
-        console.log("Preload in gallery");  //³adowanie obrazków t³a
+        console.log("Preload in gallery");  //Â³adowanie obrazkÃ³w tÂ³a
         this.load.image('card_fire', 'assets/card_fire.png');
         this.load.image('card_forest', 'assets/card_forest.png');
         this.load.image('card_water', 'assets/card_water.png');
@@ -18,13 +18,13 @@ let SceneGallery = new Phaser.Class({
         for (let card in cardData)
             this.cards = this.cards.concat(DeckBank.createCardsFromPrototype(cardData[card]));
         let imagesToLoad = DeckBank.getImages(this.cards);
-        for (let image in imagesToLoad) //³adowanie obrazków kart
+        for (let image in imagesToLoad) //Â³adowanie obrazkÃ³w kart
         {
             this.load.image(imagesToLoad[image], 'assets/cardImages/' + imagesToLoad[image] + '.png');
         }
         this.load.image('card_reverse', 'assets/card_reverse.png');
 
-        this.load.image('button_left', 'assets/button_left.png'); //obrazki przycisków
+        this.load.image('button_left', 'assets/button_left.png'); //obrazki przyciskÃ³w
         this.load.image('button_right', 'assets/button_right.png');
 
         this.page = 0;
@@ -43,6 +43,9 @@ let SceneGallery = new Phaser.Class({
         BUTTOR_LEFT_Y: 430,
         BUTTON_RIGHT_X: 1125,
         BUTTOR_RIGHT_Y: 430,
+        
+        BIG_CARD_X: 600,
+        BIG_CARD_Y: 400,
     },
 
     create: function ()
