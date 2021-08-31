@@ -65,3 +65,30 @@ function getActiveScene() {
 }
 
 
+//Networking logic
+
+function receiveMessage(data, serverMember) {
+    if (debugConfig.log_messages) console.log(data);
+    if (serverMember) {
+        let member = Network.getMember(serverMember);
+        //console.log(member);
+        switch (data.type) {
+            case 'debug': //Messages used for debugging
+                console.log(data.content);
+                break;
+            case 'welcome': //Sent whenever a new player joins the game, informing them of the game state
+                if (!gs.received) {
+                    //This is what happens after the player joins a non-empty room
+                    gs = data.content;
+                    //'gs' will now contain 'memberData' with all extra info about members; you might want to copy it to 'members'
+                    //updateAllUI();
+                }
+                break;
+            //default: console.error('Unkown message type received: ' + data.type);
+        }
+
+        getActiveScene().receiveMessage(data, member);
+    } else {
+        addMessageToListDOM('Server: ' + data.content);
+    }
+}

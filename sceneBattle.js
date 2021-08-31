@@ -113,6 +113,8 @@ let SceneBattle = new Phaser.Class({
 
         this.testBattle = new Battle(this, this.userDeck, this.opponentDeck);
         this.updateIcons(this.testBattle.points, []);
+
+        //Network.sendMessage("duelLoaded", {}, Network.Room.DUEL);
     },
     update: function (timestep, dt) {
 

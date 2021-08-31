@@ -1,10 +1,15 @@
 let Network = {
     ROOM_BASE: 'observable-lobby-',
     CHANNEL_ID: 'OQgQpPaAFSHuouGK',
-    roomName: null,
+    roomNames: {},
     members: [],
     shareable_link: null,
     setupDone: false,
+    Room: {
+        LOBBY: 1,
+        DUEL: 2,
+    },
+
 
     //Zwraca informacje o wybranym graczu. Przyjmuje id lub (niekompletne) informacje o graczu otrzymane od ScaleDrone
     getMember: function (input) {
@@ -33,19 +38,19 @@ let Network = {
     },
 
     //Wysyła wiadomość do wszystkich innych graczy na tym samym kanale
-    sendMessage: function (type, content) {
+    sendMessage: function (type, content, room = this.Room.LOBBY) {
         if (debugConfig.disable_messages) return;
         var message = { type: type, content: content };
         if (this.members.length === 1) receiveMessage(message, members[0]); //Won't send anything over the network if we're the only player
-        else this.drone.publish({ room: this.roomName, message: message });
+        else this.drone.publish({ room: this.roomNames[room], message: message });
     },
 
     //Uzyskuje nazwę użytkownika i serwera, łączy się z lobby
     setup: function () {
         let username = this.getUsername();
-        this.roomName = this.ROOM_BASE + this.getRoomName();
+        this.roomNames[this.Room.LOBBY] = this.ROOM_BASE + this.getRoomName();
         console.assert(username);
-        console.assert(this.roomName);
+        console.assert(this.roomNames[this.Room.LOBBY]);
 
         this.drone = new ScaleDrone(this.CHANNEL_ID, {
             data: { // Will be sent out as clientData via events
@@ -59,8 +64,8 @@ let Network = {
             }
             console.log('Nawiązano połączenie ze Scaledrone');
 
-            const room = this.drone.subscribe(this.roomName);
-            room.on('open', error => {
+            const lobbyRoom = this.drone.subscribe(this.roomNames[this.Room.LOBBY]);
+            lobbyRoom.on('open', error => {
                 if (error) {
                     return console.error(error);
                 }
@@ -70,7 +75,7 @@ let Network = {
             });
 
             // List of currently online members, emitted once
-            room.on('members', m => {
+            lobbyRoom.on('members', m => {
                 this.members = m.filter(x => !this.isDebugger(x));
                 if (this.members.length === 1) {
                     //This is what happens when the player joins an empty room
@@ -79,7 +84,7 @@ let Network = {
             });
 
             // User joined the room
-            room.on('member_join', member => {
+            lobbyRoom.on('member_join', member => {
                 if (this.isDebugger(member)) return;
                 this.members.push(member);
                 if (gs.received) {
@@ -91,13 +96,13 @@ let Network = {
             });
 
             // User left the room
-            room.on('member_leave', ({ id }) => {
+            lobbyRoom.on('member_leave', ({ id }) => {
                 if (!this.getMember(id)) return; //If they don't exist, it was probably the debugger
                 const index = this.members.findIndex(member => member.id === id);
                 this.members.splice(index, 1);
             });
 
-            room.on('data', receiveMessage);
+            lobbyRoom.on('data', receiveMessage);
 
         });
         this.setupDone = true;
@@ -132,7 +137,7 @@ let Network = {
         if (debugConfig.custom_server) return debugConfig.custom_server_name;
 
         //Try to get it from the URL
-        var roomFromURL = (new URLSearchParams(window.location.search)).get('room');
+        var roomFromURL = (new URLSearchParams(window.location.search)).get('server');
         if (roomFromURL) return roomFromURL;
 
         //If that fails, ask the user for it. 
@@ -145,44 +150,3 @@ let Network = {
 
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function receiveMessage(data, serverMember) {
-    if (debugConfig.log_messages) console.log(data);
-    if (serverMember) {
-        let member = Network.getMember(serverMember);
-        //console.log(member);
-        switch (data.type) {
-            case 'debug': //Messages used for debugging
-                console.log(data.content);
-                break;
-            case 'welcome': //Sent whenever a new player joins the game, informing them of the game state
-                if (!gs.received) {
-                    //This is what happens after the player joins a non-empty room
-                    gs = data.content;
-                    //'gs' will now contain 'memberData' with all extra info about members; you might want to copy it to 'members'
-                    //updateAllUI();
-                }
-                break;
-            //default: console.error('Unkown message type received: ' + data.type);
-        }
-
-        getActiveScene().receiveMessage(data, member);
-    } else {
-        addMessageToListDOM('Server: ' + data.content);
-    }
-}

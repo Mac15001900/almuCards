@@ -9,6 +9,7 @@ let ScenePreBattle = new Phaser.Class({
 
     preload: function () {
         console.log('Preload in pre-battle scene');
+        this.load.image('invite_icon', 'invite_icon.png');
     },
 
     create: function () {
@@ -67,10 +68,25 @@ let ScenePreBattle = new Phaser.Class({
         this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.playerDeck, opponentDeck: this.enemyDeck });
         //this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.testDeck, opponentDeck: this.testDeck });
     },
-    
-    openGallery()
-    {
+
+    openGallery() {
         this.scene.start('SceneGallery');
     },
 
+});
+
+let PlayerList = new Phaser.Class({
+
+    initialize:
+    function PlayerList(x, y) {
+
+    }
+
+});
+
+let PlayerListElement = new Phaser.Class({
+    initialize:
+    function PlayerListElement(scene, x, y, member) {
+
+    }
 });
