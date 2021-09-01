@@ -15,7 +15,6 @@ let ScenePreBattle = new Phaser.Class({
 
     create: function ()
     {
-
         this.opponentText = this.add.text(this.sys.game.canvas.width / 2, 100, "Łączenie...", { font: "32px Arial", fill: "#ffffff", align: 'center' });
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
