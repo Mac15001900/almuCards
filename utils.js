@@ -61,3 +61,15 @@ let TextButton = new Phaser.Class({
         this.nameText.setVisible(visible);
     }
 });
+
+//Prosty przycisk, wykonujący określoną funkcję gdy się go kliknie, i powiększający się gdy się na niego najedzie
+//TODO Może po prostu powienien dziedziczyć z Image
+let SimpleButton = new Phaser.Class({
+    initialize:
+    function SimpleButton(scene, x, y, sprite, callback, scaleChange = 1.05) {
+        this.icon = scene.add.image(x, y, sprite);
+        this.icon.setInteractive().on('pointerup', callback, scene);
+        this.icon.on('pointerover', () => this.icon.setScale(scaleChange));
+        this.icon.on('pointerout', () => this.icon.setScale(1));
+    }
+});

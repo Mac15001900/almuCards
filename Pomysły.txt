@@ -20,7 +20,8 @@ Stołówka:
   Tablica --> |
   Permanentny pisak --> otrzymujesz bonus +1 do końca walki |
 Inne:
-  Kontrola czystości (ogień) --> jeśli przeciwnik ma więcej lasu (w kartach zwycięskich) niż ty, wygrywasz |
+  [Wersja PvE] Kontrola czystości (ogień) --> jeśli przeciwnik ma więcej lasu (w kartach zwycięskich) niż ty, wygrywasz |
+  [Wersja PvP] Kontrola czystości (las?) --> Obaj gracze ujawniają swoje karty na ręce | 
   Obóz pracy --> |
   Poranne rozruchy --> Jeśli to pierwsza karta w pojedynku dostaje +10 |
 
@@ -68,19 +69,48 @@ Almuinside:
   Piękne samochody --> |
   Kwas chlebowy --> |
   Widzę cię --> podglądnij 2 losowe karty z ręki przeciwnika | "Widzę Cię!"
+
+  Mokry latech (woda) --> Jeśli przegra z kartą "Sarna", przeciwnik nie dodaje jej do kart wygranych| "... i przyjdzie sarna i go zje i umrze"
+  Sarna (las) --> Jeśli wygra z kartą "Mokry latech", nie dodajesz jej do kart wygranych | 
+  Granat zaczepny --> | "To logiczne!"
+  Caug (9, ogień)  --> | "Całki zjada na śniadanie" | Zdjęcie Cauga
+  Drzewo sandałowe (las) --> | | Zdjęcie "drzewa sandałowego"
+  Żelazko (ogień)  --> | "Idealne do robienia tostów!"
 Obsy:
   Obrotowa mapka nieba --> | "Istnieje również wersja dla Dzietrznik"
   Nieskolimowany szukacz --> |
-  Białe światło --> w następnej rundzie zostaną rzucone losowe karty z twojej ręki i ręki przeciwnika |
+  Białe światło (ogień) --> jeśli wygra, -5 do następnej karty przeciwnika [PvE: w następnej rundzie zostaną rzucone losowe karty z twojej ręki i ręki przeciwnika] | "Nie po oczach!"
+  Czerwona taśma (woda) --> -4 do ognia przeciwnika w następnej rundzie | "Od razu lepiej"
+  Czerwone światło (2, ogień) --> | 
+  Bolid (ogień) --> | "Łooooooooo..."
   Szyk parówkowy --> | "Idealny na obsy meteorów"
+  Wszystkie teleskopy?
 Śpiewnikowe:
-  Sen srebrny w płynie (woda) --> |
+  Sen srebrny w płynie (woda) --> +4 do następnej karty | "Kiedy nie masz czasu na normalny sen"
   Jesienne wino (woda) --> jeśli wygra, możesz podejrzeć 2 losowe karty z ręki przeciwnika |
   Zbroja --> | "Magicznych na niej rytów dziś nie odczyta nikt"
   Stopy, stopy, stopy --> | "Stopy stooopy, stopy stopy stopy"
   Marynarze floty wojennej --> | 
   Złota kula nad wodami --> | "Pod spuchniętymi powiekami"
   Złodzieje --> | "Przecież wszystko oddałem wam"
+
+  Fregaty dwie (woda) --> | 
+  Ta keja (woda) --> | "O, tu jest!"
+  Świrujący czajnik (4, woda?) --> | "Myślałby kto, że rodem z Manhattanu"
+  Krajka (las)  --> | "Faktycznie, kolorowa" | Na obrazek coś takiego: https://www.zoefabrics.eu/3308-thickbox_default/krajka-macrame.jpg
+  Jaworzyna (las)  --> W następnej rundzie +5 do wody. Dobierasz "Deszcz" | "To może nie być dobry pomysł"
+  Majster Bieda (las?)  --> Odraca wartości w następnej rundzie | 
+  Przystojny wiatr  --> +6 w następnej rundzie jeśli przegra | "Lecz nie jest źle \n Mogło być gorzej"
+  Pieśń skrzydlata (7) --> Jeśli wygra, zamiast następnej karty dobierz losową pieśń skrzydlatą | "Zatańczymy się siebie bez kooooooońcaaaaaa..."
+  Para bobrów (las)  --> -5 do wody przeciwnika w następnej rundzie | Jakiś taki obrazek: https://i.pinimg.com/originals/77/22/d1/7722d1973afc63fa12ed05253372ea98.jpg
+  Morska opowieść (woda)  --> | Nie ma efektu, za to cała karta zajęta jest przez losowy wers Morskich Opowieści. (do zainmplementowania jak nam się będzie nudzić xD )
+
+  Mgła --> | "aaaa-AAAA-aaaa"
+  Torba --> dodaje do ręki kartę "Grabie" i "Bomba atomowa" | 
+  Grabie (las) --> | 
+  Bomba atomowa (12-14) --> -5 do twojej następnej karty | "Całkiem jeszcze nowa"
+
+  Równoległe? Diament (z wielorybników)? Łemata? Ocean? Hiszpańskie dziewczyny (ogień)? Krzyżowiec?
 Gra nocna:
   Niezbalansowana mechanika (50) --> przegrywa z nie swoim żywiołem |
   Plothole --> do końca gry twoja karta wygrywa przy remisie | "W sumie to nie wiem, dlaczego taki efekt"
