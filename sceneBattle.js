@@ -477,9 +477,9 @@ let Hand = new Phaser.Class({
             }
             for (let i = this.cards.length - 1; i >= 0; i--)
             {
-                this.cards[i].visual.x = screenWidth / 2 - fullWidth / 2 + i * (cardWidth + padding) + cardWidth / 2;
-                this.cards[i].visual.y = this.cardY;
-                this.cards[i].visual.setDepth(5);
+                this.cards[this.cards.length - i - 1].visual.x = screenWidth / 2 - fullWidth / 2 + i * (cardWidth + padding) + cardWidth / 2;
+                this.cards[this.cards.length - i - 1].visual.y = this.cardY;
+                this.cards[this.cards.length - i - 1].visual.setDepth(5);
             }
         }
         else
