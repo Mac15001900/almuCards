@@ -18,12 +18,13 @@ Stołówka:
   Podwieczorek --> jeśli wygra do twojej talii zostanie dodane losowe jedzenie |
 Ćwiartka:
   Tablica --> |
-  Permanentny pisak --> otrzymujesz bonus +1 do końca walki |
+  Permanentny pisak --> otrzymujesz bonus +1 do końca walki | "To już chyba tak zostanie" [Obrazki z pisakami w kolorze czerwonym, niebieskim i zielonym, zależnie od żywiołu]
 Inne:
   [Wersja PvE] Kontrola czystości (ogień) --> jeśli przeciwnik ma więcej lasu (w kartach zwycięskich) niż ty, wygrywasz |
   [Wersja PvP] Kontrola czystości (las?) --> Obaj gracze ujawniają swoje karty na ręce | 
   Obóz pracy --> |
   Poranne rozruchy --> Jeśli to pierwsza karta w pojedynku dostaje +10 |
+  Lustrzane odbicie --> Odwraca działanie wartości i żywiołów w następnej turze | [W sumie to nawet całkiem fizyczne ;) ] 
 
 Grzyb:
  grzyb = każda karta tej grupy
@@ -32,7 +33,7 @@ Grzyb:
   Grzybnia (1) --> +1 do wartości za każdy zagrany grzyb |
   Zarodnik --> jeśli wygra do twojej talii zostanie dodany losowy grzyb |
 Komar:
-  Wyssanie krwi --> w następnej rundzie otrzymujesz +3, a przeciwnik -3 | "Lepiej było wykąpać się w offie"
+  Wyssanie krwi --> w następnej rundzie otrzymujesz +3, a przeciwnik -3 | "Lepiej było wykąpać się w offie" [Miałem identyczny pomysł, z dokładnie tym efektem xD ]
   Malaria --> jeśli wygra przeciwnik otrzymuje -2 do końca walki |
 Kleszcz:
   Przyczepienie --> następna karta otrzymuje bonus równy wartości obecnej karty przeciwnika |
@@ -70,12 +71,13 @@ Almuinside:
   Kwas chlebowy --> |
   Widzę cię --> podglądnij 2 losowe karty z ręki przeciwnika | "Widzę Cię!"
 
-  Mokry latech (woda) --> Jeśli przegra z kartą "Sarna", przeciwnik nie dodaje jej do kart wygranych| "... i przyjdzie sarna i go zje i umrze"
+  Mokry latech (woda) --> Jeśli przegra z kartą "Sarna", przeciwnik nie dodaje jej do kart wygranych| "... i przyjdzie sarna i go zje i umrze."
   Sarna (las) --> Jeśli wygra z kartą "Mokry latech", nie dodajesz jej do kart wygranych | 
   Granat zaczepny --> | "To logiczne!"
   Caug (9, ogień)  --> | "Całki zjada na śniadanie" | Zdjęcie Cauga
   Drzewo sandałowe (las) --> | | Zdjęcie "drzewa sandałowego"
   Żelazko (ogień)  --> | "Idealne do robienia tostów!"
+  ∛27 (ogień) --> | "Ma bardzo ciekawą wartość"
 Obsy:
   Obrotowa mapka nieba --> | "Istnieje również wersja dla Dzietrznik"
   Nieskolimowany szukacz --> |
@@ -98,7 +100,7 @@ Obsy:
   Ta keja (woda) --> | "O, tu jest!"
   Świrujący czajnik (4, woda?) --> | "Myślałby kto, że rodem z Manhattanu"
   Krajka (las)  --> | "Faktycznie, kolorowa" | Na obrazek coś takiego: https://www.zoefabrics.eu/3308-thickbox_default/krajka-macrame.jpg
-  Jaworzyna (las)  --> W następnej rundzie +5 do wody. Dobierasz "Deszcz" | "To może nie być dobry pomysł"
+  Jaworzyna (las)  --> W następnej rundzie masz +5 do wody. Dobierasz "Deszcz" | "To może nie być dobry pomysł"
   Majster Bieda (las?)  --> Odraca wartości w następnej rundzie | 
   Przystojny wiatr  --> +6 w następnej rundzie jeśli przegra | "Lecz nie jest źle \n Mogło być gorzej"
   Pieśń skrzydlata (7) --> Jeśli wygra, zamiast następnej karty dobierz losową pieśń skrzydlatą | "Zatańczymy się siebie bez kooooooońcaaaaaa..."
@@ -108,11 +110,11 @@ Obsy:
   Mgła --> | "aaaa-AAAA-aaaa"
   Torba --> dodaje do ręki kartę "Grabie" i "Bomba atomowa" | 
   Grabie (las) --> | 
-  Bomba atomowa (12-14) --> -5 do twojej następnej karty | "Całkiem jeszcze nowa"
+  Bomba atomowa (12-14, ogień) --> -5 do twojej następnej karty | "Całkiem jeszcze nowa"
 
   Równoległe? Diament (z wielorybników)? Łemata? Ocean? Hiszpańskie dziewczyny (ogień)? Krzyżowiec?
 Gra nocna:
-  Niezbalansowana mechanika (50) --> przegrywa z nie swoim żywiołem |
+  Niezbalansowana mechanika (50) --> przegrywa z nie swoim żywiołem | [Lustro będzie musiało odwracać wartości i żywioły, a nie wygranego, inaczej faktycznie będzie niezbalansowana :P ]
   Plothole --> do końca gry twoja karta wygrywa przy remisie | "W sumie to nie wiem, dlaczego taki efekt"
   Tego nie przewidzieli (-1) --> przy tym samym żywiole wygrywa niższa wartość |
   Losowy quest --> |
@@ -142,4 +144,13 @@ Zodiak:
   Koziorożec --> |
   Wodnik (woda) --> w następnej rundzie woda wygrywa z lasem o niższej wartości |
   Ryby (woda) --> |
+
+Trygonometria (ciekawe by były w walce, gdzie obaj gracze mają z tym talie - najlepiej z jakąś lekką możliwością podglądania kart przeciwnika/swoich przyszłych):
+  Sinus, Cosinus, Tangens, Kotangens - zwykłe karty bez efektów
+  Pierwsze Ćwiartka (1) --> +4 do kart "Sinus", "Cosinus", "Tangens" i "Contangens" (na zawsze) |
+  Druga Ćwiartka (2) --> +4 do karty "Sinus", -4 do "Cosinus", "Tangens" i "Contangens" (na zawsze) |
+  Trzecia Ćwiartka (3) --> +4 do kart "Tangens" i "Contangens", -4 do "Sinus" i "Cosinus" (na zawsze) |
+  Czwarta Ćwiartka (4) --> +4 do karty "Cosinus", -4 do "Sinus", "Tangens" i "Contangens" (na zawsze) |
   
+  Nieco inna wersja: sinus to woda, cosinus to las, tangens to ogień. Contangensa nie ma. Wtedy każdy buff działa na karty konkretnego żywiołu, co może prowadzić do ciekawych sytuacji.
+

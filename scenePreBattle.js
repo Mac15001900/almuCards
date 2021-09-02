@@ -124,7 +124,7 @@ let PlayerListElement = new Phaser.Class({
         this.icon = scene.add.image(x + this.text.width + layout.LIST_BUTTON_DISTANCE, y, 'invite_icon');
         this.icon.x += this.icon.width / 2; //Nie możemy użyć setOrigin, bo setScale by dziwnie wyglądało
         this.icon.setInteractive().on('pointerup', function (event) {
-            Network.sendMessage("invite", { receiver: member.id });
+            InviteManager.sendInvite(member.id);
         }, scene);
         this.icon.on('pointerover', () => {
             this.icon.setScale(1.08);
@@ -144,9 +144,9 @@ let Invite = new Phaser.Class({
         this.base = scene.add.rectangle(0, 0, layout.INVITE_BOX_WIDTH, layout.INVITE_BOX_HEIGHT, 0x778899); //TODO: standaryzacja kolorów
         this.text = scene.add.text(16, -layout.INVITE_BOX_HEIGHT * (1 / 4), "Zaproszenie od " + member.clientData.name, { font: "24px Arial", fill: "#ffffff", wordWrap: { width: layout.INVITE_BOX_WIDTH - 32 }, align: 'center' }).setOrigin(0.5, 0.5);
         this.cancel = new SimpleButton(scene, - layout.INVITE_BOX_WIDTH * (1 / 4), layout.INVITE_BOX_HEIGHT * (1 / 6),
-            'cancel_circle', () => Network.sendMessage('inviteReply', { source: member.id, reply: false }));
+            'cancel_circle', InviteManager.rejectInvite);
         this.confirm = new SimpleButton(scene, + layout.INVITE_BOX_WIDTH * (1 / 4), layout.INVITE_BOX_HEIGHT * (1 / 6),
-            'confirm_circle', () => Network.sendMessage('inviteReply', { source: member.id, reply: true }));
+            'confirm_circle', InviteManager.acceptInvite);
 
         this.visual.add([this.base, this.text, this.cancel.icon, this.confirm.icon]);
     }

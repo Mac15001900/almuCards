@@ -71,20 +71,25 @@ function receiveMessage(data, serverMember) {
     if (debugConfig.log_messages) console.log(data);
     if (serverMember) {
         let member = Network.getMember(serverMember);
-        //console.log(member);
+        let content = data.content;
         switch (data.type) {
-            case 'debug': //Messages used for debugging
+            case 'debug': //Wiadomości do debugowania
                 console.log(data.content);
                 break;
-            case 'welcome': //Sent whenever a new player joins the game, informing them of the game state
+            case 'welcome': //Informacje o stanie serwera dla nowych graczy
                 if (!gs.received) {
-                    //This is what happens after the player joins a non-empty room
-                    gs = data.content;
-                    //'gs' will now contain 'memberData' with all extra info about members; you might want to copy it to 'members'
-                    //updateAllUI();
+                    //Dołączyliśmy do niepustego serwera
+                    gs = content;
+                    let memberData = gs.memberData;
+                    for (var i = 0; i < memberData.length; i++) {
+                        getMember(memberData[i]).team = memberData[i].team;
+                        getMember(memberData[i]).codeDrawn = memberData[i].codeDrawn;
+                    }
                 }
                 break;
-            //default: console.error('Unkown message type received: ' + data.type);
+            case 'inviteReply':
+                InviteManager.processResponse(content, member);
+                break;
         }
 
         getActiveScene().receiveMessage(data, member);
