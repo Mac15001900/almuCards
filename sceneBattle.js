@@ -56,6 +56,10 @@ let SceneBattle = new Phaser.Class({
         this.load.image('symIconMinus', 'assets/minus_icon.png');
         this.load.image('symIconReplaceCan', 'assets/replace_icon_can.png');
         this.load.image('symIconReplaceMust', 'assets/replace_icon_must.png');
+        this.load.image('symIconWeakerElement', 'assets/weaker_element_icon.png');
+        this.load.image('symIconLowerValue', 'assets/lower_value_icon.png');
+        this.load.image('symIconOnlyElements', 'assets/only_elements_icon.png');
+        this.load.image('symIconOnlyValues', 'assets/only_values_icon.png');
 
         //Obrazki przycisków
         this.load.image('buttonCancel', 'assets/button_cancel.png');
@@ -118,6 +122,12 @@ let SceneBattle = new Phaser.Class({
             new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'symIconReplaceCan'),
             new Icon(this, layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT, layout.EFFET_ICON_SCALE, 'symIconReplaceMust'),
         ];
+        this.conditionIcons = [  //po jednej kopii, nie ma sensu pokazywać ich po obu stronach ekranu
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'symIconWeakerElement'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'symIconLowerValue'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING - layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'symIconOnlyElements'),
+            new Icon(this, layout.WIDTH - layout.EFFET_ICON_HORIZONTAL_PADDING - 2 * layout.EFFET_ICON_SPACING, layout.EFFET_ICON_HEIGHT + layout.EFFET_ICON_SPACING, layout.EFFET_ICON_SCALE, 'symIconOnlyValues'),
+        ];
 
         this.testBattle = new Battle(this, this.userDeck, this.opponentDeck);
         this.updateIcons(this.testBattle.points, []);
@@ -162,6 +172,22 @@ let SceneBattle = new Phaser.Class({
             else
                 this.minusIcons[i].visual.visible = false;
         }
+        if (inturnTable[4] === -1)
+            this.conditionIcons[0].visual.visible = true;
+        else
+            this.conditionIcons[0].visual.visible = false;
+        if (inturnTable[5] === -1)
+            this.conditionIcons[1].visual.visible = true;
+        else
+            this.conditionIcons[1].visual.visible = false;
+        if (inturnTable[6] === 1)
+            this.conditionIcons[2].visual.visible = true;
+        else
+            this.conditionIcons[2].visual.visible = false;
+        if (inturnTable[7] === 1)
+            this.conditionIcons[3].visual.visible = true;
+        else
+            this.conditionIcons[3].visual.visible = false;
         if (afterturnTable[0] != 0)
         {
             this.replaceIcons[0].valueText.text = afterturnTable[0];
@@ -174,10 +200,10 @@ let SceneBattle = new Phaser.Class({
             this.replaceIcons[0].visual.visible = false;
             this.replaceIcons[1].valueText.text = afterturnTable[2];
             this.replaceIcons[1].visual.visible = true;
+            console.log("REMOVE1");
         }
         else
             this.replaceIcons[1].visual.visible = false;
-
     },
 
 });
@@ -217,7 +243,8 @@ let Card = new Phaser.Class({
             //this.image.setScale(64 / this.image.height); //Skalujemy obrazek, żeby jego wysokość wynosiła 64
 
             //this.nameTextfont = (100 * scale).toString() + "px Arial";
-            this.nameTextfont = ((100 * 12 / (Math.max(data.displayName.length - 12, 0) + 12)) * scale) + "px Arial";
+            //this.nameTextfont = ((100 * 12 / (Math.max(data.displayName.length - 12, 0) + 12)) * scale) + "px Arial";
+            this.nameTextfont = (90 * 12 / Math.max(data.displayName.length, 12) * scale) + "px Arial";
             this.nameText = scene.add.text(0, 0, data.displayName, { font: this.nameTextfont, fill: "#000000" });
             this.nameText.setOrigin(0.5, 0.5);
             //this.nameText.x = x;
@@ -352,8 +379,11 @@ let Card = new Phaser.Class({
                     this.scene.replaceIcons[1].valueText.text = this.hand.replaceCards[1];
                     if (this.hand.replaceCards[1] <= 0)
                     {
-                        if (replaceCards[0] > 0)
+                        if (this.hand.replaceCards[0] > 0)
+                        {
                             this.hand.changePhase(PHASE.CAN_REPLACE);
+                            this.scene.replaceIcons[0].visual.setVisible(true);
+                        }
                         else
                             this.hand.changePhase(PHASE.MOVE);
                     }
@@ -371,13 +401,13 @@ let Card = new Phaser.Class({
         let bigCard = new Card(this.scene, this.data, this.scene.layout.BIG_CARD_X, this.scene.layout.BIG_CARD_Y, 0.4, null);
         bigCard.onlyToShow = true;
         if (!this.reverseImage.visible)
-            bigCard.reverseCard(false);
+            bigCard.reverseCard(true, false);
     },
 
-    reverseCard: function (is_interactive)
+    reverseCard: function (reverseVisible, isInteractive)
     {
-        this.interactive = is_interactive;
-        this.reverseImage.setVisible(!this.reverseImage.visible);
+        this.interactive = isInteractive;
+        this.reverseImage.setVisible(!reverseVisible);
     },
 
     getTime: function ()
@@ -433,20 +463,38 @@ let Hand = new Phaser.Class({
             this.changePhase(PHASE.MOVE);
         },
 
+    addCard: function (cardData)
+    {
+        let newCard = new Card(this.scene, cardData, 0, this.cardY, this.cardScale, this);
+        let index = Math.floor(Math.random() * (this.deck.length + 1));   //losowanie miejsca w talii, gdzie zostanie dodana karta
+        this.deck.push(newCard);    //umieszczanie karty na końcu talii
+        for (let i = this.deck.length - 1; i > index; i--)  //przsuwanie karty na odpowiednie miejsce w talii
+        {
+            let bufor = this.deck[i];
+            this.deck[i] = this.deck[i - 1];
+            this.deck[i - 1] = bufor;
+        }
+        this.drawUntilLimit();  //aby ręka się wypełniła, jeśli nie było z czego dobierać
+        this.repositionCards(this.scene);
+    },
+
     drawCard: function ()
     {
         //this.cards.push(new Card(this.scene, this.deck.pop(), 0, this.cardY, this.cardScale, this));
-        this.cards.push(this.deck.pop());
-        this.repositionCards(this.scene);
-        if (!this.enemy)
+        if (this.deck.length > 0)
         {
-            this.cards[this.cards.length - 1].reverseCard(true);
+            this.cards.push(this.deck.shift());
+            if (!this.enemy)
+            {
+                this.cards[this.cards.length - 1].reverseCard(true, true);
+            }
         }
+        this.repositionCards(this.scene);
     },
 
     drawUntilLimit: function ()
     {
-        while (this.cards.length < this.size)
+        while (this.cards.length < this.size && this.deck.length > 0)
         {
             this.drawCard();
         }
@@ -492,6 +540,18 @@ let Hand = new Phaser.Class({
         }
 
 
+    },
+
+    lookOnDeck: function (value)
+    {
+        for (let i = 0, reversedCards = 0; i < this.deck.length && reversedCards < value; i++)
+        {
+            if (this.deck[i].reverseImage.visible)
+            {
+                this.deck[i].reverseCard(true, false);
+                reversedCards++;
+            }
+        }
     },
 
     changePhase: function (new_phase)
@@ -546,7 +606,7 @@ let Battle = new Phaser.Class({
         if (this.cards[0] != null && this.cards[1] != null)
         {
             for (let i = 0; i < 2; i++)
-                this.cardsObjects[i].reverseCard(false);
+                this.cardsObjects[i].reverseCard(true, false);
             setTimeout(() => { this.endTurn(); }, 1750);
         }
     },
@@ -571,20 +631,27 @@ let Battle = new Phaser.Class({
         }
         this.scene.updateIcons(this.points, this.effects);
         this.CheckIfAnyoneWins();
+        EffectBank.addCardsToHands(this.effects, this.playerHand, this.enemyHand);
         this.cards = [null, null];    //czyszczenie tablicy
 
-        let afterturnTable = EffectBank.getAfterturnEffectsTable(this.effects);   //efekty po turze (głównie modyfikujące rękę)
-        if (afterturnTable[0] > 0) //gracz może wymienić karty
+        let afterturnTable = EffectBank.getAfterturnEffectsTable(this.effects);   //efekty po turze (głównie modyfikujące rękę)     
+        if (afterturnTable[2] > 0) //gracz musi wymienić karty
+        {
+            this.playerHand.replaceCards[1] += afterturnTable[1];
+            this.playerHand.changePhase(PHASE.MUST_REPLACE);
+            if (afterturnTable[0] > 0)  //będzie mógł jeszcze dodatkowo wymienić karty
+                this.playerHand.replaceCards[0] += afterturnTable[0]; //zapisanie, ile kart będzie mógł wymienić
+        }
+        else if (afterturnTable[0] > 0) //gracz może wymienić karty
         {
             this.playerHand.replaceCards[0] += afterturnTable[0]; //zapisanie, ile kart może wymienić
             this.playerHand.changePhase(PHASE.CAN_REPLACE);  //ustawienie odpowiedniego trybu
         }
         else
             this.playerHand.changePhase(PHASE.MOVE);
-        if (afterturnTable[2] > 0) //gracz musi wymienić karty
+        if (afterturnTable[4] > 0)  //look on player's deck
         {
-            this.playerHand.replaceCards[1] += afterturnTable[1];
-            this.playerHand.changePhase(PHASE.MUST_REPLACE);
+            this.playerHand.lookOnDeck(afterturnTable[4]);
         }
     },
 
