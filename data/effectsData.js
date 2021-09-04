@@ -119,7 +119,7 @@ let EffectBank = {
             case "deckLook": ret += "może podglądnąć karty ze swojej talii w ilości: "; break;
             case "addCards": ret += "otrzumuje do swojej talii "; break;
             case "weakerElement": ret += "wygrywa słabszy żywioł "; break;
-            case "weakerValue": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
+            case "lowerValue": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
             case "onlyElements": ret += "liczą się tylko żywioły "; break;
             case "onlyValues": ret += "liczą się tylko wartości "; break;
             case "cancelEffect": ret += "traci swój efekt "; break;
@@ -131,7 +131,7 @@ let EffectBank = {
         {
             switch (effect.cards[0])
             {
-                case "gumowaKaczuszka": ret += " razy kartę \"Gumowa kaczuszka\""; break;
+                case "gumowa_kaczuszka": ret += " razy kartę \"Gumowa kaczuszka\""; break;
             }
         }
         return ret;
@@ -140,9 +140,9 @@ let EffectBank = {
     getInturnEffectsTable: function (cardA, cardB, currentEffects)
     {
         let ret = [0, 0, 1, 1, 1, 1, 0, 0]; //legenda pól tabelki znajduje się w pliku "table of effects"
-        if (cardA.effect != "")
+        if (cardA.effect != "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))
             ret = this.translateInturnEffect(cardA.effect, ret);
-        if (cardB.effect != "")
+        if (cardB.effect != "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
             ret = this.translateInturnEffect(cardB.effect, ret);
         for (let i = 0; i < currentEffects.length; i++)
             ret = this.translateInturnEffect(currentEffects[i], ret);
@@ -151,10 +151,33 @@ let EffectBank = {
 
     getAfterturnEffectsTable: function (currentEffects)
     {
-        let ret = [0, 0, 0, 0];
+        let ret = [0, 0, 0, 0, 0, 0];
         for (let i = 0; i < currentEffects.length; i++)
             ret = this.translateAfrerturnEffect(currentEffects[i], ret);
         return ret;
+    },
+
+    addCardsToHands: function (currentEffects, handPlayer, handEnemy)
+    {
+        for (let i = 0; i < currentEffects.length; i++)
+        {
+            if (currentEffects[i].type === "addCards")
+            {
+                if (currentEffects[i].target === "player")
+                    this.addCardToHand(currentEffects[i], handPlayer);
+                //else
+                //    this.addCardToHand(currentEffects[i], handEnemy);
+            }
+        }
+    },
+
+    addCardToHand: function (effect, hand)
+    {
+        if (effect.type === "addCards")
+        {
+            for (let i = 0; i < effect.value; i++)
+                hand.addCard(cardData[effect.cards[i % effect.cards.length]]);
+        }
     },
 
     translateInturnEffect: function (effect, table)
@@ -196,6 +219,12 @@ let EffectBank = {
                     else
                         table[3] += effect.value;
                     break;
+                case "deckLook":
+                    if (effect.target === "player")
+                        table[4] += effect.value;
+                    else
+                        table[5] += effect.value;
+                    break;
             }
         }
         return table;
@@ -213,16 +242,16 @@ let EffectBank = {
                     updatedEffects[updatedEffects.length - 1].endCondition = "oneUse";
                     break;
                 case "untilWin":
-                    if (score != 1)
+                    if (score !== 1)
                         updatedEffects.push(currentEffects[i]);
                     break;
                 case "untilLose":
-                    if (score != -1)
+                    if (score !== -1)
                         updatedEffects.push(currentEffects[i]);
                     break;
             }
         }
-        if (cardA.effect != "")    //adding effects from current cards
+        if (cardA.effect !== "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))    //adding effects from current cards
         {
             if (cardA.effect.startCondition === "" || (cardA.effect.startCondition === "ifWin" && score === 1) ||
                 (cardA.effect.startCondition === "ifLose" && score === -1) || (cardA.effect.startCondition === "ifDraw" && score === 0))
@@ -233,7 +262,7 @@ let EffectBank = {
                     updatedEffects[updatedEffects.length - 1].activation = "thisTurn";
             }
         }
-        if (cardB.effect != "")
+        if (cardB.effect !== "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
         {
             if (cardB.effect.startCondition === "" || (cardB.effect.startCondition === "ifWin" && score === 1) ||
                 (cardB.effect.startCondition === "ifLose" && score === -1) || (cardB.effect.startCondition === "ifDraw" && score === 0))
