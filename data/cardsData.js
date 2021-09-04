@@ -170,6 +170,14 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.replace1
+    }, remove1: {
+        "name": "remove1",
+        "differentNames": true,
+        "displayName": ["Miotacz ognia", "Ent", "Gradobicie"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 5,
+        "effect": effectData.remove1
     }, weaker: {
         "name": "weaker",
         "differentNames": true,
@@ -178,6 +186,14 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": effectData.weakerElement
+    }, lower: {
+        "name": "lower",
+        "differentNames": true,
+        "displayName": ["Słaby płomień", "Mech", "Wir wodny"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 2,
+        "effect": effectData.lowerValue
     }, only_values: {
         "name": "only_values",
         "differentNames": false,
@@ -186,6 +202,14 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": effectData.onlyValues
+    }, only_elements: {
+        "name": "only_elements",
+        "differentNames": false,
+        "displayName": "Potęga żywiołów",
+        "flavour": "",
+        "element": ELEMENT.ONE_EACH,
+        "value": 1,
+        "effect": effectData.onlyElements
     }, divB: {
         "name": "divB",
         "differentNames": false,
@@ -194,7 +218,7 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 0,
         "effect": ""
-    }, kontrolaCzystosci: {
+    }, kontrola_czystosci: {
         "name": "kontrola_czystosci",
         "differentNames": false,
         "displayName": "Kontrola czystości",
@@ -202,7 +226,7 @@ let cardData = {
         "element": ELEMENT.FOREST,
         "value": 8,
         "effect": ""
-    }, goracaWoda: {
+    }, goraca_woda: {
         "name": "goraca_woda",
         "differentNames": false,
         "displayName": "Gorąca woda",
@@ -210,7 +234,7 @@ let cardData = {
         "element": ELEMENT.WATER,
         "value": 3,
         "effect": ""
-    }, emptySet: {
+    }, empty_set: {
         "name": "empty_set",
         "differentNames": false,
         "displayName": "Zbiór pusty",
@@ -226,7 +250,7 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 2.54,
         "effect": effectData.deckLook1
-    }, gumowaKaczuszka: {
+    }, gumowa_kaczuszka: {
         "name": "gumowa_kaczuszka",
         "differentNames": false,
         "displayName": "Gumowa kaczuszka",
@@ -267,7 +291,10 @@ let DeckBank = {
 
     getTestDeck: function ()
     {
-        return this.getClasicDeck();
+        //let specialCardList = ["weaker_all", "lower_all", "only_elements_all", "only_values_all"];
+        let specialCardList = ["gumowa_kaczuszka"];
+        let testDeck = this.getBasicDeck(1, 2).concat(specialCardList);
+        return testDeck;
     },
 
     assemblyDeck: function (names)
