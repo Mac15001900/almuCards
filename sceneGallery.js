@@ -65,7 +65,7 @@ let SceneGallery = new Phaser.Class({
         {
             let j = i - this.page * this.layout.CARDS_PER_PAGE;
             let newCard = new Card(this, this.cards[i], this.layout.FIRST_CARD_X + (j % 8) * this.layout.CARDS_H_SPACING, this.layout.FIRST_CARD_Y + Math.floor(j / 8) * this.layout.CARDS_V_SPACING, this.layout.CARD_SCALE, null);
-            newCard.reverseCard(false);
+            newCard.reverseCard(true, false);
             this.currentCards.push(newCard);
         }
         if (this.page === 0)
