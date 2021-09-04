@@ -3,7 +3,7 @@ let cardsLogic = {
     {
         effectsTable = EffectBank.getInturnEffectsTable(cardPlayer, cardEnemy, currentEffects);    //translate effects to simple table
         //elements check
-        if (!effectsTable[7])
+        if (!effectsTable[6])
         {
             if (cardPlayer.element === ELEMENT.WATER && cardEnemy.element === ELEMENT.FIRE || cardPlayer.element === ELEMENT.FIRE && cardEnemy.element === ELEMENT.FOREST || cardPlayer.element === ELEMENT.FOREST && cardEnemy.element === ELEMENT.WATER)
                 return 1 * effectsTable[4];
@@ -11,7 +11,7 @@ let cardsLogic = {
                 return -1 * effectsTable[4];
         }
         //value check
-        if (!effectsTable[8])
+        if (!effectsTable[7])
         {
             if ((cardPlayer.value + effectsTable[0]) * effectsTable[2] > (cardEnemy.value + effectsTable[1]) * effectsTable[3])
                 return 1 * effectsTable[5];
