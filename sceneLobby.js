@@ -20,7 +20,7 @@ let SceneLobby = new Phaser.Class({
         WIDTH: null,
         HEIGHT: null,
 
-        LIST_SPACING: 16,
+        LIST_SPACING: 32,
         LIST_BUTTON_DISTANCE: 16,
         LIST_START_X: 32,
         LIST_START_Y: 32 + 12,

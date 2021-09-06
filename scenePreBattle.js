@@ -3,14 +3,13 @@ let ScenePreBattle = new Phaser.Class({
     Extends: Phaser.Scene,
 
     initialize:
-        function ScenePreBattle()
-        {
-            Phaser.Scene.call(this, { key: 'ScenePreBattle' });
-        },
+    function ScenePreBattle() {
+        Phaser.Scene.call(this, { key: 'ScenePreBattle' });
+    },
 
-    preload: function ()
-    {
-        console.log('Preload in pre-battle scene');
+    preload: function () {
+        console.log('Preload w pre-battle');
+        console.assert(Network.roomNames[Network.Room.DUEL]); //Gdy ta scena jest wywoływana, powinien istnieć już pokój do pojedynku
     },
 
     layout: {
@@ -28,74 +27,55 @@ let ScenePreBattle = new Phaser.Class({
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.playerDeck = DeckBank.getClasicDeck();
-        this.enemyDeck = null;
+        this.opponentDeck = null;
         this.startButton = new TextButton(this, layout.WIDTH / 2, 500, "Start", () => Network.sendMessage("startBattle", {}, Network.Room.DUEL), false);
-        this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.openGallery());
+        this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.scene.start('SceneGallery'));
 
-        this.createFinished = true;
-        if (Network.drone.clientId) {
-            this.userDrone = Network.getUser();
-            this.networkConnected();
+        //Sprawdzamy, czy uczestniczymy w tym pojedynku. TODO: Strasznie to brzdkie i zależne od systemu nazw. Powinniśmy jakoś ładniej przekazać tej scenie id pojedynkujących się
+        let roomNameParts = Network.roomNames[Network.Room.DUEL].split('-');
+        this.spectator = false;
+        if (Network.isUser(roomNameParts[2])) this.opponentDrone = Network.getMember(roomNameParts[3]);
+        else if (Network.isUser(roomNameParts[3])) this.opponentDrone = Network.getMember(roomNameParts[2]);
+        else this.spectator = true;
+        console.assert(!this.spectator); //TODO: Tymczasowe, póki nie da się być obserwującym
+
+        this.userDrone = Network.getUser();
+        if (!this.spectator) {
+            Network.confirm("preBattleLoaded", Network.Room.DUEL, (() => {
+                Network.sendMessage("opponentDeck", this.playerDeck, Network.Room.DUEL);
+                if (!this.opponentDeck) this.opponentText.text = this.opponentDrone.clientData.name + " wybiera talię...";
+            }).bind(this));
+            this.opponentText.text = "Oczkiwanie na " + this.opponentDrone.clientData.name + "...";
         }
+        this.createFinished = true;
+    },
+
+    update: function (timestep, dt) {
 
     },
 
-    update: function (timestep, dt)
-    {
-
-    },
-
-    receiveMessage: function (data, member)
-    {
-        switch (data.type)
-        {
-            case "enemyDeck":
-                if (this.enemyDeck === null && member != Network.getUser())
-                {
-                    this.enemyDeck = data.content;
-                    Network.sendMessage("enemyDeck", this.playerDeck);  //odpowiedź do przeciwnika z informacjami o własnej talii
+    receiveMessage: function (data, sender) {
+        switch (data.type) {
+            case "opponentDeck":
+                if (this.spectator) {
+                    if (!this.spectatedDecks) this.spectatedDecks = [];
+                    this.spectatedDecks = this.spectatedDecks.concat(data.content);
+                } else if (!Network.isUser(sender)) {
+                    this.opponentDeck = data.content;
+                    this.opponentText.text = "Pojedynek gotowy!";
+                    this.startButton.setActive(true);
                 }
+                if (this.waitingForDeck && !Network.isUser(sender)) this.startBattle();
                 break;
             case "startBattle":
-                this.startBattle();
+                if (this.spectatedDecks || this.opponentDeck) this.startBattle();
+                else this.waitingForDeck = true; //Ta zmienna oznacza, że chcemy już zacząć pojedynek, ale nie otrzymaliśmy jeszcze talii
                 break;
         }
     },
 
-    networkConnected() {
-        if (!this.createFinished) return;
-        let members = Network.members;
-        if (!this.userDrone) this.userDrone = Network.getUser();
-        if (members.length > 2)
-        {
-            this.opponentText.text = "Pojedynek już trwa pomiędzy " + members[0].clientData.name + " a " + members[1].clientData.name;
-            this.spectator = true;
-        } else if (members.length === 2)
-        {
-            if (members[0].id === this.userDrone.id) this.opponentDrone = members[1];
-            else this.opponentDrone = members[0];
-            this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
-            Network.sendMessage("enemyDeck", this.playerDeck);  //przekazanie informacji o swojej talii przeciwnikowi (do wczytywania obrazków)
-            this.startButton.setActive(true);
-        } else
-        {
-            this.opponentText.text = "Oczekiwanie na przeciwnika...";
-        }
-    },
-
-    memberJoined(newMember)
-    {
-        if (Network.members.length === 2)
-        {
-            this.opponentDrone = newMember;
-            this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
-            this.startButton.setActive(true);
-        }
-    },
-
-    startBattle()
-    {
-        this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.playerDeck, opponentDeck: this.enemyDeck });
+    startBattle() {
+        this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.playerDeck, opponentDeck: this.opponentDeck });
         //this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.testDeck, opponentDeck: this.testDeck });
     },
 

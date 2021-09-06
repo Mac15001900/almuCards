@@ -24,6 +24,8 @@ let Network = {
         MESSAGE: 6,
     },
     listeners: [], //WIP
+    confirmations: {},
+    confirmationCallbacks: {},
 
 
     //Zwraca informacje o wybranym graczu. Przyjmuje id lub (niekompletne) informacje o graczu otrzymane od ScaleDrone
@@ -60,9 +62,30 @@ let Network = {
     //Wysyła wiadomość do wszystkich innych graczy na tym samym kanale
     sendMessage: function (type, content, room = this.Room.LOBBY) {
         if (debugConfig.disable_messages) return;
-        var message = { type: type, content: content };
+        let message = { type: type, content: content };
         if (this.members.length === 1) receiveMessage(message, members[0]); //Won't send anything over the network if we're the only player
         else this.drone.publish({ room: this.roomNames[room], message: message });
+    },
+
+    //Potwierdza, że dwóch graczy jest na tym samym etapie czegoś. Wywołuje callback, kiedy jest to prawdą.
+    confirm: function (name, room, callback) {
+        this.sendMessage("confirmation", { name }, room);
+        if (this.confirmations[name]) { //Drugi gracz już tu jest
+            this.confirmations[name] = false;
+            callback();
+        } else {
+            this.confirmations[name] = true;
+            this.confirmationCallbacks[name] = callback;
+        }
+    },
+
+    processConfirmation: function (name) {
+        if (this.confirmations[name]) { //My już tu jesteśmy
+            this.confirmations[name] = false;
+            this.confirmationCallbacks[name]();
+        } else {
+            this.confirmations[name] = true;
+        }
     },
 
     //Uzyskuje nazwę użytkownika i serwera, łączy się z lobby
@@ -144,12 +167,12 @@ let Network = {
 
     //Funckje do wybieranie nazwy użytkownika i serwera
     getUsername: function () {
-        var name;
+        let name;
         if (debugConfig.random_username) name = this.getRandomName();
         else name = prompt(s.enter_username, "");
 
         while (!name) {
-            var name = prompt(s.enter_username_non_empty, "");
+            let name = prompt(s.enter_username_non_empty, "");
         }
         return (name);
     },
@@ -168,13 +191,13 @@ let Network = {
         if (debugConfig.custom_server) return debugConfig.custom_server_name;
 
         //Try to get it from the URL
-        var roomFromURL = (new URLSearchParams(window.location.search)).get('server');
+        let roomFromURL = (new URLSearchParams(window.location.search)).get('server');
         if (roomFromURL) return roomFromURL;
 
         //If that fails, ask the user for it. 
-        var chosenName = prompt(s.enter_room_name);
+        let chosenName = prompt(s.enter_room_name);
         while (!chosenName) chosenName = prompt(s.enter_room_name);
-        var shareableLink = encodeURI(window.location.origin + window.location.pathname + "?room=" + chosenName);
+        let shareableLink = encodeURI(window.location.origin + window.location.pathname + "?room=" + chosenName);
         //addMessageToListDOM(s.shareable_link + " " + shareableLink);
         return chosenName;
     },
@@ -308,6 +331,7 @@ let InviteManager = {
             if (Network.isUser(firstPlayer) || Network.isUser(secondPlayer)) {
                 let duelRoomName = "observable-duel-" + firstPlayer + "-" + secondPlayer;
                 Network.roomNames[Network.Room.DUEL] = duelRoomName;
+                console.log("Statrting duel in " + duelRoomName);
                 Network.connectToRoom(duelRoomName, this.duelStartCallback);
             }
         }

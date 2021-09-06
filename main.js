@@ -12,26 +12,22 @@ let lang = 'pl'; //Specify default language here (will be used if requested lang
 const languages = { 'en': enStrings, 'pl': plStrings };
 let s = languages[lang];
 
-function initLanguage()
-{
+function initLanguage() {
     let browsers = navigator.language; //Gets browser's language.
     if (languages[browsers]) lang = languages[browsers]; //If not supported, we just keep the default
     translate();
 }
 
-function changeLanguage(newLanguage)
-{ //Call this to change current language
+function changeLanguage(newLanguage) { //Call this to change current language
     if (!languages[newLanguage]) return;
     lang = newLanguage;
     s = languages[newLanguage];
     translate();
 }
 
-function translate()
-{
+function translate() {
     let allDom = document.getElementsByTagName("*");
-    for (let i = 0; i < allDom.length; i++)
-    {
+    for (let i = 0; i < allDom.length; i++) {
         let elem = allDom[i];
         let data = elem.dataset;
         //Note: only 'innerHTML', 'value' and 'placeholder' will be translated. Support for more must be added here first
@@ -60,12 +56,9 @@ let game = new Phaser.Game({
     scene: [SceneLobby, ScenePreBattle, SceneBattle, SceneVictory, SceneGallery],
 });
 
-function getActiveScene()
-{
-    for (let i = 0; i < game.scene.scenes.length; i++)
-    {
-        if (game.scene.scenes[i].scene.settings.active)
-        {
+function getActiveScene() {
+    for (let i = 0; i < game.scene.scenes.length; i++) {
+        if (game.scene.scenes[i].scene.settings.active) {
             return (game.scene.scenes[i]);
         }
     }
@@ -79,6 +72,7 @@ function receiveMessage(data, serverMember) {
     if (debugConfig.log_messages) console.log(data);
     if (serverMember) {
         let member = Network.getMember(serverMember);
+        let fromUser = Network.isUser(member);
         let content = data.content;
         switch (data.type) {
             case 'debug': //Wiadomości do debugowania
@@ -93,6 +87,9 @@ function receiveMessage(data, serverMember) {
                         Network.getMember(memberData[i]).state = memberData[i].state;
                     }
                 }
+                break;
+            case 'confirmation':
+                if (!fromUser) Network.processConfirmation(content.name);
                 break;
             case 'invite':
                 if (Network.isUser(content.invited)) InviteManager.addInvite(member);
@@ -113,6 +110,6 @@ function receiveMessage(data, serverMember) {
 
         getActiveScene().receiveMessage(data, member);
     } else {
-        addMessageToListDOM('Server: ' + data.content);
+        console.warn('Server: ' + data.content);
     }
 }
