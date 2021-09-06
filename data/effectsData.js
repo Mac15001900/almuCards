@@ -1,82 +1,82 @@
 let effectData =
 {
     plus5: {
-        "type": "value_change",
+        "type": "valueChange",
         "value": 5,
-        "target": "player_card",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
+        "target": "playerCard",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
     }, minus5: {
-        "type": "value_change",
+        "type": "valueChange",
         "value": -5,
-        "target": "enemy_card",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
+        "target": "enemyCard",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
     }, replace1: {
-        "type": "card_replace",
+        "type": "cardReplace",
         "value": 1,
         "target": "player",
-        "activation": "after_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
+        "activation": "afterTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
     }, remove1: {
-        "type": "card_remove",
+        "type": "cardRemove",
         "value": 1,
         "target": "enemy",
-        "activation": "after_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, weaker_element: {
-        "type": "weaker_element",
+        "activation": "afterTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, weakerElement: {
+        "type": "weakerElement",
         "value": 0,
         "target": "",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, lower_value: {
-        "type": "lower_value",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, lowerValue: {
+        "type": "lowerValue",
         "value": 0,
         "target": "",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, only_elements: {
-        "type": "only_elements",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, onlyValues: {
+        "type": "onlyValues",
         "value": 0,
         "target": "",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, only_values: {
-        "type": "only_values",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, onlyElements: {
+        "type": "onlyElements",
         "value": 0,
         "target": "",
-        "activation": "next_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, cancel_enemy_effect: {
-        "type": "cancel_effect",
+        "activation": "nextTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, cancelEnemyEffect: {
+        "type": "cancelEffect",
         "value": 0,
-        "target": "enemy_card",
-        "activation": "this_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, deck_look1: {
-        "type": "deck_look",
+        "target": "enemyCard",
+        "activation": "thisTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, deckLook1: {
+        "type": "deckLook",
         "value": 1,
         "target": "player",
-        "activation": "after_turn",
-        "start_condition": "",
-        "end_condition": "one_use"
-    }, add_duck2: {
-        "type": "add_cards",
+        "activation": "afterTurn",
+        "startCondition": "",
+        "endCondition": "oneUse"
+    }, addDuck2: {
+        "type": "addCards",
         "value": 2,
         "target": "player",
-        "activation": "after_turn",
-        "start_condition": "",
-        "end_condition": "one_use",
+        "activation": "afterTurn",
+        "startCondition": "",
+        "endCondition": "oneUse",
         "cards": ["gumowa_kaczuszka"]
     },
 };
@@ -88,46 +88,46 @@ let EffectBank = {
     {
         if (effect === "")
             return "";
-        var ret = "";
-        switch (effect.start_condition)
+        let ret = "";
+        switch (effect.startCondition)
         {
-            case "if_win": ret += "jeśli ta karta wygra, "; break;
-            case "if_lose": ret += "jeśli ta karta przegra, "; break;
-            case "if_draw": ret += "jeśli ta karta zremisuje, "; break;
+            case "ifWin": ret += "jeśli ta karta wygra, "; break;
+            case "ifLose": ret += "jeśli ta karta przegra, "; break;
+            case "ifDraw": ret += "jeśli ta karta zremisuje, "; break;
         }
         switch (effect.activation)
         {
-            case "this_turn": ret += "podczas tej tury "; break;
-            case "next_turn": ret += "w następnej turze "; break;
-            case "after_turn": ret += "pod koniec tej tury "; break;
+            case "thisTurn": ret += "podczas tej tury "; break;
+            case "nextTurn": ret += "w następnej turze "; break;
+            case "afterTurn": ret += "pod koniec tej tury "; break;
         }
         switch (effect.target)
         {
-            case "player_card": ret += "karta gracza "; break;
-            case "enemy_card": ret += "karta przeciwnika "; break;
+            case "playerCard": ret += "karta gracza "; break;
+            case "enemyCard": ret += "karta przeciwnika "; break;
             case "player": ret += "gracz "; break;
             case "enemy": ret += "przeciwnik "; break;
         }
         switch (effect.type)
         {
-            case "value_change": ret += "otrzymuje ";
+            case "valueChange": ret += "otrzymuje ";
                 if (effect.value > 0)
                     ret += "+";
                 break;
-            case "card_replace": ret += "może odrzucic karty i dobrać nowe w ilości: "; break;
-            case "card_remove": ret += "musi odrzucic karty i dobrać nowe w ilości: "; break;
-            case "deck_look": ret += "może podglądnąć karty ze swojej talii w ilości: "; break;
-            case "add_cards": ret += "otrzumuje do swojej talii "; break;
-            case "weaker_element": ret += "wygrywa słabszy żywioł "; break;
-            case "weaker_value": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
-            case "only_elements": ret += "liczą się tylko żywioły "; break;
-            case "only_values": ret += "liczą się tylko wartości "; break;
-            case "cancel_effect": ret += "traci swój efekt "; break;
+            case "cardReplace": ret += "może odrzucic karty i dobrać nowe w ilości: "; break;
+            case "cardRemove": ret += "musi odrzucic karty i dobrać nowe w ilości: "; break;
+            case "deckLook": ret += "może podglądnąć karty ze swojej talii w ilości: "; break;
+            case "addCards": ret += "otrzumuje do swojej talii "; break;
+            case "weakerElement": ret += "wygrywa słabszy żywioł "; break;
+            case "lowerValue": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
+            case "onlyElements": ret += "liczą się tylko żywioły "; break;
+            case "onlyValues": ret += "liczą się tylko wartości "; break;
+            case "cancelEffect": ret += "traci swój efekt "; break;
         }
         if (effect.value != 0)
             ret += effect.value;
         ret = ret.charAt(0).toUpperCase() + ret.slice(1);   //making first letter big
-        if (effect.type === "add_cards")
+        if (effect.type === "addCards")
         {
             switch (effect.cards[0])
             {
@@ -139,40 +139,63 @@ let EffectBank = {
 
     getInturnEffectsTable: function (cardA, cardB, currentEffects)
     {
-        var ret = [0, 0, 1, 1, 1, 1, 0, 0]; //legenda pól tabelki znajduje się w pliku "table of effects"
-        if (cardA.effect != "")
+        let ret = [0, 0, 1, 1, 1, 1, 0, 0]; //legenda pól tabelki znajduje się w pliku "table of effects"
+        if (cardA.effect != "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))
             ret = this.translateInturnEffect(cardA.effect, ret);
-        if (cardB.effect != "")
+        if (cardB.effect != "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
             ret = this.translateInturnEffect(cardB.effect, ret);
-        for (var i = 0; i < currentEffects.length; i++)
+        for (let i = 0; i < currentEffects.length; i++)
             ret = this.translateInturnEffect(currentEffects[i], ret);
         return ret;
     },
 
     getAfterturnEffectsTable: function (currentEffects)
     {
-        var ret = [0, 0, 0, 0];
-        for (var i = 0; i < currentEffects.length; i++)
+        let ret = [0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < currentEffects.length; i++)
             ret = this.translateAfrerturnEffect(currentEffects[i], ret);
         return ret;
     },
 
+    addCardsToHands: function (currentEffects, handPlayer, handEnemy)
+    {
+        for (let i = 0; i < currentEffects.length; i++)
+        {
+            if (currentEffects[i].type === "addCards")
+            {
+                if (currentEffects[i].target === "player")
+                    this.addCardToHand(currentEffects[i], handPlayer);
+                //else
+                //    this.addCardToHand(currentEffects[i], handEnemy);
+            }
+        }
+    },
+
+    addCardToHand: function (effect, hand)
+    {
+        if (effect.type === "addCards")
+        {
+            for (let i = 0; i < effect.value; i++)
+                hand.addCard(cardData[effect.cards[i % effect.cards.length]]);
+        }
+    },
+
     translateInturnEffect: function (effect, table)
     {
-        if (effect.activation === "this_turn")
+        if (effect.activation === "thisTurn")
         {
             switch (effect.type)
             {
-                case "value_change":
-                    if (effect.target === "player_card")
+                case "valueChange":
+                    if (effect.target === "playerCard")
                         table[0] += effect.value;
                     else
                         table[1] += effect.value;
                     break;
-                case "weaker_element": table[4] = -1; break;
-                case "lower_value": table[5] = -1; break;
-                case "only_elements": table[6] = 1; break;
-                case "only_values": table[7] = 1; break;
+                case "weakerElement": table[4] = -1; break;
+                case "lowerValue": table[5] = -1; break;
+                case "onlyElements": table[6] = 1; break;
+                case "onlyValues": table[7] = 1; break;
             }
         }
         return table;
@@ -180,21 +203,27 @@ let EffectBank = {
 
     translateAfrerturnEffect: function (effect, table)
     {
-        if (effect.activation === "after_turn")
+        if (effect.activation === "afterTurn")
         {
             switch (effect.type)
             {
-                case "card_replace":
+                case "cardReplace":
                     if (effect.target === "player")
                         table[0] += effect.value;
                     else
                         table[1] += effect.value;
                     break;
-                case "card_remove":
+                case "cardRemove":
                     if (effect.target === "player")
                         table[2] += effect.value;
                     else
                         table[3] += effect.value;
+                    break;
+                case "deckLook":
+                    if (effect.target === "player")
+                        table[4] += effect.value;
+                    else
+                        table[5] += effect.value;
                     break;
             }
         }
@@ -203,50 +232,50 @@ let EffectBank = {
 
     updateEffects: function (cardA, cardB, score, currentEffects)
     {
-        var updatedEffects = [];
-        for (var i = 0; i < currentEffects.length; i++)    //checking if any current effects tranfer to next rund
+        let updatedEffects = [];
+        for (let i = 0; i < currentEffects.length; i++)    //checking if any current effects tranfer to next rund
         {
-            switch (currentEffects[i].end_condition)
+            switch (currentEffects[i].endCondition)
             {
-                case "two_use":
+                case "twoUse":
                     updatedEffects.push(currentEffects[i]);
-                    updatedEffects[updatedEffects.length - 1].end_condition = "one_use";
+                    updatedEffects[updatedEffects.length - 1].endCondition = "oneUse";
                     break;
-                case "until_win":
-                    if (score != 1)
+                case "untilWin":
+                    if (score !== 1)
                         updatedEffects.push(currentEffects[i]);
                     break;
-                case "until_lose":
-                    if (score != -1)
+                case "untilLose":
+                    if (score !== -1)
                         updatedEffects.push(currentEffects[i]);
                     break;
             }
         }
-        if (cardA.effect != "")    //adding effects from current cards
+        if (cardA.effect !== "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))    //adding effects from current cards
         {
-            if (cardA.effect.start_condition === "" || (cardA.effect.start_condition === "if_win" && score === 1) ||
-                (cardA.effect.start_condition === "if_lose" && score === -1) || (cardA.effect.start_condition === "if_draw" && score === 0))
+            if (cardA.effect.startCondition === "" || (cardA.effect.startCondition === "ifWin" && score === 1) ||
+                (cardA.effect.startCondition === "ifLose" && score === -1) || (cardA.effect.startCondition === "ifDraw" && score === 0))
             {
-                var newEffect = Object.assign({}, cardA.effect);
+                let newEffect = Object.assign({}, cardA.effect);
                 updatedEffects.push(newEffect);
-                if (updatedEffects[updatedEffects.length - 1].activation === "next_turn")
-                    updatedEffects[updatedEffects.length - 1].activation = "this_turn";
+                if (updatedEffects[updatedEffects.length - 1].activation === "nextTurn")
+                    updatedEffects[updatedEffects.length - 1].activation = "thisTurn";
             }
         }
-        if (cardB.effect != "")
+        if (cardB.effect !== "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
         {
-            if (cardB.effect.start_condition === "" || (cardB.effect.start_condition === "if_win" && score === 1) ||
-                (cardB.effect.start_condition === "if_lose" && score === -1) || (cardB.effect.start_condition === "if_draw" && score === 0))
+            if (cardB.effect.startCondition === "" || (cardB.effect.startCondition === "ifWin" && score === 1) ||
+                (cardB.effect.startCondition === "ifLose" && score === -1) || (cardB.effect.startCondition === "ifDraw" && score === 0))
             {
-                var newEffect = Object.assign({}, cardB.effect);
+                let newEffect = Object.assign({}, cardB.effect);
                 updatedEffects.push(newEffect);
-                if (updatedEffects[updatedEffects.length - 1].activation === "next_turn")
-                    updatedEffects[updatedEffects.length - 1].activation = "this_turn";
+                if (updatedEffects[updatedEffects.length - 1].activation === "nextTurn")
+                    updatedEffects[updatedEffects.length - 1].activation = "thisTurn";
                 //nawet sobie nie wyobrażasz ile problemów sprawił mi ten fragment (głupie referencje)
-                if (updatedEffects[updatedEffects.length - 1].target === "player_card")   //przeciwnikowi trzeba odwrócić target, aby sam w siebie nie strzelał
-                    updatedEffects[updatedEffects.length - 1].target = "enemy_card";
-                else if (updatedEffects[updatedEffects.length - 1].target === "enemy_card")
-                    updatedEffects[updatedEffects.length - 1].target = "player_card";
+                if (updatedEffects[updatedEffects.length - 1].target === "playerCard")   //przeciwnikowi trzeba odwrócić target, aby sam w siebie nie strzelał
+                    updatedEffects[updatedEffects.length - 1].target = "enemyCard";
+                else if (updatedEffects[updatedEffects.length - 1].target === "enemyCard")
+                    updatedEffects[updatedEffects.length - 1].target = "playerCard";
                 if (updatedEffects[updatedEffects.length - 1].target === "player")
                     updatedEffects[updatedEffects.length - 1].target = "enemy";
                 else if (updatedEffects[updatedEffects.length - 1].target === "enemy")

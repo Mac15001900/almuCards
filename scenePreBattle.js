@@ -3,11 +3,13 @@ let ScenePreBattle = new Phaser.Class({
     Extends: Phaser.Scene,
 
     initialize:
-    function ScenePreBattle() {
-        Phaser.Scene.call(this, { key: 'ScenePreBattle' });
-    },
+        function ScenePreBattle()
+        {
+            Phaser.Scene.call(this, { key: 'ScenePreBattle' });
+        },
 
-    preload: function () {
+    preload: function ()
+    {
         console.log('Preload in pre-battle scene');
     },
 
@@ -26,7 +28,7 @@ let ScenePreBattle = new Phaser.Class({
         this.opponentText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.playerDeck = DeckBank.getClasicDeck();
-        this.enemyDeck = DeckBank.getClasicDeck();
+        this.enemyDeck = null;
         this.startButton = new TextButton(this, layout.WIDTH / 2, 500, "Start", () => Network.sendMessage("startBattle", {}, Network.Room.DUEL), false);
         this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.openGallery());
 
@@ -38,12 +40,22 @@ let ScenePreBattle = new Phaser.Class({
 
     },
 
-    update: function (timestep, dt) {
+    update: function (timestep, dt)
+    {
 
     },
 
-    receiveMessage: function (data, sender) {
-        switch (data.type) {
+    receiveMessage: function (data, member)
+    {
+        switch (data.type)
+        {
+            case "enemyDeck":
+                if (this.enemyDeck === null && member != Network.getUser())
+                {
+                    this.enemyDeck = data.content;
+                    Network.sendMessage("enemyDeck", this.playerDeck);  //odpowiedź do przeciwnika z informacjami o własnej talii
+                }
+                break;
             case "startBattle":
                 this.startBattle();
                 break;
@@ -54,28 +66,35 @@ let ScenePreBattle = new Phaser.Class({
         if (!this.createFinished) return;
         let members = Network.members;
         if (!this.userDrone) this.userDrone = Network.getUser();
-        if (members.length > 2) {
+        if (members.length > 2)
+        {
             this.opponentText.text = "Pojedynek już trwa pomiędzy " + members[0].clientData.name + " a " + members[1].clientData.name;
             this.spectator = true;
-        } else if (members.length === 2) {
+        } else if (members.length === 2)
+        {
             if (members[0].id === this.userDrone.id) this.opponentDrone = members[1];
             else this.opponentDrone = members[0];
             this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
+            Network.sendMessage("enemyDeck", this.playerDeck);  //przekazanie informacji o swojej talii przeciwnikowi (do wczytywania obrazków)
             this.startButton.setActive(true);
-        } else {
+        } else
+        {
             this.opponentText.text = "Oczekiwanie na przeciwnika...";
         }
     },
 
-    memberJoined(newMember) {
-        if (Network.members.length === 2) {
+    memberJoined(newMember)
+    {
+        if (Network.members.length === 2)
+        {
             this.opponentDrone = newMember;
             this.opponentText.text = "Przeciwnik dołączył: " + this.opponentDrone.clientData.name;
             this.startButton.setActive(true);
         }
     },
 
-    startBattle() {
+    startBattle()
+    {
         this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.playerDeck, opponentDeck: this.enemyDeck });
         //this.scene.start('SceneBattle', { userDrone: this.userDrone, opponentDrone: this.opponentDrone, userDeck: this.testDeck, opponentDeck: this.testDeck });
     },

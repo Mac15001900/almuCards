@@ -10,22 +10,22 @@ let SceneGallery = new Phaser.Class({
 
     preload: function ()
     {
-        console.log("Preload in gallery");  //³adowanie obrazków t³a
-        this.load.image('card_fire', 'assets/card_fire.png');
-        this.load.image('card_forest', 'assets/card_forest.png');
-        this.load.image('card_water', 'assets/card_water.png');
+        console.log("Preload in gallery");  //ładowanie obrazków tła
+        this.load.image('cardFire', 'assets/card_fire.png');
+        this.load.image('cardForest', 'assets/card_forest.png');
+        this.load.image('cardWater', 'assets/card_water.png');
         this.cards = [];    //tworzenie listy wszystkich kart w grze
         for (let card in cardData)
             this.cards = this.cards.concat(DeckBank.createCardsFromPrototype(cardData[card]));
         let imagesToLoad = DeckBank.getImages(this.cards);
-        for (let image in imagesToLoad) //³adowanie obrazków kart
+        for (let image in imagesToLoad) //ładowanie obrazków kart
         {
             this.load.image(imagesToLoad[image], 'assets/cardImages/' + imagesToLoad[image] + '.png');
         }
-        this.load.image('card_reverse', 'assets/card_reverse.png');
+        this.load.image('cardReverse', 'assets/card_reverse.png');
 
-        this.load.image('button_left', 'assets/button_left.png'); //obrazki przycisków
-        this.load.image('button_right', 'assets/button_right.png');
+        this.load.image('buttonLeft', 'assets/button_left.png'); //obrazki przycisków
+        this.load.image('buttonRight', 'assets/button_right.png');
 
         this.page = 0;
     },
@@ -43,7 +43,7 @@ let SceneGallery = new Phaser.Class({
         BUTTOR_LEFT_Y: 430,
         BUTTON_RIGHT_X: 1125,
         BUTTOR_RIGHT_Y: 430,
-        
+
         BIG_CARD_X: 600,
         BIG_CARD_Y: 400,
     },
@@ -51,8 +51,8 @@ let SceneGallery = new Phaser.Class({
     create: function ()
     {
         console.log('Gallery open');
-        this.buttonLeft = new Button(this, "galleryLeft", this.layout.BUTTON_LEFT_X, this.layout.BUTTOR_LEFT_Y, 0.8, "button_left", null);
-        this.buttonRight = new Button(this, "galleryRight", this.layout.BUTTON_RIGHT_X, this.layout.BUTTOR_RIGHT_Y, 0.8, "button_right", null);
+        this.buttonLeft = new Button(this, "galleryLeft", this.layout.BUTTON_LEFT_X, this.layout.BUTTOR_LEFT_Y, 0.8, "buttonLeft", null);
+        this.buttonRight = new Button(this, "galleryRight", this.layout.BUTTON_RIGHT_X, this.layout.BUTTOR_RIGHT_Y, 0.8, "buttonRight", null);
         this.createPage();
     },
 
@@ -65,7 +65,7 @@ let SceneGallery = new Phaser.Class({
         {
             let j = i - this.page * this.layout.CARDS_PER_PAGE;
             let newCard = new Card(this, this.cards[i], this.layout.FIRST_CARD_X + (j % 8) * this.layout.CARDS_H_SPACING, this.layout.FIRST_CARD_Y + Math.floor(j / 8) * this.layout.CARDS_V_SPACING, this.layout.CARD_SCALE, null);
-            newCard.Reverse_card(false);
+            newCard.reverseCard(true, false);
             this.currentCards.push(newCard);
         }
         if (this.page === 0)

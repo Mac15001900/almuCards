@@ -13,19 +13,19 @@ ELEMENT.basic = [ELEMENT.FIRE, ELEMENT.FOREST, ELEMENT.WATER];
 
 ELEMENT.info[ELEMENT.FIRE] = {
     name: "Ogień", //Nazwa, którą może zobaczyć użytkownik
-    symbol: "sym_icon_fire", //Nazwa sprite'a symbolu
+    symbol: "symIconFire", //Nazwa sprite'a symbolu
     color: 0xFF2A00, //Powiązany kolor
     real: true, //Czy to prawdziwy element, czy coś technicznego co nie ma powiązanych kart itp.
 };
 ELEMENT.info[ELEMENT.FOREST] = {
     name: "Las",
-    symbol: "sym_icon_forest",
+    symbol: "symIconForest",
     color: 0x00B33C,
     real: true,
 };
 ELEMENT.info[ELEMENT.WATER] = {
     name: "Woda",
-    symbol: "sym_icon_water",
+    symbol: "symIconWater",
     color: 0x0055FF,
     real: true,
 };
@@ -170,6 +170,14 @@ let cardData = {
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.replace1
+    }, remove1: {
+        "name": "remove1",
+        "differentNames": true,
+        "displayName": ["Miotacz ognia", "Ent", "Gradobicie"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 5,
+        "effect": effectData.remove1
     }, weaker: {
         "name": "weaker",
         "differentNames": true,
@@ -177,7 +185,15 @@ let cardData = {
         "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 2,
-        "effect": effectData.weaker_element
+        "effect": effectData.weakerElement
+    }, lower: {
+        "name": "lower",
+        "differentNames": true,
+        "displayName": ["Słaby płomień", "Mech", "Wir wodny"],
+        "flavour": ["", "", ""],
+        "element": ELEMENT.ONE_EACH,
+        "value": 2,
+        "effect": effectData.lowerValue
     }, only_values: {
         "name": "only_values",
         "differentNames": false,
@@ -185,7 +201,15 @@ let cardData = {
         "flavour": "Zostaly rzucone",
         "element": ELEMENT.ONE_EACH,
         "value": 6,
-        "effect": effectData.only_values
+        "effect": effectData.onlyValues
+    }, only_elements: {
+        "name": "only_elements",
+        "differentNames": false,
+        "displayName": "Potęga żywiołów",
+        "flavour": "",
+        "element": ELEMENT.ONE_EACH,
+        "value": 1,
+        "effect": effectData.onlyElements
     }, divB: {
         "name": "divB",
         "differentNames": false,
@@ -217,7 +241,7 @@ let cardData = {
         "flavour": "Jest podzbiorem Twoich myśli",
         "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": effectData.cancel_enemy_effect
+        "effect": effectData.cancelEnemyEffect
     }, synta: {
         "name": "synta",
         "differentNames": false,
@@ -225,7 +249,7 @@ let cardData = {
         "flavour": "Niebo żyleta, obsy do rana!",
         "element": ELEMENT.ONE_EACH,
         "value": 2.54,
-        "effect": effectData.deck_look1
+        "effect": effectData.deckLook1
     }, gumowa_kaczuszka: {
         "name": "gumowa_kaczuszka",
         "differentNames": false,
@@ -233,7 +257,7 @@ let cardData = {
         "flavour": "Kwa kwa",
         "element": ELEMENT.WATER,
         "value": 3,
-        "effect": effectData.add_duck2
+        "effect": effectData.addDuck2
     },
 };
 
@@ -267,14 +291,18 @@ let DeckBank = {
 
     getTestDeck: function ()
     {
-        return this.getClasicDeck();
+        //let specialCardList = ["weaker_all", "lower_all", "only_elements_all", "only_values_all"];
+        let specialCardList = ["gumowa_kaczuszka"];
+        let testDeck = this.getBasicDeck(1, 2).concat(specialCardList);
+        return testDeck;
     },
 
     assemblyDeck: function (names)
     {
-        let new_deck = this.getCardsFromNames(names);
-        Phaser.Actions.Shuffle(new_deck);
-        return new_deck;
+        let newDeck = this.getCardsFromNames(names);
+        //console.log(new_deck);
+        Phaser.Actions.Shuffle(newDeck);
+        return newDeck;
     },
 
     transformRandToElements: function (names)
@@ -354,24 +382,24 @@ let DeckBank = {
         }
         return ret;
     },
-    
+
     createSingleCard: function (prototype, element)
     {
-        var new_card = Object.assign({}, prototype);    //tworzenie nowego obiektu
-        new_card.element = element;
-        if (new_card.differentNames)
+        let newCard = Object.assign({}, prototype);    //tworzenie nowego obiektu
+        newCard.element = element;
+        if (newCard.differentNames)
         {
             switch (element)    //zmiana nazwy karty
             {
-              case ELEMENT.FIRE: new_card.name += "_fire"; break;
-              case ELEMENT.FOREST: new_card.name += "_forest"; break;
-              case ELEMENT.WATER: new_card.name += "_water"; break;
-              default: console.log("Blad: " + new_card.name + " " + element);
+                case ELEMENT.FIRE: newCard.name += "_fire"; break;
+                case ELEMENT.FOREST: newCard.name += "_forest"; break;
+                case ELEMENT.WATER: newCard.name += "_water"; break;
+                default: console.log("Blad: " + newCard.name + " " + element);
             }
-            new_card.displayName = new_card.displayName[new_card.element - 1];
-            new_card.flavour = new_card.flavour[new_card.element - 1];
+            newCard.displayName = newCard.displayName[newCard.element - 1];
+            newCard.flavour = newCard.flavour[newCard.element - 1];
         }
-        return new_card;
+        return newCard;
     },
 
     //Zwraca listę obrazków na kartach w talii (lub taliach), usuwając duplikaty
@@ -381,7 +409,8 @@ let DeckBank = {
         let combined = deck.concat(deck2);
         if (typeof combined[0] === "string")
             combined = this.assemblyDeck(combined);
-        for (var i = 0; i < combined.length; i++)
+        //console.log(combined);
+        for (let i = 0; i < combined.length; i++)
         {
             if (combined[i].image) res.push(combined[i].image);
             else res.push(combined[i].name);
