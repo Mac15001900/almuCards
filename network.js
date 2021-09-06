@@ -6,14 +6,24 @@ let Network = {
     shareable_link: null,
     setupDone: false,
     Room: {
-        LOBBY: 1,
-        DUEL: 2,
+        ANY: 0, //Do oznaczania 'dowolnego' pokoju
+        LOBBY: 1, //Pokój z wszystkimi graczami na serwerze, 
+        DUEL: 2, //Pokój aktualnego pojedynku
     },
     State: {
         FREE: 1, //Gracz nie toczy w tym momencie pojedynku
         ENTERING_DUEL: 2, //Gracz zaczyna pojedynek
         IN_DUEL: 3, //Gracz jest w pojedynku
     },
+    Event: {
+        JOIN_ROOM: 1,
+        RECEIVE_MEMBERS: 2,
+        RECEIVE_WELCOME: 3,
+        MEMBER_JOINED: 4,
+        MEMBER_LEFT: 5,
+        MESSAGE: 6,
+    },
+    listeners: [], //WIP
 
 
     //Zwraca informacje o wybranym graczu. Przyjmuje id lub (niekompletne) informacje o graczu otrzymane od ScaleDrone
@@ -28,6 +38,11 @@ let Network = {
     //Zwraca informacje o użytkowniku
     getUser: function () {
         return this.getMember(this.drone.clientId);
+    },
+
+    //Zwraca ID użytkownika
+    getUserId: function () {
+        return this.drone.clientId;
     },
 
     //Sprawdza, czy dane id bądź dron należy do użytkownika
@@ -84,6 +99,7 @@ let Network = {
                 this.members = m.filter(x => !this.isDebugger(x));
                 if (this.members.length === 1) {
                     //This is what happens when the player joins an empty room
+                    this.members[0].state = Network.State.FREE;
                     gs.received = true;
                 }
             });
@@ -114,14 +130,15 @@ let Network = {
         this.setupDone = true;
     },
 
-    connectToRoom: function (roomName, conntecCallback, joinCallback, leaveCallback) {
+    connectToRoom: function (roomName, conntectCallback, joinCallback, leaveCallback) {
         let newRoom = this.drone.subscribe(roomName);
         newRoom.on('open', error => {
             if (error) console.error(error);
         });
-        newRoom.on('members', conntecCallback);
-        newRoom.on('member_join', joinCallback);
-        newRoom.on('member_leave', leaveCallback);
+        if (conntectCallback) newRoom.on('members', conntectCallback);
+        if (joinCallback) newRoom.on('member_join', joinCallback);
+        if (leaveCallback) newRoom.on('member_leave', leaveCallback);
+        newRoom.on('data', receiveMessage);
     },
 
 
@@ -162,6 +179,22 @@ let Network = {
         return chosenName;
     },
 
+    Listener: function (callback, event, removeOnSceneChange, room = Network.Room.ANY, messageType = null) { //WIP, może być zmienione
+        this.callback = callback;
+        this.event = event;
+        this.removeOnSceneChange = removeOnSceneChange;
+        this.room = room;
+        this.messageType = messageType;
+        this.execute = function (event, room, messageType) {
+            if (this.event === event && (this.room === Network.Room.ANY || this.room === room)) {
+                if (event === Network.Event.MESSAGE && this.messageType && this.messageType !== messageType) return;
+                callback();
+            }
+        }
+    },
+
+
+
 };
 
 
@@ -174,7 +207,7 @@ let InviteManager = {
     state: Network.State.FREE,
     chosenOpponent: null,
     inviteListUpdateCallback: null,
-    duelConfirmedCallback: null,
+    duelStartCallback: null,
 
     //Zaproszenia, które dostaliśmy
     addInvite: function (member) { //Dodaje zaproszenie do kolejki (jeśli jeszcze go tam nie ma)
@@ -195,33 +228,45 @@ let InviteManager = {
     },
 
     rejectInvite: function () { //Usuwa pierwsze zaproszenie z kolejki. Zwraca kolejne, jeśli istnieje
+        console.log(this);
+        console.assert(this.receivedInvites.length > 0);
         let rejected = this.receivedInvites.shift();
-        Network.sendMessage('inviteReply', { inviter: rejected, reply: false });
+        Network.sendMessage('inviteReply', { inviter: rejected.id, invited: Network.getUserId(), reply: false });
         if (this.receivedInvites.length > 0) return this.receivedInvites[0];
     },
 
     acceptInvite: function () { //Akceptuje pierwsze zaproszenie z kolejki
         if (this.state !== Network.State.FREE) return; //Można zaakceptować tylko jedno zaproszenie
         console.assert(this.receivedInvites.length > 0);
-        Network.sendMessage('inviteReply', { inviter: this.receivedInvites[0], reply: true });
+        Network.sendMessage('inviteReply', { inviter: this.receivedInvites[0].id, invited: Network.getUserId(), reply: true });
+        this.chosenOpponent = this.receivedInvites[0];
         this.state = Network.State.ENTERING_DUEL;
         this.receivedInvites.shift();
     },
 
-    sendInvite: function (member) { //Wysyłanie zaproszenia
-        if (this.sentInvites.filter(i => i.id === member.id).length > 0) return; //TODO Przypomnieć użytkownikowi, że nie da się kilkukrotnie zaprosić tego samego gracza 
-        if (member.state !== Network.state.FREE) return; //Nie możemy wysłać zaproszenia dla zajętego gracza
-        Network.sendMessage("invite", { receiver: member.id });
+    sendInvite: function (memberId) { //Wysyłanie zaproszenia
+        let member = Network.getMember(memberId);
+        console.assert(member.state);
+        if (this.sentInvites.filter(i => i.id === member.id).length > 0) {
+            console.warn("Próbowano wysłać zaproszenie do zaproszonego już wcześniej gracza");
+            return; //TODO: interfejs nie powinien na to w ogóle pozwalać
+        }
+        if (member.state !== Network.State.FREE) {
+            console.warn("Próbowano wysłać zaproszenie do zajętego gracza");
+            return; //TODO: na to też
+        }
+        Network.sendMessage("invite", { inviter: Network.getUserId(), invited: member.id });
         this.sentInvites.push(member);
     },
 
     //Reagowanie na wiadomości
+
     processResponse: function (content, member) { //Przetwarzanie reakcji na zaproszenia
         if (Network.isUser(content.inviter)) { //Zaproszenie było od nas
             if (content.reply) { //Zaakceptowane
                 if (this.state === Network.State.FREE) { //Jesteśmy wolni
                     this.state = Network.State.ENTERING_DUEL;
-                    Network.sendMessage("requestDuelConfirmation", { inviter: Network.getUser().id, invited: member.id });
+                    Network.sendMessage("requestDuelConfirmation", { inviter: Network.getUserId(), invited: member.id });
                     this.chosenOpponent = member;
                     //Anulujemy pozostałe wysłane zaproszenia
                     for (let i = 0; i < this.sentInvites.length; i++) {
@@ -245,21 +290,39 @@ let InviteManager = {
     },
 
     processConfirmationRequests: function (content, member) {
-        if (!Network.isUser(content.invited.id)) return; //To nie do nas
+        if (!Network.isUser(content.invited)) return; //To nie do nas
 
         let accept = this.chosenOpponent && this.chosenOpponent.id === member.id;
-        Network.sendMessage("duelConfirmation", { inviter: member.id, invited: Network.getUser().id, reply: accept });
-        this.state = Network.state.IN_DUEL;
+        Network.sendMessage("duelConfirmation", { inviter: member.id, invited: Network.getUserId(), reply: Boolean(accept) });
+        this.state = Network.State.IN_DUEL;
     },
 
     processConfirmation: function (content, member) {
         let firstPlayer = content.inviter;
         let secondPlayer = content.invited;
 
-        Network.getUser(firstPlayer).state = Network.state.IN_DUEL;
-        Network.getUser(secondPlayer).state = Network.state.IN_DUEL;
+        if (content.reply) {
+            Network.getMember(firstPlayer).state = Network.State.IN_DUEL;
+            Network.getMember(secondPlayer).state = Network.State.IN_DUEL;
 
-        if (Network.isUser(firstPlayer) || Network.isUser(secondPlayer)) this.duelConfirmedCallback(firstPlayer + "-" + secondPlayer);
+            if (Network.isUser(firstPlayer) || Network.isUser(secondPlayer)) {
+                let duelRoomName = "observable-duel-" + firstPlayer + "-" + secondPlayer;
+                Network.roomNames[Network.Room.DUEL] = duelRoomName;
+                Network.connectToRoom(duelRoomName, this.duelStartCallback);
+            }
+        }
+
+
+    },
+
+    setCallbacks: function (inviteListUpdateCallback, duelStartCallback) {
+        this.inviteListUpdateCallback = inviteListUpdateCallback;
+        this.duelStartCallback = duelStartCallback;
+    },
+
+    clearCallbacks: function () {
+        this.inviteListUpdateCallback = null;
+        this.duelStartCallback = null;
     },
 
 

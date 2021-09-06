@@ -52,7 +52,7 @@ let game = new Phaser.Game({
             debug: false
         }
     },
-    scene: [ScenePreBattle, SceneBattle, SceneVictory, SceneGallery],
+    scene: [SceneLobby, ScenePreBattle, SceneBattle, SceneVictory, SceneGallery],
 });
 
 function getActiveScene() {
@@ -82,13 +82,24 @@ function receiveMessage(data, serverMember) {
                     gs = content;
                     let memberData = gs.memberData;
                     for (var i = 0; i < memberData.length; i++) {
-                        getMember(memberData[i]).team = memberData[i].team;
-                        getMember(memberData[i]).codeDrawn = memberData[i].codeDrawn;
+                        Network.getMember(memberData[i]).state = memberData[i].state;
                     }
                 }
                 break;
+            case 'invite':
+                if (Network.isUser(content.invited)) InviteManager.addInvite(member);
+                break;
             case 'inviteReply':
                 InviteManager.processResponse(content, member);
+                break;
+            case 'requestDuelConfirmation':
+                InviteManager.processConfirmationRequests(content, member);
+                break;
+            case 'duelConfirmation':
+                InviteManager.processConfirmation(content, member);
+                break;
+            case 'cancelInvite':
+                InviteManager.processCancelation(content, member);
                 break;
         }
 

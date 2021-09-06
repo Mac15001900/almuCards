@@ -1,3 +1,22 @@
+let Utils = { //Obiekt z różnymi małymi funkcjami
+
+    enlargeOnMouseover: function (thing, scaleChange = 1.05, baseScale = 1) { //Sprawia, że dany obiekt będzie się powiększał po najechaniu na niego myszką
+        thing.setInteractive();
+        thing.on('pointerover', () => {
+            thing.setScale(baseScale * scaleChange);
+        });
+        thing.on('pointerout', () => {
+            thing.setScale(baseScale);
+        })
+    },
+
+}
+
+
+
+
+
+
 let TextButton = new Phaser.Class({
 
     params: {

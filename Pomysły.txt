@@ -34,6 +34,8 @@ Grzyb:
   Zarodnik --> jeśli wygra do twojej talii zostanie dodany losowy grzyb |
 Komar:
   Wyssanie krwi --> w następnej rundzie otrzymujesz +3, a przeciwnik -3 | "Lepiej było wykąpać się w offie" [Miałem identyczny pomysł, z dokładnie tym efektem xD ]
+  [Alternatywnie, zamiast wyssania krwi dać ten efekt dla karty "Komar", ale tylko jeśli wygra]
+  Komarnado (9,las) --> Dostajesz 3 inne karty typu "Komar" lub "Małe trąby powietrzne" | [Może w sumie mieć te dwa typy naraz jeśli to miałoby sens]
   Malaria --> jeśli wygra przeciwnik otrzymuje -2 do końca walki |
 Kleszcz:
   Przyczepienie --> następna karta otrzymuje bonus równy wartości obecnej karty przeciwnika |
@@ -71,9 +73,9 @@ Almuinside:
   Kwas chlebowy --> |
   Widzę cię --> podglądnij 2 losowe karty z ręki przeciwnika | "Widzę Cię!"
 
-  Mokry latech (woda) --> Jeśli przegra z kartą "Sarna", przeciwnik nie dodaje jej do kart wygranych| "... i przyjdzie sarna i go zje i umrze."
+  Mokry latech (woda) --> Jeśli przegra z kartą "Sarna", przeciwnik nie dodaje jej do kart wygranych | "... i przyjdzie sarna i go zje i umrze."
   Sarna (las) --> Jeśli wygra z kartą "Mokry latech", nie dodajesz jej do kart wygranych | 
-  Granat zaczepny --> | "To logiczne!"
+  Granat zaczepny (ogień) --> | "To logiczne!"
   Caug (9, ogień)  --> | "Całki zjada na śniadanie" | Zdjęcie Cauga
   Drzewo sandałowe (las) --> | | Zdjęcie "drzewa sandałowego"
   Żelazko (ogień)  --> | "Idealne do robienia tostów!"
