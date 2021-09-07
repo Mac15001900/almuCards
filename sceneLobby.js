@@ -57,6 +57,16 @@ let SceneLobby = new Phaser.Class({
         }
     },
 
+    rejectInvite: function () {
+        this.invite.visual.removeAll(true);
+        InviteManager.rejectInvite();
+        let nextInvite = InviteManager.getFirstInvite();
+        if (nextInvite) {
+            this.invite = new Invite(this, nextInvite);
+        }
+
+    },
+
     startDuel: function () {
         console.log("Zaczynamy pojedynek!");
         this.scene.start('ScenePreBattle');
@@ -123,7 +133,7 @@ let Invite = new Phaser.Class({
         this.base = scene.add.rectangle(0, 0, layout.INVITE_BOX_WIDTH, layout.INVITE_BOX_HEIGHT, 0x778899); //TODO: standaryzacja kolorów
         this.text = scene.add.text(0, -layout.INVITE_BOX_HEIGHT * (1 / 4), "Zaproszenie od " + member.clientData.name, { font: "24px Arial", fill: "#ffffff", wordWrap: { width: layout.INVITE_BOX_WIDTH - 32 }, align: 'center' }).setOrigin(0.5, 0.5);
         this.cancel = new SimpleButton(scene, - layout.INVITE_BOX_WIDTH * (1 / 4), layout.INVITE_BOX_HEIGHT * (1 / 6),
-            'cancel_circle', InviteManager.rejectInvite.bind(InviteManager));
+            'cancel_circle', scene.rejectInvite.bind(scene));
         this.confirm = new SimpleButton(scene, + layout.INVITE_BOX_WIDTH * (1 / 4), layout.INVITE_BOX_HEIGHT * (1 / 6),
             'confirm_circle', InviteManager.acceptInvite.bind(InviteManager));
 
