@@ -43,7 +43,7 @@ let SceneLobby = new Phaser.Class({
     },
 
     networkConnected: function () {
-        this.playerList.update();
+        if (this.playerList) this.playerList.update();
     },
 
     receiveMessage: function (data, sender) {
