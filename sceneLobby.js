@@ -36,6 +36,8 @@ let SceneLobby = new Phaser.Class({
 
         this.playerList = new PlayerList(this, this.layout.LIST_START_X, this.layout.LIST_START_Y);
         InviteManager.setCallbacks("TODO", this.startDuel.bind(this));
+
+        this.galeryButton = new TextButton(this, layout.WIDTH - 130, layout.HEIGHT - 100, "Galeria", () => this.scene.start('SceneGallery'));
     },
 
     update: function (timestep, dt) {
@@ -52,7 +54,7 @@ let SceneLobby = new Phaser.Class({
                 this.playerList.update();
                 break;
             case "invite":
-                if (Network.isUser(data.content.invited)) this.invite = new Invite(this, sender);
+                if (Network.isUser(data.content.invited) && !this.invite) this.invite = new Invite(this, sender);
                 break;
         }
     },
@@ -63,6 +65,8 @@ let SceneLobby = new Phaser.Class({
         let nextInvite = InviteManager.getFirstInvite();
         if (nextInvite) {
             this.invite = new Invite(this, nextInvite);
+        } else {
+            this.invite = null;
         }
 
     },

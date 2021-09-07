@@ -235,6 +235,7 @@ let InviteManager = {
     //Zaproszenia, które dostaliśmy
     addInvite: function (member) { //Dodaje zaproszenie do kolejki (jeśli jeszcze go tam nie ma)
         if (this.receivedInvites.filter(i => i.id === member.id).length === 0) this.receivedInvites.push(member);
+        else console.warn("Dostaliśmy drugie zaproszenie od " + member.clientData.name);
     },
 
     removeInvite: function (member) { //Usuwa zaproszenie od danego gracza
