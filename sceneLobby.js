@@ -20,7 +20,7 @@ let SceneLobby = new Phaser.Class({
         WIDTH: null,
         HEIGHT: null,
 
-        LIST_SPACING: 32,
+        LIST_SPACING: 36,
         LIST_BUTTON_DISTANCE: 16,
         LIST_START_X: 32,
         LIST_START_Y: 32 + 12,
@@ -110,19 +110,26 @@ let PlayerListElement = new Phaser.Class({
     initialize:
     function PlayerListElement(scene, x, y, member) {
         let layout = scene.layout;
+        let isFree = member.state === Network.State.FREE;
         this.visual = scene.add.container(x, y);
-        this.text = scene.add.text(0, 0, member.clientData.name, { font: "24px Arial", fill: "#ffffff", align: 'center' }).setOrigin(0, 0.5);
+        this.text = scene.add.text(0, 0, member.clientData.name, { font: "24px Arial", fill: isFree ? "#ffffff" : "#888888", align: 'center' }).setOrigin(0, 0.5);
         this.icon = scene.add.image(this.text.width + layout.LIST_BUTTON_DISTANCE, 0, 'invite_icon');
         this.icon.x += this.icon.width / 2; //Nie możemy użyć setOrigin, bo setScale by dziwnie wyglądało
-        this.icon.setInteractive().on('pointerup', function (event) {
-            InviteManager.sendInvite(member.id);
-        }, scene);
-        this.icon.on('pointerover', () => {
-            this.icon.setScale(1.08);
-        });
-        this.icon.on('pointerout', () => {
-            this.icon.setScale(1);
-        });
+        if (isFree) {
+            this.icon.setInteractive().on('pointerup', function (event) {
+                InviteManager.sendInvite(member.id);
+            }, scene);
+            this.icon.on('pointerover', () => {
+                this.icon.setScale(1.08);
+            });
+            this.icon.on('pointerout', () => {
+                this.icon.setScale(1);
+            });
+        } else {
+            this.icon.alpha = 0.3;
+        }
+
+
 
         this.visual.add([this.text, this.icon]);
     }

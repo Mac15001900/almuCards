@@ -29,7 +29,7 @@ let ScenePreBattle = new Phaser.Class({
         this.playerDeck = DeckBank.getClasicDeck();
         this.opponentDeck = null;
         this.startButton = new TextButton(this, layout.WIDTH / 2, 500, "Start", () => Network.sendMessage("startBattle", {}, Network.Room.DUEL), false);
-        this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.scene.start('SceneGallery'));
+        //this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.scene.start('SceneGallery'));
 
         //Sprawdzamy, czy uczestniczymy w tym pojedynku. TODO: Strasznie to brzdkie i zależne od systemu nazw. Powinniśmy jakoś ładniej przekazać tej scenie id pojedynkujących się
         let roomNameParts = Network.roomNames[Network.Room.DUEL].split('-');
