@@ -92,3 +92,112 @@ let SimpleButton = new Phaser.Class({
         this.icon.on('pointerout', () => this.icon.setScale(1));
     }
 });
+
+let Icon = new Phaser.Class({
+    initialize:
+        function Icon(scene, x, y, scale, image)
+        {
+            this.scale = scale;
+            this.visual = scene.add.container(x, y);
+
+            this.image = scene.add.image(0, 0, image).setScale(scale);
+
+            this.valueTextfont = "bold " + (50 * scale) + "px Arial";
+            this.valueText = scene.add.text(0, 0, "", { font: this.valueTextfont, fill: "#000000" });
+            this.valueText.setOrigin(0.5, 0.5);
+
+            this.visual.add([this.image, this.valueText]);
+        },
+});
+
+let VictoryIcons = new Phaser.Class({
+    initialize:
+        function VictoryIcons(scene, x, y)
+        {
+            this.icons = {};
+            this.visual = scene.add.container(x, y);
+            this.elements = scene.config.ALL_ELEMENTS;
+
+            let spacing = scene.layout.VICTORY_ICONS_SPACING;
+            let scale = scene.layout.VICTORY_ICONS_SCALE;
+
+            for (let i = 0; i < this.elements.length; i++)
+            {
+                this.icons[this.elements[i]] = [];
+                for (let j = 0; j < 3; j++)
+                {
+                    let newIcon = scene.add.image(i * spacing, - j * spacing, ELEMENT.info[this.elements[i]].symbol).setScale(scale);
+                    newIcon.alpha = 0.15;
+                    this.visual.add(newIcon);
+                    this.icons[this.elements[i]].push(newIcon);
+                }
+            }
+        },
+
+    update: function (playerPoints)
+    {
+        console.assert(playerPoints);
+        for (let i = 0; i < this.elements.length; i++)
+        {
+            for (let j = 0; j < 3; j++)
+            {
+                this.icons[this.elements[i]][j].alpha = playerPoints[this.elements[i]] > j ? 1 : 0.15;
+            }
+        }
+    },
+});
+
+let Button = new Phaser.Class({
+    initialize:
+        function Button(scene, type, x, y, scale, image, hand)
+        {
+            this.type = type;
+            this.scale = scale;
+            this.hand = hand;
+            this.visual = scene.add.container(x, y);
+
+            this.sprite = scene.add.image(0, 0, image).setScale(scale);
+
+            this.visual.add([this.sprite]);
+
+            this.sprite.setInteractive().on('pointerup', () =>
+            {
+                switch (this.type)
+                {
+                    case "cancel":
+                        switch (this.hand.phase)
+                        {
+                            case PHASE.CAN_REPLACE:
+                                console.log("Anulowano wymienianie");
+                                this.hand.replaceCards[0] = 0;
+                                this.hand.changePhase(PHASE.MOVE);
+                                break;
+                            case PHASE.MUST_REPLACE:
+                                console.log("Musisz wymienic karty!");
+                                break;
+                        }
+                        break;
+                    case "galleryLeft":
+                        scene.page--;
+                        scene.createPage();
+                        break;
+                    case "galleryRight":
+                        scene.page++;
+                        scene.createPage();
+                        break;
+                    case "help":
+                        scene.helpScreen.setVisible(!scene.helpScreen.visible);
+                        break;
+                }
+            });
+
+            this.sprite.on('pointerover', () =>
+            {
+                this.visual.setScale(1.05);
+            });
+            this.sprite.on('pointerout', () =>
+            {
+                this.visual.setScale(1);
+            })
+        },
+});
