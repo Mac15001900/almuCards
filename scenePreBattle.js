@@ -10,6 +10,7 @@ let ScenePreBattle = new Phaser.Class({
     preload: function () {
         console.log('Preload w pre-battle');
         console.assert(Network.roomNames[Network.Room.DUEL]); //Gdy ta scena jest wywoływana, powinien istnieć już pokój do pojedynku
+        this.load.image('help_circle', 'assets/help_circle.png');
     },
 
     layout: {
@@ -25,18 +26,34 @@ let ScenePreBattle = new Phaser.Class({
 
         this.opponentText = this.add.text(layout.WIDTH / 2, 100, "Łączenie...", { font: "32px Arial", fill: "#ffffff", align: 'center' });
         this.opponentText.setOrigin(0.5, 0.5);
+        let randomProtip = Math.floor(Math.random() * plStrings.protips.length);
+        this.protipText = this.add.text(layout.WIDTH / 2, 140, plStrings.protips[randomProtip], { font: "18px Arial", fill: "#ffffff", align: 'center' });
+        this.protipText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.playerDeck = DeckBank.getClasicDeck();
         this.opponentDeck = null;
         this.startButton = new TextButton(this, layout.WIDTH / 2, 500, "Start", () => Network.sendMessage("startBattle", {}, Network.Room.DUEL), false);
+
         //this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.scene.start('SceneGallery'));
+
+
+        this.versionText = this.add.text(0, 0, "Wersja: " + plStrings.version, { fill: "#FFFFFF" });
+
+        //elementy okna pomocy
+        this.helpButton = new Button(this, "help", layout.WIDTH - 20, 20, 0.5, "help_circle", null);
+        this.helpScreen = this.add.text(layout.WIDTH / 2, 100, plStrings.help, { font: "20px Arial", backgroundColor: "#FFFFFF", fill: "#000000" });
+        this.helpScreen.setOrigin(0.5, 0);
+        this.helpScreen.setVisible(false);
 
         //Sprawdzamy, czy uczestniczymy w tym pojedynku. TODO: Strasznie to brzdkie i zależne od systemu nazw. Powinniśmy jakoś ładniej przekazać tej scenie id pojedynkujących się
         let roomNameParts = Network.roomNames[Network.Room.DUEL].split('-');
         this.spectator = false;
-        if (Network.isUser(roomNameParts[2])) this.opponentDrone = Network.getMember(roomNameParts[3]);
-        else if (Network.isUser(roomNameParts[3])) this.opponentDrone = Network.getMember(roomNameParts[2]);
-        else this.spectator = true;
+        if (Network.isUser(roomNameParts[2]))
+            this.opponentDrone = Network.getMember(roomNameParts[3]);
+        else if (Network.isUser(roomNameParts[3]))
+            this.opponentDrone = Network.getMember(roomNameParts[2]);
+        else
+            this.spectator = true;
         console.assert(!this.spectator); //TODO: Tymczasowe, póki nie da się być obserwującym
 
         this.userDrone = Network.getUser();
@@ -60,16 +77,20 @@ let ScenePreBattle = new Phaser.Class({
                 if (this.spectator) {
                     if (!this.spectatedDecks) this.spectatedDecks = [];
                     this.spectatedDecks = this.spectatedDecks.concat(data.content);
-                } else if (!Network.isUser(sender)) {
+                }
+                else if (!Network.isUser(sender)) {
                     this.opponentDeck = data.content;
                     this.opponentText.text = "Pojedynek gotowy!";
                     this.startButton.setActive(true);
                 }
-                if (this.waitingForDeck && !Network.isUser(sender)) this.startBattle();
+                if (this.waitingForDeck && !Network.isUser(sender))
+                    this.startBattle();
                 break;
             case "startBattle":
-                if (this.spectatedDecks || this.opponentDeck) this.startBattle();
-                else this.waitingForDeck = true; //Ta zmienna oznacza, że chcemy już zacząć pojedynek, ale nie otrzymaliśmy jeszcze talii
+                if (this.spectatedDecks || this.opponentDeck)
+                    this.startBattle();
+                else
+                    this.waitingForDeck = true; //Ta zmienna oznacza, że chcemy już zacząć pojedynek, ale nie otrzymaliśmy jeszcze talii
                 break;
         }
     },

@@ -98,6 +98,7 @@ let Network = {
         this.drone = new ScaleDrone(this.CHANNEL_ID, {
             data: { // Will be sent out as clientData via events
                 name: username,
+                points: 0,  //do obsługi gry do n zwycięstw
             },
         });
 
