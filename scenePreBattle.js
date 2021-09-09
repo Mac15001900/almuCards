@@ -13,12 +13,18 @@ let ScenePreBattle = new Phaser.Class({
         console.log('Preload w pre-battle');
         console.assert(Network.roomNames[Network.Room.DUEL]); //Gdy ta scena jest wywoływana, powinien istnieć już pokój do pojedynku
         this.load.image('help_circle', 'assets/help_circle.png');
+        this.load.image('dot_off', 'assets/dot_off.png');
+        this.load.image('dot_on', 'assets/dot_on.png');
     },
 
     layout: {
         WIDTH: null,
         HEIGHT: null,
 
+
+        DECKS_LIST_X: 1000,
+        DECKS_LIST_Y: 300,
+        DECKS_LIST_SPACING: 30,
     },
 
     create: function ()
@@ -33,7 +39,8 @@ let ScenePreBattle = new Phaser.Class({
         this.protipText = this.add.text(layout.WIDTH / 2, 140, plStrings.protips[randomProtip], { font: "18px Arial", fill: "#ffffff", align: 'center' });
         this.protipText.setOrigin(0.5, 0.5);
         this.spectator = false;
-        this.playerDeck = DeckBank.getClasicDeck();
+        this.playerDeck = null;
+        this.deckIndex = -1;    //talia zostanie dodana później
         this.opponentDeck = null;
         this.startButton = new TextButton(this, layout.WIDTH / 2, 500, "Start", () => Network.sendMessage("startBattle", {}, Network.Room.DUEL), false);
         this.galeryButton = new TextButton(this, layout.WIDTH / 2, 700, "Galeria", () => this.scene.start('SceneGallery'));
@@ -44,6 +51,7 @@ let ScenePreBattle = new Phaser.Class({
         this.helpScreen = this.add.text(layout.WIDTH / 2, 100, plStrings.help, { font: "20px Arial", backgroundColor: "#FFFFFF", fill: "#000000" });
         this.helpScreen.setOrigin(0.5, 0);
         this.helpScreen.setVisible(false);
+        this.helpScreen.setDepth(10);
 
         //Sprawdzamy, czy uczestniczymy w tym pojedynku. TODO: Strasznie to brzdkie i zależne od systemu nazw. Powinniśmy jakoś ładniej przekazać tej scenie id pojedynkujących się
         let roomNameParts = Network.roomNames[Network.Room.DUEL].split('-');
@@ -56,12 +64,19 @@ let ScenePreBattle = new Phaser.Class({
             this.spectator = true;
         console.assert(!this.spectator); //TODO: Tymczasowe, póki nie da się być obserwującym
 
+        this.decksChoices = [new DeckChoice(this, this.layout.DECKS_LIST_X, this.layout.DECKS_LIST_Y, "Talia klasyczna", "dot_on", "dot_off"),
+        new DeckChoice(this, this.layout.DECKS_LIST_X, this.layout.DECKS_LIST_Y + this.layout.DECKS_LIST_SPACING, "Ta druga talia", "dot_on", "dot_off")];
+        this.decksChoices[0].switch(true);
+
+        this.decksList = [DeckBank.getClasicDeck(), DeckBank.getTheSecondDeck()];
+
         this.userDrone = Network.getUser();
         if (!this.spectator)
         {
             Network.confirm("preBattleLoaded", Network.Room.DUEL, (() =>
             {
-                Network.sendMessage("opponentDeck", this.playerDeck, Network.Room.DUEL);
+                //Network.sendMessage("opponentDeck", [this.playerDeck, 0], Network.Room.DUEL);
+                this.chooseDeck(0); //domyślnie wybiera się klasyczną talię
                 if (!this.opponentDeck) this.opponentText.text = this.opponentDrone.clientData.name + " wybiera talię...";
             }).bind(this));
             this.opponentText.text = "Oczkiwanie na " + this.opponentDrone.clientData.name + "...";
@@ -82,11 +97,12 @@ let ScenePreBattle = new Phaser.Class({
                 if (this.spectator)
                 {
                     if (!this.spectatedDecks) this.spectatedDecks = [];
-                    this.spectatedDecks = this.spectatedDecks.concat(data.content);
+                    this.spectatedDecks = this.spectatedDecks.concat(data.content[0]);
                 }
                 else if (!Network.isUser(sender))
                 {
-                    this.opponentDeck = data.content;
+                    this.opponentDeck = data.content[0];
+                    this.chooseDeck(data.content[1]);
                     this.opponentText.text = "Pojedynek gotowy!";
                     this.startButton.setActive(true);
                 }
@@ -111,6 +127,24 @@ let ScenePreBattle = new Phaser.Class({
     openGallery()
     {
         this.scene.start('SceneGallery');
+    },
+
+    chooseDeckByButton: function (button)
+    {
+        this.chooseDeck(this.decksChoices.indexOf(button));
+    },
+
+    chooseDeck: function (index)
+    {
+        if (index === this.deckIndex)
+            return;
+        this.deckIndex = index;
+        this.playerDeck = this.decksList[index];
+        Network.sendMessage("opponentDeck", [this.playerDeck, index], Network.Room.DUEL);
+        for (let i = 0; i < this.decksChoices.length; i++)
+        {
+            this.decksChoices[i].switch(i === index);
+        }
     },
 
 });
