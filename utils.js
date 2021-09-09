@@ -201,3 +201,28 @@ let Button = new Phaser.Class({
             })
         },
 });
+
+let DeckChoice = new Phaser.Class({
+    initialize:
+        function DeckChoice(scene, x, y, text, imageOn, imageOff)
+        {
+            this.scene = scene;
+            this.sprite = scene.add.image(x, y, imageOff);
+            this.sprite.setDepth(0);
+            this.imageOn = scene.add.image(x, y, imageOn);
+            this.imageOn.setVisible(false);
+            this.imageOn.setDepth(1);
+            this.text = scene.add.text(x + 30, y, text, { font: "20px Arial", fill: "#FFFFFF" });
+            this.text.setOrigin(0, 0.5);
+            this.sprite.setInteractive().on('pointerup', () =>
+            {
+                this.imageOn.setVisible(true);
+                this.scene.chooseDeckByButton(this);
+            });
+        },
+
+    switch: function (state)
+    {
+        this.imageOn.setVisible(state);
+    },
+});
