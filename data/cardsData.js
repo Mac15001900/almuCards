@@ -288,6 +288,14 @@ let DeckBank = {
         this.transformRandToElements(clasicDeck);
         return clasicDeck;
     },
+    
+    getTheSecondDeck: function ()
+    {
+        let theSecondDeck = ["synta_all", "lower_rand", "weaker_rand", "remove1_rand", "empty_set_all", "kontrola_czystosci", "goraca_woda", "divB_fire",
+            "basic3_fire", "basic3_forest", "basic8_fire", "basic8_water", "basic1_forest", "basic1_water", "basic7_all"];
+        this.transformRandToElements(theSecondDeck);
+        return theSecondDeck;
+    },
 
     getTestDeck: function ()
     {
