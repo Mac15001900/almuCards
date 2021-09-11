@@ -22,6 +22,7 @@ Stołówka:
 Inne:
   [Wersja PvE] Kontrola czystości (ogień) --> jeśli przeciwnik ma więcej lasu (w kartach zwycięskich) niż ty, wygrywasz |
   [Wersja PvP] Kontrola czystości (las?) --> Obaj gracze ujawniają swoje karty na ręce | 
+  Przygotowanie do kontroli czystości (ogień? żeby kontrolę kontrowało) --> Od teraz kiedy przeciwnik podgląda twoje losowe karty możesz wybrać które | "A tą ściółkę schowamy tam..."
   Obóz pracy --> |
   Poranne rozruchy --> Jeśli to pierwsza karta w pojedynku dostaje +10 |
   Lustrzane odbicie --> Odwraca działanie wartości i żywiołów w następnej turze | [W sumie to nawet całkiem fizyczne ;) ] 

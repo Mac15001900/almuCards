@@ -14,6 +14,8 @@ let SceneLobby = new Phaser.Class({
         this.load.image('cancel_circle', 'assets/cancel_circle.png');  //https://game-icons.net/1x1/sbed/cancel.html#download
         this.load.image('confirm_circle', 'assets/confirm_circle.png');//https://game-icons.net/1x1/delapouite/confirmed.html#download
         this.load.image('help_circle', 'assets/help_circle.png');
+
+        this.load.image('symIconForest', 'assets/forest_icon.png');
     },
 
     layout: {
@@ -38,13 +40,31 @@ let SceneLobby = new Phaser.Class({
         InviteManager.setCallbacks("TODO", this.startDuel.bind(this));
 
         this.galeryButton = new TextButton(this, layout.WIDTH - 130, layout.HEIGHT - 100, "Galeria", () => this.scene.start('SceneGallery'));
-        
+
         this.versionText = this.add.text(0, 0, "Wersja: " + plStrings.version, { fill: "#FFFFFF" });
 
         this.helpButton = new Button(this, "help", layout.WIDTH - 20, 20, 0.5, "help_circle", null);
-        this.helpScreen = this.add.text(layout.WIDTH / 2, 100, plStrings.help, { font: "20px Arial", backgroundColor: "#FFFFFF", fill: "#000000" });
-        this.helpScreen.setOrigin(0.5, 0);
+        this.helpScreen = this.add.text(32, 100, s.help, { font: "20px Arial", backgroundColor: "#FFFFFF", wordWrap: { width: layout.WIDTH - 64 }, fill: "#000000" });
+        //this.helpScreen.setOrigin(0.5, 0);
         this.helpScreen.setVisible(false);
+
+        //TODO: testing
+        let testEmitter = this.add.particles('symIconForest').createEmitter({
+            speed: { min: 100, max: 1000 },
+            scale: { start: 1, end: 0 },
+            blendMode: 'ADD',
+            lifespan: 300,
+            x: 500,
+            y: 500,
+        });
+        testEmitter.setFrequency(-1, 20);
+
+        this.input.keyboard.on('keyup', () => {
+            testEmitter.explode();
+            this.cameras.main.shakeEffect.start(200, .005, .005);
+        });
+
+
     },
 
     update: function (timestep, dt) {
