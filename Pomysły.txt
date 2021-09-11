@@ -78,9 +78,11 @@ Almuinside:
   Sarna (las) --> Jeśli wygra z kartą "Mokry latech", nie dodajesz jej do kart wygranych | 
   Granat zaczepny (ogień) --> | "To logiczne!"
   Caug (9, ogień)  --> | "Całki zjada na śniadanie" | Zdjęcie Cauga
+  Jeźdźcy Cauga (11,ogień) --> | "Ku przygodzie!"
   Drzewo sandałowe (las) --> | | Zdjęcie "drzewa sandałowego"
   Żelazko (ogień)  --> | "Idealne do robienia tostów!"
   ∛27 (ogień) --> | "Ma bardzo ciekawą wartość"
+  Mag matematyki  --> Efekty zwiększające wartość działają na niego podwójnie | "... w związku z czym giniesz. CND." [Mam dośc konkretny pomysł na zdjęcie ;) ]
 Obsy:
   Obrotowa mapka nieba --> | "Istnieje również wersja dla Dzietrznik"
   Nieskolimowany szukacz --> |
@@ -90,6 +92,7 @@ Obsy:
   Bolid (ogień) --> | "Łooooooooo..."
   Szyk parówkowy --> | "Idealny na obsy meteorów"
   Wszystkie teleskopy?
+  Gwiazdozbiory?
 Śpiewnikowe:
   Sen srebrny w płynie (woda) --> +4 do następnej karty | "Kiedy nie masz czasu na normalny sen"
   Jesienne wino (woda) --> jeśli wygra, możesz podejrzeć 2 losowe karty z ręki przeciwnika |
@@ -147,6 +150,26 @@ Zodiak:
   Koziorożec --> |
   Wodnik (woda) --> w następnej rundzie woda wygrywa z lasem o niższej wartości |
   Ryby (woda) --> |
+
+Ktulu:
+  Myślałem ogólnie o karcie 'posążek' z którą pozostałe wchodziłyby w interackje, ale nijak nie mogę wymyślić czegoś ciekawego, co nie byłoby zupełnie losowe.
+
+  Pastor --> Podgląda jedną losową kartę przeciwnika |
+  Harardzista (ogień) --> Jeśli wygra, twoje karty dostają +5. Buff trwa aż nie przegrasz. |  
+  Agent ubezpieczeniowy  --> Możesz pokazać przeciwnikowi jedną ze swoich kart |  
+  Mściciel (3,ogień) --> Dostaje +2 za każdą wygraną kartę przeciwnika |  
+  Szaman (las) --> Podgląda losową kartę przeciwnika |
+  Szamanka (las) --> Następna karta przeciwnika ma -4 |
+  Samotny kojot (4, las)  --> Jeśli nie masz żadnych 🌲 kart wygranych, [PvP: dostaje +5] [PvE: liczy się jako dwie wygrane] |
+  [Tylko elektroniczne] Poborca podatkowy --> Poznajesz sumę wartości kart przeciwnika | [Nie wiem, czy to będzie jakkolwiek przydatne, ale na pewno śmieszne :P ]
+  [Tylko elektroniczne] Złodziej --> Kradnie losową kartę przeciwnika |
+  [Tylko elektroniczne] Detektor --> Poznajesz żywioły kart przeciwnika |
+  [PvE] Opój (woda) --> Przeciwnik w następnej rundzie zagrywa losową kartę|
+  [PvE] Burmistrz --> Jeśli przegrasz w następnej rundzie, zamiast tego następuje remis |
+  [PvE] Szuler --> Przeciwnik w następnej rundzie zagrywa losową kartę |
+  
+
+  
 
 Trygonometria (ciekawe by były w walce, gdzie obaj gracze mają z tym talie - najlepiej z jakąś lekką możliwością podglądania kart przeciwnika/swoich przyszłych):
   Sinus, Cosinus, Tangens, Kotangens - zwykłe karty bez efektów
