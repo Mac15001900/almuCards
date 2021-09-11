@@ -1,13 +1,13 @@
 const ELEMENT =
-{
-    NONE: 0,
-    FIRE: 1,
-    FOREST: 2,
-    WATER: 3,
-    ONE_EACH: 4,
+    {
+        NONE: 0,
+        FIRE: 1,
+        FOREST: 2,
+        WATER: 3,
+        ONE_EACH: 4,
 
-    info: {} //Informacje o danym żywiole, przydatne w wielu miejscach
-};
+        info: {} //Informacje o danym żywiole, przydatne w wielu miejscach
+    };
 
 ELEMENT.basic = [ELEMENT.FIRE, ELEMENT.FOREST, ELEMENT.WATER];
 
@@ -266,13 +266,10 @@ let DeckBank = {
     MIN_DECK_SIZE: 13 + 5,
 
     //Zwraca podstawową talię (w postaci nazw), zawierającą po jednej karcie każdego żywiołu dla każdej wartości od minValue do maxValue (włącznie)
-    getBasicDeck: function (minValue = 1, maxValue = 7)
-    {
+    getBasicDeck: function (minValue = 1, maxValue = 7) {
         let res = [];
-        for (let i = minValue; i <= maxValue; i++) 
-        {
-            if (i >= 1 && i <= 7)
-            {
+        for (let i = minValue; i <= maxValue; i++) {
+            if (i >= 1 && i <= 7) {
                 res.push("basic" + i + "_all");
                 continue;
             }
@@ -280,54 +277,46 @@ let DeckBank = {
         return res;
     },
 
-    getClasicDeck: function ()
-    {
+    getClasicDeck: function () {
         //let specialCardList = ["plus5_forest", "replace1_water", "minus5_fire"];
         let specialCardList = ["plus5_rand", "replace1_rand", "minus5_rand"];
         let clasicDeck = this.getBasicDeck(1, 6).concat(specialCardList);
         this.transformRandToElements(clasicDeck);
         return clasicDeck;
     },
-    
-    getTheSecondDeck: function ()
-    {
+
+    getTheSecondDeck: function () {
         let theSecondDeck = ["synta_all", "lower_rand", "weaker_rand", "remove1_rand", "empty_set_all", "kontrola_czystosci", "goraca_woda", "divB_fire",
             "basic3_fire", "basic3_forest", "basic8_fire", "basic8_water", "basic1_forest", "basic1_water", "basic7_all"];
         this.transformRandToElements(theSecondDeck);
         return theSecondDeck;
     },
 
-    getTestDeck: function ()
-    {
+    getTestDeck: function () {
         //let specialCardList = ["weaker_all", "lower_all", "only_elements_all", "only_values_all"];
         let specialCardList = ["gumowa_kaczuszka"];
         let testDeck = this.getBasicDeck(1, 2).concat(specialCardList);
         return testDeck;
     },
 
-    assemblyDeck: function (names)
-    {
+    assemblyDeck: function (names) {
         let newDeck = this.getCardsFromNames(names);
         //console.log(new_deck);
         Phaser.Actions.Shuffle(newDeck);
         return newDeck;
     },
 
-    transformRandToElements: function (names)
-    {
+    transformRandToElements: function (names) {
         Phaser.Actions.Shuffle(names);
         let ret = [];
         let randomElement = Math.floor((Math.random() * 3)) + 1;    //jeżeli będzie potrzebne losowanie żywiołów, losowanie początku pętli
-        for (let i = 0; i < names.length; i++)
-        {
-            if (names[i].indexOf("_rand") !== -1)
-            {
+        for (let i = 0; i < names.length; i++) {
+            if (names[i].indexOf("_rand") !== -1) {
                 randomElement++;
                 if (randomElement > 3)
                     randomElement -= 3;
                 names[i] = names[i].slice(0, names[i].indexOf("_rand"));
-                switch (randomElement)
-                {
+                switch (randomElement) {
                     case ELEMENT.FIRE: names[i] += "_fire"; break;
                     case ELEMENT.FOREST: names[i] += "_forest"; break;
                     case ELEMENT.WATER: names[i] += "_water"; break;
@@ -338,15 +327,12 @@ let DeckBank = {
         return ret;
     },
 
-    getCardsFromNames: function (names)
-    {
+    getCardsFromNames: function (names) {
         let ret = [];
         //let prototype = names.map(n => cardData[n]);
-        for (let i = 0; i < names.length; i++)
-        {
+        for (let i = 0; i < names.length; i++) {
             let specyficElement = ELEMENT.NONE;
-            if (names[i].indexOf("_all") !== -1)
-            {
+            if (names[i].indexOf("_all") !== -1) {
                 names[i] = names[i].slice(0, names[i].indexOf("_all"));
                 specyficElement = ELEMENT.ONE_EACH;
             }
@@ -355,13 +341,11 @@ let DeckBank = {
                 names[i] = names[i].slice(0, names[i].indexOf("_fire"));
                 specyficElement = ELEMENT.FIRE;
             }
-            else if (names[i].indexOf("_forest") !== -1)
-            {
+            else if (names[i].indexOf("_forest") !== -1) {
                 names[i] = names[i].slice(0, names[i].indexOf("_forest"));
                 specyficElement = ELEMENT.FOREST;
             }
-            else if (names[i].indexOf("_water") !== -1)
-            {
+            else if (names[i].indexOf("_water") !== -1) {
                 names[i] = names[i].slice(0, names[i].indexOf("_water"));
                 specyficElement = ELEMENT.WATER;
             }
@@ -373,8 +357,7 @@ let DeckBank = {
         return ret;
     },
 
-    createCardsFromPrototype: function (prototype)
-    {
+    createCardsFromPrototype: function (prototype) {
         let ret = [];
         switch (prototype.element)  //tworzenie kart (dodawanie nazw i flavourText)
         {
@@ -391,12 +374,10 @@ let DeckBank = {
         return ret;
     },
 
-    createSingleCard: function (prototype, element)
-    {
+    createSingleCard: function (prototype, element) {
         let newCard = Object.assign({}, prototype);    //tworzenie nowego obiektu
         newCard.element = element;
-        if (newCard.differentNames)
-        {
+        if (newCard.differentNames) {
             switch (element)    //zmiana nazwy karty
             {
                 case ELEMENT.FIRE: newCard.name += "_fire"; break;
@@ -411,15 +392,13 @@ let DeckBank = {
     },
 
     //Zwraca listę obrazków na kartach w talii (lub taliach), usuwając duplikaty
-    getImages: function (deck, deck2 = [])
-    {
+    getImages: function (deck, deck2 = []) {
         let res = [];
         let combined = deck.concat(deck2);
         if (typeof combined[0] === "string")
             combined = this.assemblyDeck(combined);
         //console.log(combined);
-        for (let i = 0; i < combined.length; i++)
-        {
+        for (let i = 0; i < combined.length; i++) {
             if (combined[i].image) res.push(combined[i].image);
             else res.push(combined[i].name);
         }
@@ -427,20 +406,17 @@ let DeckBank = {
     },
 
     //Sprawdza, czy w talii nie ma czegoś dziwnego.
-    validateDeck: function (deck, checkLength = true)
-    {
+    validateDeck: function (deck, checkLength = true) {
         if (checkLength) console.assert(deck.length >= this.MIN_DECK_SIZE); //Talia musi zawierać minimalną ilość kart
 
-        deck.forEach(function (card)
-        {
+        deck.forEach(function (card) {
             console.assert(card); //Karty muszą istnieć
             console.assert(typeof card === "object"); //Karty muszą być obiektami
             console.assert(card.name); //Karty muszą mieć nazwę
             console.assert(card.displayName); //Karty muszą mieć wyświetlaną nazwę
-            console.assert(card.value && !isNaN(card.value)); //Karty muszą mieć wartość która jest liczbą
+            console.assert((card.value && !isNaN(card.value)) || card.value === 0); //Karty muszą mieć wartość która jest liczbą
             let elementFound = false;
-            for (let elementName in ELEMENT)
-            {
+            for (let elementName in ELEMENT) {
                 if (ELEMENT[elementName] === card.element) elementFound = true;
             }
             console.assert(elementFound); //Karty muszą mieć żywioł będący częścią ELEMENT
