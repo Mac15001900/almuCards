@@ -49,7 +49,7 @@ let SceneLobby = new Phaser.Class({
         this.helpScreen.setVisible(false);
 
         //TODO: testing
-        let testEmitter = this.add.particles('symIconForest').createEmitter({
+        /*let testEmitter = this.add.particles('symIconForest').createEmitter({
             speed: { min: 100, max: 1000 },
             scale: { start: 1, end: 0 },
             blendMode: 'ADD',
@@ -63,6 +63,9 @@ let SceneLobby = new Phaser.Class({
             testEmitter.explode();
             this.cameras.main.shakeEffect.start(200, .005, .005);
         });
+
+        alert("test");
+        console.log("tost");*/
 
 
     },
