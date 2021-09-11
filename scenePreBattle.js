@@ -91,11 +91,12 @@ let ScenePreBattle = new Phaser.Class({
             case "opponentDeck":
                 if (this.spectator) {
                     if (!this.spectatedDecks) this.spectatedDecks = [];
-                    this.spectatedDecks = this.spectatedDecks.concat(data.content[0]);
+                    this.spectatedDecks = this.spectatedDecks.concat(data.content.deck);
                 }
                 else if (!Network.isUser(sender)) {
-                    this.opponentDeck = data.content[0];
-                    this.chooseDeck(data.content[1]);
+                    this.opponentDeck = data.content.deck;
+                    console.log("Wybierzemy zaraz " + data.content.index);
+                    this.chooseDeck(data.content.index);
                     this.opponentText.text = "Pojedynek gotowy!";
                     this.startButton.setActive(true);
                 }
@@ -127,9 +128,10 @@ let ScenePreBattle = new Phaser.Class({
     chooseDeck: function (index) {
         if (index === this.deckIndex)
             return;
+        console.log("Wybieramy talię " + index);
         this.deckIndex = index;
         this.playerDeck = this.decksList[index];
-        Network.sendMessage("opponentDeck", [this.playerDeck, index], Network.Room.DUEL);
+        Network.sendMessage("opponentDeck", { deck: this.playerDeck, index: index }, Network.Room.DUEL);
         for (let i = 0; i < this.decksChoices.length; i++) {
             this.decksChoices[i].switch(i === index);
         }
