@@ -1,16 +1,16 @@
-[0] --> player card value modifier (add)		        | 0
-[1] --> enemy card value modifier (add)		        	| 0
-[2] --> player card value modifier (multiplication)	| 1
-[3] --> enemy card value modifier (multiplication)	| 1
-[4] --> reverse elements (1 or -1)			            | 1
-[5] --> reverse values (1 or -1)		              	| 1
-[6] --> only elements (0 or 1)			              	| 0
-[7] --> only values (0 or 1)			                	| 0
+.playerAdd --> zmiana wartości karty gracza			| 0
+.enemyAdd --> zmiana wartości karty przeciwnika			| 0
+.playerProduct --> przemnożenie wartości karty gracza		| 1
+.enemyProduct --> przemnożenie wartości karty przeciwnika	| 1
+.reverseElements --> wygrywa słabszy żywioł (1, lub -1)		| 1
+.reverseValues --> wygrywa słabsza wartość (1, lub -1)		| 1
+.onlyElements --> liczą się tylko żywioły (1, lub 0)		| 0
+.onlyValues --> liczą się tylko wartości (1, lub 0)		| 0
 
 afterturn effects:
-[0] --> player card replace (can)		              	| 0
-[1] --> enemy card replace (can)		              	| 0
-[2] --> player card replace (must)	            		| 0
-[3] --> enemy card replace (must)	              		| 0
-[4] --> look on player's deck				                | 0
-[5] --> look on enemy's deck			                	| 0  //nie będzie działać, bez przekazywania odpowiednich informacji o kartach przeciwnika przez Network
+.playerReplace --> ile kart może wymienić gracz			| 0
+.enemyReplace --> ile kart może wymienić przeciwnik		| 0
+.playerRemove --> ile kart musi wymienić gracz			| 0
+.enemyRemove --> ile kart musi wymienić przeciwnik		| 0
+.playerLook --> ile swoich kart z talii można podglądnąć	| 0
+.enemyLook --> ile kart z talii przeciwnika można podglądnąć	| 0  //nie będzie działać, bez przekazywania odpowiednich informacji o kartach przeciwnika przez Network
