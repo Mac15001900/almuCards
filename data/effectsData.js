@@ -139,7 +139,16 @@ let EffectBank = {
 
     getInturnEffectsTable: function (cardA, cardB, currentEffects)
     {
-        let ret = [0, 0, 1, 1, 1, 1, 0, 0]; //legenda pól tabelki znajduje się w pliku "table of effects"
+        let ret = {//legenda pól struktury znajduje się w pliku "table of effects"
+            'playerAdd': 0,
+            'enemyAdd': 0,
+            'playerProduct': 1,
+            'enemyProduct': 1,
+            'reverseElements': 1,
+            'reverseValues': 1,
+            'onlyElements': false,
+            'onlyValues': false,
+        };
         if (cardA.effect != "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))
             ret = this.translateInturnEffect(cardA.effect, ret);
         if (cardB.effect != "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
@@ -151,7 +160,14 @@ let EffectBank = {
 
     getAfterturnEffectsTable: function (currentEffects)
     {
-        let ret = [0, 0, 0, 0, 0, 0];
+        let ret = {
+            'playerReplace': 0,
+            'enemyReplace': 0,
+            'playerRemove': 0,
+            'enemyRemove': 0,
+            'playerLook': 0,
+            'enemyLook': 0,
+        };
         for (let i = 0; i < currentEffects.length; i++)
             ret = this.translateAfrerturnEffect(currentEffects[i], ret);
         return ret;
@@ -188,14 +204,14 @@ let EffectBank = {
             {
                 case "valueChange":
                     if (effect.target === "playerCard")
-                        table[0] += effect.value;
+                        table.playerAdd += effect.value;
                     else
-                        table[1] += effect.value;
+                        table.enemyAdd += effect.value;
                     break;
-                case "weakerElement": table[4] = -1; break;
-                case "lowerValue": table[5] = -1; break;
-                case "onlyElements": table[6] = 1; break;
-                case "onlyValues": table[7] = 1; break;
+                case "weakerElement": table.reverseElements = -1; break;
+                case "lowerValue": table.reverseValues = -1; break;
+                case "onlyElements": table.onlyElements = 1; break;
+                case "onlyValues": table.onlyValues = 1; break;
             }
         }
         return table;
@@ -209,27 +225,27 @@ let EffectBank = {
             {
                 case "cardReplace":
                     if (effect.target === "player")
-                        table[0] += effect.value;
+                        table.playerReplace += effect.value;
                     else
-                        table[1] += effect.value;
+                        table.enemyReplace += effect.value;
                     break;
                 case "cardRemove":
                     if (effect.target === "player")
-                        table[2] += effect.value;
+                        table.playerRemove += effect.value;
                     else
-                        table[3] += effect.value;
+                        table.enemyRemove += effect.value;
                     break;
                 case "deckLook":
                     if (effect.target === "player")
-                        table[4] += effect.value;
+                        table.playerLook += effect.value;
                     else
-                        table[5] += effect.value;
+                        table.enemyLook += effect.value;
                     break;
             }
         }
         return table;
     },
-
+    
     updateEffects: function (cardA, cardB, score, currentEffects)
     {
         let updatedEffects = [];
