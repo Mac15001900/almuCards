@@ -153,6 +153,7 @@ let Network = {
             lobbyRoom.on('member_leave', (member) => {
                 //let member = this.getMember(id);
                 if (!member) return; //If they don't exist, it was probably the debugger                
+                InviteManager.removeInvite(member);
                 this.tryCalling('memberLeft', this.Room.LOBBY)(member);
                 const index = this.members.findIndex(m => m.id === member.id);
                 this.members.splice(index, 1);
