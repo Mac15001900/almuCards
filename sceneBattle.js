@@ -150,6 +150,7 @@ let SceneBattle = new Phaser.Class({
         }
     },
 
+
     memberLeft: function (member, room) { //TODO: kod jest duplikatem ze scenePreBattle
         if (room === Network.Room.DUEL && Network.compareMembers(member, this.opponentDrone)) {
             alert("Przeciwnik opuszcza grę 😢");
@@ -160,40 +161,42 @@ let SceneBattle = new Phaser.Class({
     },
 
     updateIcons: function (points, effects) {
+
         this.userWon.update(points.user);
         this.enemyWon.update(points.enemy);
 
         let inturnTable = EffectBank.getInturnEffectsTable(cardData.basic1, cardData.basic1, effects);  //2 pierwsze argumenty to karty bez efektów
         let afterturnTable = EffectBank.getAfterturnEffectsTable(effects);
+        let addTable = [inturnTable.playerAdd, inturnTable.enemyAdd];
         for (let i = 0; i < 2; i++) {
-            if (inturnTable[i] > 0) {
-                this.plusIcons[i].valueText.text = "+" + inturnTable[i];
+            if (addTable[i] > 0) {
+                this.plusIcons[i].valueText.text = "+" + addTable[i];
                 this.plusIcons[i].visual.visible = true;
             }
             else
                 this.plusIcons[i].visual.visible = false;
-            if (inturnTable[i] < 0) {
-                this.minusIcons[i].valueText.text = inturnTable[i];
+            if (addTable[i] < 0) {
+                this.minusIcons[i].valueText.text = addTable[i];
                 this.minusIcons[i].visual.visible = true;
             }
             else
                 this.minusIcons[i].visual.visible = false;
         }
-        this.conditionIcons[0].visual.visible = inturnTable[4] === -1;
-        this.conditionIcons[1].visual.visible = inturnTable[5] === -1;
-        this.conditionIcons[2].visual.visible = inturnTable[6] === 1;
-        this.conditionIcons[3].visual.visible = inturnTable[7] === 1;
-        if (afterturnTable[0] !== 0) {
-            this.replaceIcons[0].valueText.text = afterturnTable[0];
+        this.conditionIcons[0].visual.visible = inturnTable.reverseElements === -1;
+        this.conditionIcons[1].visual.visible = inturnTable.reverseValues === -1;
+        this.conditionIcons[2].visual.visible = inturnTable.onlyElements === 1;
+        this.conditionIcons[3].visual.visible = inturnTable.onlyValues === 1;
+        if (afterturnTable.playerReplace !== 0) {
+            this.replaceIcons[0].valueText.text = afterturnTable.playerReplace;
             this.replaceIcons[0].visual.visible = true;
         }
         else
             this.replaceIcons[0].visual.visible = false;
-        if (afterturnTable[2] !== 0) {
+        if (afterturnTable.playerRemove !== 0) {
             this.replaceIcons[0].visual.visible = false;
-            this.replaceIcons[1].valueText.text = afterturnTable[2];
+            this.replaceIcons[1].valueText.text = afterturnTable.playerRemove;
             this.replaceIcons[1].visual.visible = true;
-            console.log("REMOVE1");
+            //console.log("REMOVE1");
         }
         else
             this.replaceIcons[1].visual.visible = false;
@@ -556,7 +559,9 @@ let Battle = new Phaser.Class({
         }
     },
 
+
     endTurn: function () {
+
         for (let i = 0; i < 2; i++)
             this.cardsObjects[i].visual.removeAll(true);
         let score = cardsLogic.getWinner(this.cards[0], this.cards[1], this.effects);
@@ -579,23 +584,23 @@ let Battle = new Phaser.Class({
         this.cards = [null, null];    //czyszczenie tablicy
 
         let afterturnTable = EffectBank.getAfterturnEffectsTable(this.effects);   //efekty po turze (głównie modyfikujące rękę)     
-        if (afterturnTable[2] > 0) //gracz musi wymienić karty
+        if (afterturnTable.playerRemove > 0) //gracz musi wymienić karty
         {
-            this.playerHand.replaceCards[1] += afterturnTable[1];
+            this.playerHand.replaceCards[1] += afterturnTable.playerRemove;
             this.playerHand.changePhase(PHASE.MUST_REPLACE);
-            if (afterturnTable[0] > 0)  //będzie mógł jeszcze dodatkowo wymienić karty
-                this.playerHand.replaceCards[0] += afterturnTable[0]; //zapisanie, ile kart będzie mógł wymienić
+            if (afterturnTable.playerReplace > 0)  //będzie mógł jeszcze dodatkowo wymienić karty
+                this.playerHand.replaceCards[0] += afterturnTable.playerReplace; //zapisanie, ile kart będzie mógł wymienić
         }
-        else if (afterturnTable[0] > 0) //gracz może wymienić karty
+        else if (afterturnTable.playerReplace > 0) //gracz może wymienić karty
         {
-            this.playerHand.replaceCards[0] += afterturnTable[0]; //zapisanie, ile kart może wymienić
+            this.playerHand.replaceCards[0] += afterturnTable.playerReplace; //zapisanie, ile kart może wymienić
             this.playerHand.changePhase(PHASE.CAN_REPLACE);  //ustawienie odpowiedniego trybu
         }
         else
             this.playerHand.changePhase(PHASE.MOVE);
-        if (afterturnTable[4] > 0)  //look on player's deck
+        if (afterturnTable.playerLook > 0)  //look on player's deck
         {
-            this.playerHand.lookOnDeck(afterturnTable[4]);
+            this.playerHand.lookOnDeck(afterturnTable.playerLook);
         }
     },
 
