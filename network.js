@@ -37,6 +37,14 @@ let Network = {
         return res;
     },
 
+    //Porównuje dwa drony lub id. Zwraca true
+    compareMembers: function (member1, member2) {
+        let id1 = member1, id2 = member2;
+        if (typeof member1 === 'object') id1 = member1.id;
+        if (typeof member2 === 'object') id2 = member2.id;
+        return id1 === id2;
+    },
+
     //Zwraca informacje o użytkowniku
     getUser: function () {
         return this.getMember(this.drone.clientId);
@@ -59,11 +67,11 @@ let Network = {
         return member.authData && member.authData.user_is_from_scaledrone_debugger;
     },
 
-    //Wysyła wiadomość do wszystkich innych graczy na tym samym kanale
+    //Wysyła wiadomość do wszystkich innych graczy w danym pokoju
     sendMessage: function (type, content, room = this.Room.LOBBY) {
         if (debugConfig.disable_messages) return;
         let message = { type: type, content: content };
-        if (this.members.length === 1) receiveMessage(message, members[0]); //Won't send anything over the network if we're the only player
+        if (this.members.length === 1) receiveMessage(message, this.members[0]); //Nie wysyłamy jeśli nikogo poza nami w grze nie ma
         else this.drone.publish({ room: this.roomNames[room], message: message });
     },
 
@@ -137,15 +145,18 @@ let Network = {
                     gs.memberData = this.members;
                     this.sendMessage('welcome', gs);
                 }
-                let activeScene = getActiveScene();
-                if (activeScene.memberJoined) activeScene.memberJoined(member);
+                InviteManager.updateStates();
+                this.tryCalling('memberJoined', this.Room.LOBBY)(member);
             });
 
             // User left the room
-            lobbyRoom.on('member_leave', ({ id }) => {
-                if (!this.getMember(id)) return; //If they don't exist, it was probably the debugger
-                const index = this.members.findIndex(member => member.id === id);
+            lobbyRoom.on('member_leave', (member) => {
+                //let member = this.getMember(id);
+                if (!member) return; //If they don't exist, it was probably the debugger                
+                this.tryCalling('memberLeft', this.Room.LOBBY)(member);
+                const index = this.members.findIndex(m => m.id === member.id);
                 this.members.splice(index, 1);
+                InviteManager.updateStates();
             });
 
             lobbyRoom.on('data', receiveMessage);
@@ -154,15 +165,23 @@ let Network = {
         this.setupDone = true;
     },
 
-    connectToRoom: function (roomName, conntectCallback, joinCallback, leaveCallback) {
+    connectToRoom: function (roomName, roomType) {
+        Network.roomNames[roomType] = roomName;
         let newRoom = this.drone.subscribe(roomName);
         newRoom.on('open', error => {
             if (error) console.error(error);
+            if (getActiveScene().roomJoined) getActiveScene().roomJoined(roomType);
         });
-        if (conntectCallback) newRoom.on('members', conntectCallback);
-        if (joinCallback) newRoom.on('member_join', joinCallback);
-        if (leaveCallback) newRoom.on('member_leave', leaveCallback);
+        newRoom.on('members', this.tryCalling('membersReceived', roomType));
+        newRoom.on('member_join', this.tryCalling('memberJoined', roomType));
+        newRoom.on('member_leave', this.tryCalling('memberLeft', roomType));
         newRoom.on('data', receiveMessage);
+    },
+
+    tryCalling: function (functionName, room) {
+        return (arg) => {
+            if (getActiveScene()[functionName]) getActiveScene()[functionName](arg, room);
+        }
     },
 
 
@@ -203,7 +222,7 @@ let Network = {
         return chosenName;
     },
 
-    Listener: function (callback, event, removeOnSceneChange, room = Network.Room.ANY, messageType = null) { //WIP, może być zmienione
+    /*Listener: function (callback, event, removeOnSceneChange, room = Network.Room.ANY, messageType = null) { //WIP, może być zmienione
         this.callback = callback;
         this.event = event;
         this.removeOnSceneChange = removeOnSceneChange;
@@ -215,7 +234,7 @@ let Network = {
                 callback();
             }
         }
-    },
+    },*/
 
 
 
@@ -226,12 +245,12 @@ let Network = {
 
 
 let InviteManager = {
-    sentInvites: [],
-    receivedInvites: [],
-    state: Network.State.FREE,
-    chosenOpponent: null,
-    inviteListUpdateCallback: null,
-    duelStartCallback: null,
+    sentInvites: [], //Lista graczy, którym wysłaliśmy zaproszenia
+    receivedInvites: [], //Lista graczy, od których otrzymaliśmy zaproszenia
+    state: Network.State.FREE, //Nasz obecny stan
+    chosenOpponent: null, //Nasz wybrany przeciwnik (jeśli istnieje)
+    inviteListUpdateCallback: null, //funckja, którą wywołujemy, kiedy w liście graczy do zapraszania coś się zmieni
+    inviteCancelledCallback: null, //funckja, którą wywołujemy, kiedy aktualne zaproszenie zostanie anulowane
 
     //Zaproszenia, które dostaliśmy
     addInvite: function (member) { //Dodaje zaproszenie do kolejki (jeśli jeszcze go tam nie ma)
@@ -244,6 +263,9 @@ let InviteManager = {
             this.chosenOpponent = null;
             this.state = Network.State.FREE;
             Network.sendMessage("changeState", this.state);
+        }
+        if (Network.compareMembers(this.receivedInvites[0], member)) { //To było pierwsze zaproszenie
+            this.inviteCancelledCallback();
         }
         this.receivedInvites = this.receivedInvites.filter(i => i.id !== member.id);
     },
@@ -286,6 +308,10 @@ let InviteManager = {
 
     //Reagowanie na wiadomości
 
+    updateStates: function () {
+        if (this.inviteListUpdateCallback) this.inviteListUpdateCallback();
+    },
+
     processResponse: function (content, member) { //Przetwarzanie reakcji na zaproszenia
         if (Network.isUser(content.inviter)) { //Zaproszenie było od nas
             if (content.reply) { //Zaakceptowane
@@ -307,6 +333,7 @@ let InviteManager = {
             }
         } else if (content.reply) { //Nie od nas, ale zaakceptowane
             member.state = Network.State.ENTERING_DUEL;
+            this.updateStates();
         }
     },
 
@@ -317,8 +344,8 @@ let InviteManager = {
     processConfirmationRequests: function (content, member) {
         if (!Network.isUser(content.invited)) return; //To nie do nas
 
-        let accept = this.chosenOpponent && this.chosenOpponent.id === member.id;
-        Network.sendMessage("duelConfirmation", { inviter: member.id, invited: Network.getUserId(), reply: Boolean(accept) });
+        let accept = Boolean(this.chosenOpponent && this.chosenOpponent.id === member.id);
+        Network.sendMessage("duelConfirmation", { inviter: member.id, invited: Network.getUserId(), reply: accept });
         this.state = Network.State.IN_DUEL;
     },
 
@@ -329,26 +356,33 @@ let InviteManager = {
         if (content.reply) {
             Network.getMember(firstPlayer).state = Network.State.IN_DUEL;
             Network.getMember(secondPlayer).state = Network.State.IN_DUEL;
+            this.updateStates();
 
-            if (Network.isUser(firstPlayer) || Network.isUser(secondPlayer)) {
+            if (Network.isUser(firstPlayer) || Network.isUser(secondPlayer)) { //Zaczynamy pojedynek!
+                //Anulujemy wszystkie wysłane zaproszenia
+                for (let i = 0; i < this.sentInvites.length; i++) {
+                    let invite = this.sentInvites[i];
+                    if (invite.id !== this.chosenOpponent.id) Network.sendMessage("cancelInvite", { invited: invite.id });
+                }
+                this.sentInvites = [];
+                //Dołączamy do pokoju
                 let duelRoomName = "observable-duel-" + firstPlayer + "-" + secondPlayer;
-                Network.roomNames[Network.Room.DUEL] = duelRoomName;
-                console.log("Statrting duel in " + duelRoomName);
-                Network.connectToRoom(duelRoomName, this.duelStartCallback);
+                console.log("Starting duel in " + duelRoomName);
+                Network.connectToRoom(duelRoomName, Network.Room.DUEL);
             }
         }
 
 
     },
 
-    setCallbacks: function (inviteListUpdateCallback, duelStartCallback) {
+    setCallbacks: function (inviteListUpdateCallback, inviteCancelledCallback) {
         this.inviteListUpdateCallback = inviteListUpdateCallback;
-        this.duelStartCallback = duelStartCallback;
+        this.inviteCancelledCallback = inviteCancelledCallback;
     },
 
     clearCallbacks: function () {
         this.inviteListUpdateCallback = null;
-        this.duelStartCallback = null;
+        this.inviteCancelledCallback = null;
     },
 
 

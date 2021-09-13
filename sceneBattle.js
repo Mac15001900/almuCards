@@ -150,8 +150,16 @@ let SceneBattle = new Phaser.Class({
         }
     },
 
+    memberLeft: function (member, room) { //TODO: kod jest duplikatem ze scenePreBattle
+        if (room === Network.Room.DUEL && Network.compareMembers(member, this.opponentDrone)) {
+            alert("Przeciwnik opuszcza grę 😢");
+            console.log("Przeciwnik opuścił grę, więc my też 😒");
+            Network.sendMessage("changeState", Network.State.FREE);
+            this.scene.start('SceneLobby');
+        }
+    },
+
     updateIcons: function (points, effects) {
-        console.log(points)
         this.userWon.update(points.user);
         this.enemyWon.update(points.enemy);
 
@@ -549,7 +557,6 @@ let Battle = new Phaser.Class({
     },
 
     endTurn: function () {
-        //console.log(this.effects);
         for (let i = 0; i < 2; i++)
             this.cardsObjects[i].visual.removeAll(true);
         let score = cardsLogic.getWinner(this.cards[0], this.cards[1], this.effects);

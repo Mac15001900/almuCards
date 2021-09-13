@@ -76,7 +76,7 @@ function receiveMessage(data, serverMember) {
         let content = data.content;
         switch (data.type) {
             case 'debug': //Wiadomości do debugowania
-                console.log(data.content);
+                console.log(content);
                 break;
             case 'welcome': //Informacje o stanie serwera dla nowych graczy
                 if (!gs.received) {
@@ -87,6 +87,10 @@ function receiveMessage(data, serverMember) {
                         Network.getMember(memberData[i]).state = memberData[i].state;
                     }
                 }
+                break;
+            case 'changeState':
+                member.state = content;
+                InviteManager.updateStates();
                 break;
             case 'confirmation':
                 if (!fromUser) Network.processConfirmation(content.name);

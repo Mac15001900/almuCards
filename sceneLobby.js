@@ -37,7 +37,7 @@ let SceneLobby = new Phaser.Class({
         layout.HEIGHT = this.sys.game.canvas.height;
 
         this.playerList = new PlayerList(this, this.layout.LIST_START_X, this.layout.LIST_START_Y);
-        InviteManager.setCallbacks("TODO", this.startDuel.bind(this));
+        InviteManager.setCallbacks(this.playerList.update.bind(this.playerList), this.rejectInvite.bind(this));
 
         this.galeryButton = new TextButton(this, layout.WIDTH - 130, layout.HEIGHT - 100, "Galeria", () => this.scene.start('SceneGallery'));
 
@@ -47,27 +47,6 @@ let SceneLobby = new Phaser.Class({
         this.helpScreen = this.add.text(32, 100, s.help, { font: "20px Arial", backgroundColor: "#FFFFFF", wordWrap: { width: layout.WIDTH - 64 }, fill: "#000000" });
         //this.helpScreen.setOrigin(0.5, 0);
         this.helpScreen.setVisible(false);
-
-        //TODO: testing
-        /*let testEmitter = this.add.particles('symIconForest').createEmitter({
-            speed: { min: 100, max: 1000 },
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD',
-            lifespan: 300,
-            x: 500,
-            y: 500,
-        });
-        testEmitter.setFrequency(-1, 20);
-
-        this.input.keyboard.on('keyup', () => {
-            testEmitter.explode();
-            this.cameras.main.shakeEffect.start(200, .005, .005);
-        });
-
-        alert("test");
-        console.log("tost");*/
-
-
     },
 
     update: function (timestep, dt) {
@@ -76,6 +55,10 @@ let SceneLobby = new Phaser.Class({
 
     networkConnected: function () {
         if (this.playerList) this.playerList.update();
+    },
+
+    roomJoined: function (roomName) {
+        if (roomName === Network.Room.DUEL) this.startDuel();
     },
 
     receiveMessage: function (data, sender) {
@@ -90,19 +73,23 @@ let SceneLobby = new Phaser.Class({
     },
 
     rejectInvite: function () {
-        this.invite.visual.removeAll(true);
         InviteManager.rejectInvite();
+        this.updateInvite();
+    },
+
+    updateInvite: function () {
+        this.invite.visual.removeAll(true);
         let nextInvite = InviteManager.getFirstInvite();
         if (nextInvite) {
             this.invite = new Invite(this, nextInvite);
         } else {
             this.invite = null;
         }
-
     },
 
     startDuel: function () {
         console.log("Zaczynamy pojedynek!");
+        InviteManager.clearCallbacks();
         this.scene.start('ScenePreBattle');
     },
 

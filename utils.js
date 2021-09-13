@@ -147,7 +147,6 @@ let VictoryIcons = new Phaser.Class({
 
     explosion: function (element, points) {
         let emitter = this.emitters[element];
-        console.log("Points: " + points + ", y: " + (this.baseY - (points - 1) * this.scene.layout.VICTORY_ICONS_SPACING));
         emitter.setPosition(emitter.x.propertyValue, this.baseY - (points - 1) * this.scene.layout.VICTORY_ICONS_SPACING);
         emitter.explode();
         this.scene.cameras.main.shakeEffect.start(200, .003, .003);

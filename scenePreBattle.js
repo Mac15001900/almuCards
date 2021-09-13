@@ -32,8 +32,7 @@ let ScenePreBattle = new Phaser.Class({
 
         this.opponentText = this.add.text(layout.WIDTH / 2, 100, "Łączenie...", { font: "32px Arial", fill: "#ffffff", align: 'center' });
         this.opponentText.setOrigin(0.5, 0.5);
-        let randomProtip = Math.floor(Math.random() * plStrings.protips.length);
-        this.protipText = this.add.text(layout.WIDTH / 2, 140, plStrings.protips[randomProtip], { font: "18px Arial", fill: "#ffffff", align: 'center' });
+        this.protipText = this.add.text(layout.WIDTH / 2, 140, Phaser.Math.RND.pick(s.protips), { font: "18px Arial", fill: "#ffffff", align: 'center' });
         this.protipText.setOrigin(0.5, 0.5);
         this.spectator = false;
         this.playerDeck = null;
@@ -108,6 +107,15 @@ let ScenePreBattle = new Phaser.Class({
                 else
                     this.waitingForDeck = true; //Ta zmienna oznacza, że chcemy już zacząć pojedynek, ale nie otrzymaliśmy jeszcze talii
                 break;
+        }
+    },
+
+    memberLeft: function (member, room) {
+        if (room === Network.Room.DUEL && Network.compareMembers(member, this.opponentDrone)) {
+            alert("Przeciwnik opuszcza grę 😢");
+            console.log("Przeciwnik opuścił grę, więc my też 😒");
+            Network.sendMessage("changeState", Network.State.FREE);
+            this.scene.start('SceneLobby');
         }
     },
 

@@ -49,7 +49,7 @@ let SceneVictory = new Phaser.Class({
         if (!this.userWon) this.additionalText.setColor("#bbaa99");
 
         this.backButton = new TextButton(this, width - 150, height - 100, "Powrót ↩", () => this.goBack());//this.goBack);
-        
+
         this.victor.clientData.points++;    //dadanie punktu zwycięstwa (po powrocie do preBattle nie odświeża się opponentDrone)
     },
 
@@ -60,6 +60,15 @@ let SceneVictory = new Phaser.Class({
     receiveMessage: function (data) {
 
     },
+
+    /*memberLeft: function (member, room) { //TODO: kod jest duplikatem ze scenePreBattle. Inne TODO: nie wyrzucajmy stąd użytkownika od razu, dajmy się im nacieszyć zwycięstwem
+        if (room === Network.Room.DUEL && Network.compareMembers(member, this.opponentDrone)) { // Nie mamy dostępu do opponetDrone
+            alert("Przeciwnik opuszcza grę.");
+            console.log("Przeciwnik opuścił grę, więc my też 😒");
+            Network.sendMessage("changeState", Network.State.FREE);
+            this.scene.start('SceneLobby');
+        }
+    },*/
 
     goBack: function () {
         this.scene.start('ScenePreBattle');
