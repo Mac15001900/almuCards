@@ -47,6 +47,8 @@ let SceneLobby = new Phaser.Class({
         this.helpScreen = this.add.text(32, 100, s.help, { font: "20px Arial", backgroundColor: "#FFFFFF", wordWrap: { width: layout.WIDTH - 64 }, fill: "#000000" });
         //this.helpScreen.setOrigin(0.5, 0);
         this.helpScreen.setVisible(false);
+        this.playerList.update();
+        this.updateInvite();
     },
 
     update: function (timestep, dt) {
@@ -78,7 +80,7 @@ let SceneLobby = new Phaser.Class({
     },
 
     updateInvite: function () {
-        this.invite.visual.removeAll(true);
+        if (this.invite) this.invite.visual.removeAll(true);
         let nextInvite = InviteManager.getFirstInvite();
         if (nextInvite) {
             this.invite = new Invite(this, nextInvite);
