@@ -120,8 +120,8 @@ let EffectBank = {
             case "addCards": ret += "otrzumuje do swojej talii "; break;
             case "weakerElement": ret += "wygrywa słabszy żywioł "; break;
             case "lowerValue": ret += "przy tych samych żywiołach wygrywa niższa wartość "; break;
-            case "onlyElements": ret += "liczą się tylko żywioły "; break;
-            case "onlyValues": ret += "liczą się tylko wartości "; break;
+            case "onlyElements": ret += "nie liczą się wartości "; break;
+            case "onlyValues": ret += "nie liczą się żywioły "; break;
             case "cancelEffect": ret += "traci swój efekt "; break;
         }
         if (effect.value != 0)
