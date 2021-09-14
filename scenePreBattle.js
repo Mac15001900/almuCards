@@ -78,6 +78,14 @@ let ScenePreBattle = new Phaser.Class({
             }).bind(this));
             this.opponentText.text = "Oczkiwanie na " + this.opponentDrone.clientData.name + "...";
         }
+
+        this.backButton = new TextButton(this, layout.WIDTH - 150, layout.HEIGHT - 100, "Opuść pojedynek ↩", () => {
+            Network.sendMessage("changeState", Network.State.FREE);
+            Network.disconnectFromRoom(Network.Room.DUEL);
+            this.scene.start('SceneLobby');
+        });
+
+
         this.createFinished = true;
     },
 

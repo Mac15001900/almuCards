@@ -12,7 +12,7 @@ var plStrings = {
 	"": "",
 	"": "",
 
-	"version": "Alfa 0.0.0.0.0, ale nadal niestabilna", //name and number of version
+	"version": "Alfa 2.0, ale nadal niestabilna", //name and number of version
 	"help": "Zasady gry:\n\n" +
 	"W każdej turze obaj gracze jednocześnie zagrywają po jednej wybranej karcie z ręki. Karty te ze sobą walczą, a właściciel wygranej dokłada ją do swoich kart wygranych.\n\n" +
 	"Karty występują w trzech żywiołach: ogień 🔥, las 🌲 i woda 💧. Karty ogniste pokonują leśne, leśne pokonują wodne, a wodne pokonują ogniste. " +

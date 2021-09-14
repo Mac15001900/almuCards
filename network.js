@@ -185,6 +185,10 @@ let Network = {
         }
     },
 
+    disconnectFromRoom: function (roomType) {
+        Network.drone.rooms[Network.roomNames[roomType]].unsubscribe();
+    },
+
 
     //Funckje do wybieranie nazwy użytkownika i serwera
     getUsername: function () {

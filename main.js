@@ -90,6 +90,7 @@ function receiveMessage(data, serverMember) {
                 break;
             case 'changeState':
                 member.state = content;
+                if (Network.isUser(member)) InviteManager.state = content;
                 InviteManager.updateStates();
                 break;
             case 'confirmation':
