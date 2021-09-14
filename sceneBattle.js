@@ -259,7 +259,7 @@ let Card = new Phaser.Class({
         this.effectText.y = + 75 * scale;
 
         this.flavourTextfont = "italic " + (60 * scale) + "px Arial";
-        this.flavourText = scene.add.text(0, 0, data.flavour, { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
+        this.flavourText = scene.add.text(0, 0, data.flavour || "", { font: this.flavourTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
         this.flavourText.setOrigin(0, 1);
         this.flavourText.x = - 325 * scale;
         this.flavourText.y = + 500 * scale;

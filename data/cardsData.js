@@ -15,7 +15,7 @@ ELEMENT.info[ELEMENT.FIRE] = {
     name: "Ogień", //Nazwa, którą może zobaczyć użytkownik
     symbol: "symIconFire", //Nazwa sprite'a symbolu
     color: 0xFF2A00, //Powiązany kolor
-    real: true, //Czy to prawdziwy element, czy coś technicznego co nie ma powiązanych kart itp.
+    real: true, //Czy to prawdziwy żywioł, czy coś technicznego co nie ma powiązanych kart itp.
 };
 ELEMENT.info[ELEMENT.FOREST] = {
     name: "Las",
@@ -44,95 +44,84 @@ ELEMENT.info[ELEMENT.ONE_EACH] = {
 let cardData = {
     basic1: {
         "name": "basic1",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Zapałka", "Żołądź", "Rosa"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 1,
         "effect": ""
     }, basic2: {
         "name": "basic2",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Świeczka", "Szyszka", "Kropla wody"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": ""
     }, basic3: {
         "name": "basic3",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Zimne ognie", "Sadzonka", "Kałuża"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 3,
         "effect": ""
     }, basic4: {
         "name": "basic4",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Pochodnia", "Krzak", "Szklanka wody"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": ""
     }, basic5: {
         "name": "basic5",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Małe ognisko", "Sosna karłowata", "Deszcz"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 5,
         "effect": ""
     }, basic6: {
         "name": "basic6",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Duże ognisko", "Dąb", "Staw"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 6,
         "effect": ""
     }, basic7: {
         "name": "basic7",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Fajerwerki", "Zagajnik", "Rzeka"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 7,
         "effect": ""
     }, basic8: {
         "name": "basic8",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Ogniste tronado", "Las", "Jezioro"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 8,
         "effect": ""
     }, basic9: {
         "name": "basic9",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Pożar domu", "Gęsty las", "Powódź"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 9,
         "effect": ""
     }, basic10: {
         "name": "basic10",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Pożar lasu", "Baobab", "Śniardwy"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 10,
         "effect": ""
     }, basic11: {
         "name": "basic11",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Wulkan", "Sekwoja olbrzymia", "Morze"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 11,
         "effect": ""
     }, basic12: {
         "name": "basic12",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Bomba atomowa", "Puszcza", "Ocean"],
         "flavour": ["Całkiem jeszcze nowa", "", ""],
         "element": ELEMENT.ONE_EACH,
@@ -140,63 +129,55 @@ let cardData = {
         "effect": ""
     }, basic13: {
         "name": "basic13",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Słońce", "Apokalipsa baobabów", "Wodna planeta"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 13,
         "effect": ""
     }, plus5: {
         "name": "plus5",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Pięć świeczek", "Plantacja", "Krople deszczu"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.plus5
     }, minus5: {
         "name": "minus5",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Polano", "Oset", "Kostki lodu"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.minus5
     }, replace1: {
         "name": "replace1",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Feniks", "Torfowisko", "Starorzecze"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
         "effect": effectData.replace1
     }, remove1: {
         "name": "remove1",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Miotacz ognia", "Ent", "Gradobicie"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 5,
         "effect": effectData.remove1
     }, weaker: {
         "name": "weaker",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Grecki ogień", "Kaktus", "Powódź lasu"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": effectData.weakerElement
     }, lower: {
         "name": "lower",
-        "differentNames": true,
+        "multipleImages": true,
         "displayName": ["Słaby płomień", "Mech", "Wir wodny"],
-        "flavour": ["", "", ""],
         "element": ELEMENT.ONE_EACH,
         "value": 2,
         "effect": effectData.lowerValue
     }, only_values: {
         "name": "only_values",
-        "differentNames": false,
         "displayName": "Kości",
         "flavour": "Zostaly rzucone",
         "element": ELEMENT.ONE_EACH,
@@ -204,15 +185,13 @@ let cardData = {
         "effect": effectData.onlyValues
     }, only_elements: {
         "name": "only_elements",
-        "differentNames": false,
         "displayName": "Potęga żywiołów",
-        "flavour": "",
+        "flavour": ["Test ognia", "Test lasu", "Test wody"],
         "element": ELEMENT.ONE_EACH,
         "value": 1,
         "effect": effectData.onlyElements
     }, divB: {
         "name": "divB",
-        "differentNames": false,
         "displayName": "Dywergencja pola magnetycznego",
         "flavour": "Jesteś zerem!",
         "element": ELEMENT.ONE_EACH,
@@ -220,7 +199,6 @@ let cardData = {
         "effect": ""
     }, kontrola_czystosci: {
         "name": "kontrola_czystosci",
-        "differentNames": false,
         "displayName": "Kontrola czystości",
         "flavour": "Zbiórka przed namiotami!",
         "element": ELEMENT.FOREST,
@@ -228,7 +206,6 @@ let cardData = {
         "effect": ""
     }, goraca_woda: {
         "name": "goraca_woda",
-        "differentNames": false,
         "displayName": "Gorąca woda",
         "flavour": "Uwaga! Może wybuchnąć",
         "element": ELEMENT.WATER,
@@ -236,7 +213,6 @@ let cardData = {
         "effect": ""
     }, empty_set: {
         "name": "empty_set",
-        "differentNames": false,
         "displayName": "Zbiór pusty",
         "flavour": "Jest podzbiorem Twoich myśli",
         "element": ELEMENT.ONE_EACH,
@@ -244,7 +220,6 @@ let cardData = {
         "effect": effectData.cancelEnemyEffect
     }, synta: {
         "name": "synta",
-        "differentNames": false,
         "displayName": "Synta supernowa",
         "flavour": "Niebo żyleta, obsy do rana!",
         "element": ELEMENT.ONE_EACH,
@@ -252,7 +227,6 @@ let cardData = {
         "effect": effectData.deckLook1
     }, gumowa_kaczuszka: {
         "name": "gumowa_kaczuszka",
-        "differentNames": false,
         "displayName": "Gumowa kaczuszka",
         "flavour": "Kwa kwa",
         "element": ELEMENT.WATER,
@@ -377,16 +351,19 @@ let DeckBank = {
     createSingleCard: function (prototype, element) {
         let newCard = Object.assign({}, prototype);    //tworzenie nowego obiektu
         newCard.element = element;
-        if (newCard.differentNames) {
+        if (Array.isArray(newCard.displayName) || Array.isArray(newCard.flavour) || newCard.multipleImages) {
+            if (!newCard.multipleImages) newCard.image = newCard.name;
             switch (element)    //zmiana nazwy karty
             {
                 case ELEMENT.FIRE: newCard.name += "_fire"; break;
                 case ELEMENT.FOREST: newCard.name += "_forest"; break;
                 case ELEMENT.WATER: newCard.name += "_water"; break;
-                default: console.log("Blad: " + newCard.name + " " + element);
+                default: console.error("Niepoprawny żywioł: " + newCard.name + " " + element);
             }
-            newCard.displayName = newCard.displayName[newCard.element - 1];
-            newCard.flavour = newCard.flavour[newCard.element - 1];
+            if (Array.isArray(newCard.displayName)) newCard.displayName = newCard.displayName[newCard.element - 1];
+            if (Array.isArray(newCard.flavour)) newCard.flavour = newCard.flavour[newCard.element - 1];
+
+
         }
         return newCard;
     },
