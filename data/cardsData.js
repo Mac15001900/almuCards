@@ -140,28 +140,28 @@ let cardData = {
         "displayName": ["Pięć świeczek", "Plantacja", "Krople deszczu"],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": effectData.plus5
+        "effect": effectData.plus(5)
     }, minus5: {
         "name": "minus5",
         "multipleImages": true,
         "displayName": ["Polano", "Oset", "Kostki lodu"],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": effectData.minus5
+        "effect": effectData.minus(5)
     }, replace1: {
         "name": "replace1",
         "multipleImages": true,
         "displayName": ["Feniks", "Torfowisko", "Starorzecze"],
         "element": ELEMENT.ONE_EACH,
         "value": 4,
-        "effect": effectData.replace1
+        "effect": effectData.replace(1)
     }, remove1: {
         "name": "remove1",
         "multipleImages": true,
         "displayName": ["Miotacz ognia", "Ent", "Gradobicie"],
         "element": ELEMENT.ONE_EACH,
         "value": 5,
-        "effect": effectData.remove1
+        "effect": effectData.remove(1)
     }, weaker: {
         "name": "weaker",
         "multipleImages": true,
@@ -224,7 +224,7 @@ let cardData = {
         "flavour": "Niebo żyleta, obsy do rana!",
         "element": ELEMENT.ONE_EACH,
         "value": 2.54,
-        "effect": effectData.deckLook1
+        "effect": effectData.deckLook(1)
     }, gumowa_kaczuszka: {
         "name": "gumowa_kaczuszka",
         "displayName": "Gumowa kaczuszka",
@@ -388,9 +388,14 @@ let DeckBank = {
 
         deck.forEach(function (card) {
             console.assert(card); //Karty muszą istnieć
-            console.assert(typeof card === "object"); //Karty muszą być obiektami
-            console.assert(card.name); //Karty muszą mieć nazwę
-            console.assert(card.displayName); //Karty muszą mieć wyświetlaną nazwę
+            console.assert(typeof card === 'object'); //Karty muszą być obiektami
+            console.assert(card.name && typeof card.name === 'string'); //Karty muszą mieć nazwę, będącą stringiem
+            console.assert(card.displayName); //Karty muszą mieć wyświetlaną nazwę...
+            console.assert(typeof card.displayName === 'string' || Array.isArray(card.displayName)); //...która jest albo stringiem, albo listą
+            if (Array.isArray(card.displayName)) {
+                console.assert(card.displayName.length > 0); //Jeśli jest listą, to musi zawierać elementy
+                card.displayName.forEach(name => console.assert(typeof name === 'string')); //Elementy tej listy muszą być stringami
+            }
             console.assert((card.value && !isNaN(card.value)) || card.value === 0); //Karty muszą mieć wartość która jest liczbą
             let elementFound = false;
             for (let elementName in ELEMENT) {

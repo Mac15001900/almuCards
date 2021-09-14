@@ -1,115 +1,110 @@
 let effectData =
-{
-    plus5: {
-        "type": "valueChange",
-        "value": 5,
-        "target": "playerCard",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, minus5: {
-        "type": "valueChange",
-        "value": -5,
-        "target": "enemyCard",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, replace1: {
-        "type": "cardReplace",
-        "value": 1,
-        "target": "player",
-        "activation": "afterTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, remove1: {
-        "type": "cardRemove",
-        "value": 1,
-        "target": "enemy",
-        "activation": "afterTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, weakerElement: {
-        "type": "weakerElement",
-        "value": 0,
-        "target": "",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, lowerValue: {
-        "type": "lowerValue",
-        "value": 0,
-        "target": "",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, onlyValues: {
-        "type": "onlyValues",
-        "value": 0,
-        "target": "",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, onlyElements: {
-        "type": "onlyElements",
-        "value": 0,
-        "target": "",
-        "activation": "nextTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, cancelEnemyEffect: {
-        "type": "cancelEffect",
-        "value": 0,
-        "target": "enemyCard",
-        "activation": "thisTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, deckLook1: {
-        "type": "deckLook",
-        "value": 1,
-        "target": "player",
-        "activation": "afterTurn",
-        "startCondition": "",
-        "endCondition": "oneUse"
-    }, addDuck2: {
-        "type": "addCards",
-        "value": 2,
-        "target": "player",
-        "activation": "afterTurn",
-        "startCondition": "",
-        "endCondition": "oneUse",
-        "cards": ["gumowa_kaczuszka"]
-    },
-};
+    {
+        plus: (value) => ({
+            "type": "valueChange",
+            "value": value,
+            "target": "playerCard",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }), minus: (value) => ({
+            "type": "valueChange",
+            "value": value,
+            "target": "enemyCard",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }), replace: (value) => ({
+            "type": "cardReplace",
+            "value": value,
+            "target": "player",
+            "activation": "afterTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }), remove: (value) => ({
+            "type": "cardRemove",
+            "value": value,
+            "target": "enemy",
+            "activation": "afterTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }), weakerElement: {
+            "type": "weakerElement",
+            "value": 0,
+            "target": "",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }, lowerValue: {
+            "type": "lowerValue",
+            "value": 0,
+            "target": "",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }, onlyValues: {
+            "type": "onlyValues",
+            "value": 0,
+            "target": "",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }, onlyElements: {
+            "type": "onlyElements",
+            "value": 0,
+            "target": "",
+            "activation": "nextTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }, cancelEnemyEffect: {
+            "type": "cancelEffect",
+            "value": 0,
+            "target": "enemyCard",
+            "activation": "thisTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }, deckLook: (value) => ({
+            "type": "deckLook",
+            "value": value,
+            "target": "player",
+            "activation": "afterTurn",
+            "startCondition": "",
+            "endCondition": "oneUse"
+        }), addDuck2: {
+            "type": "addCards",
+            "value": 2,
+            "target": "player",
+            "activation": "afterTurn",
+            "startCondition": "",
+            "endCondition": "oneUse",
+            "cards": ["gumowa_kaczuszka"]
+        },
+    };
 
 let EffectBank = {
 
     //Do tworzenia opisów efektów na kartach
-    getEffectDescription: function (effect)
-    {
+    getEffectDescription: function (effect) {
         if (effect === "")
             return "";
         let ret = "";
-        switch (effect.startCondition)
-        {
+        switch (effect.startCondition) {
             case "ifWin": ret += "jeśli ta karta wygra, "; break;
             case "ifLose": ret += "jeśli ta karta przegra, "; break;
             case "ifDraw": ret += "jeśli ta karta zremisuje, "; break;
         }
-        switch (effect.activation)
-        {
+        switch (effect.activation) {
             case "thisTurn": ret += "podczas tej tury "; break;
             case "nextTurn": ret += "w następnej turze "; break;
             case "afterTurn": ret += "pod koniec tej tury "; break;
         }
-        switch (effect.target)
-        {
+        switch (effect.target) {
             case "playerCard": ret += "karta gracza "; break;
             case "enemyCard": ret += "karta przeciwnika "; break;
             case "player": ret += "gracz "; break;
             case "enemy": ret += "przeciwnik "; break;
         }
-        switch (effect.type)
-        {
+        switch (effect.type) {
             case "valueChange": ret += "otrzymuje ";
                 if (effect.value > 0)
                     ret += "+";
@@ -127,18 +122,15 @@ let EffectBank = {
         if (effect.value != 0)
             ret += effect.value;
         ret = ret.charAt(0).toUpperCase() + ret.slice(1);   //making first letter big
-        if (effect.type === "addCards")
-        {
-            switch (effect.cards[0])
-            {
+        if (effect.type === "addCards") {
+            switch (effect.cards[0]) {
                 case "gumowa_kaczuszka": ret += " razy kartę \"Gumowa kaczuszka\""; break;
             }
         }
         return ret;
     },
 
-    getInturnEffectsTable: function (cardA, cardB, currentEffects)
-    {
+    getInturnEffectsTable: function (cardA, cardB, currentEffects) {
         let ret = {//legenda pól struktury znajduje się w pliku "table of effects"
             'playerAdd': 0,
             'enemyAdd': 0,
@@ -158,8 +150,7 @@ let EffectBank = {
         return ret;
     },
 
-    getAfterturnEffectsTable: function (currentEffects)
-    {
+    getAfterturnEffectsTable: function (currentEffects) {
         let ret = {
             'playerReplace': 0,
             'enemyReplace': 0,
@@ -173,12 +164,9 @@ let EffectBank = {
         return ret;
     },
 
-    addCardsToHands: function (currentEffects, handPlayer, handEnemy)
-    {
-        for (let i = 0; i < currentEffects.length; i++)
-        {
-            if (currentEffects[i].type === "addCards")
-            {
+    addCardsToHands: function (currentEffects, handPlayer, handEnemy) {
+        for (let i = 0; i < currentEffects.length; i++) {
+            if (currentEffects[i].type === "addCards") {
                 if (currentEffects[i].target === "player")
                     this.addCardToHand(currentEffects[i], handPlayer);
                 //else
@@ -187,21 +175,16 @@ let EffectBank = {
         }
     },
 
-    addCardToHand: function (effect, hand)
-    {
-        if (effect.type === "addCards")
-        {
+    addCardToHand: function (effect, hand) {
+        if (effect.type === "addCards") {
             for (let i = 0; i < effect.value; i++)
                 hand.addCard(cardData[effect.cards[i % effect.cards.length]]);
         }
     },
 
-    translateInturnEffect: function (effect, table)
-    {
-        if (effect.activation === "thisTurn")
-        {
-            switch (effect.type)
-            {
+    translateInturnEffect: function (effect, table) {
+        if (effect.activation === "thisTurn") {
+            switch (effect.type) {
                 case "valueChange":
                     if (effect.target === "playerCard")
                         table.playerAdd += effect.value;
@@ -217,12 +200,9 @@ let EffectBank = {
         return table;
     },
 
-    translateAfrerturnEffect: function (effect, table)
-    {
-        if (effect.activation === "afterTurn")
-        {
-            switch (effect.type)
-            {
+    translateAfrerturnEffect: function (effect, table) {
+        if (effect.activation === "afterTurn") {
+            switch (effect.type) {
                 case "cardReplace":
                     if (effect.target === "player")
                         table.playerReplace += effect.value;
@@ -245,14 +225,12 @@ let EffectBank = {
         }
         return table;
     },
-    
-    updateEffects: function (cardA, cardB, score, currentEffects)
-    {
+
+    updateEffects: function (cardA, cardB, score, currentEffects) {
         let updatedEffects = [];
         for (let i = 0; i < currentEffects.length; i++)    //checking if any current effects tranfer to next rund
         {
-            switch (currentEffects[i].endCondition)
-            {
+            switch (currentEffects[i].endCondition) {
                 case "twoUse":
                     updatedEffects.push(currentEffects[i]);
                     updatedEffects[updatedEffects.length - 1].endCondition = "oneUse";
@@ -270,19 +248,16 @@ let EffectBank = {
         if (cardA.effect !== "" && !(cardB.effect !== "" && cardB.effect.type === "cancelEffect"))    //adding effects from current cards
         {
             if (cardA.effect.startCondition === "" || (cardA.effect.startCondition === "ifWin" && score === 1) ||
-                (cardA.effect.startCondition === "ifLose" && score === -1) || (cardA.effect.startCondition === "ifDraw" && score === 0))
-            {
+                (cardA.effect.startCondition === "ifLose" && score === -1) || (cardA.effect.startCondition === "ifDraw" && score === 0)) {
                 let newEffect = Object.assign({}, cardA.effect);
                 updatedEffects.push(newEffect);
                 if (updatedEffects[updatedEffects.length - 1].activation === "nextTurn")
                     updatedEffects[updatedEffects.length - 1].activation = "thisTurn";
             }
         }
-        if (cardB.effect !== "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect"))
-        {
+        if (cardB.effect !== "" && !(cardA.effect !== "" && cardA.effect.type === "cancelEffect")) {
             if (cardB.effect.startCondition === "" || (cardB.effect.startCondition === "ifWin" && score === 1) ||
-                (cardB.effect.startCondition === "ifLose" && score === -1) || (cardB.effect.startCondition === "ifDraw" && score === 0))
-            {
+                (cardB.effect.startCondition === "ifLose" && score === -1) || (cardB.effect.startCondition === "ifDraw" && score === 0)) {
                 let newEffect = Object.assign({}, cardB.effect);
                 updatedEffects.push(newEffect);
                 if (updatedEffects[updatedEffects.length - 1].activation === "nextTurn")
