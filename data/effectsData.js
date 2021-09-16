@@ -9,7 +9,7 @@ let effectData =
             "endCondition": "oneUse"
         }), minus: (value) => ({
             "type": "valueChange",
-            "value": value,
+            "value": -value,
             "target": "enemyCard",
             "activation": "nextTurn",
             "startCondition": "",
