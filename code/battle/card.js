@@ -46,8 +46,8 @@ let Card = new Phaser.Class({
         this.valueText.y = 585 * scale;
 
         //this.effectTextfont = (60 * scale) + "px Arial";
-        this.effectTextfont = ((60 * 70 / (Math.max(EffectBank.getEffectDescription(data.effect).length - 70, 0) + 70)) * scale) + "px Arial";
-        this.effectText = scene.add.text(0, 0, EffectBank.getEffectDescription(data.effect), { font: this.effectTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
+        this.effectTextfont = ((60 * 70 / (Math.max(DescriptionGenerator.getEffectDescription(data.effect).length - 70, 0) + 70)) * scale) + "px Arial";
+        this.effectText = scene.add.text(0, 0, DescriptionGenerator.getEffectDescription(data.effect), { font: this.effectTextfont, fill: "#000000", wordWrap: { width: 700 * scale }, align: 'left' });
         this.effectText.setOrigin(0, 0);
         this.effectText.x = - 325 * scale;
         this.effectText.y = + 75 * scale;

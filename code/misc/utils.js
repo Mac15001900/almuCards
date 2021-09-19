@@ -12,11 +12,6 @@ let Utils = { //Obiekt z różnymi małymi funkcjami
 
 }
 
-
-
-
-
-
 let TextButton = new Phaser.Class({
 
     params: {
@@ -131,3 +126,4 @@ let DeckChoice = new Phaser.Class({
         this.imageOn.setVisible(state);
     },
 });
+

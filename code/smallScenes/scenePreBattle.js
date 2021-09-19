@@ -67,7 +67,7 @@ let ScenePreBattle = new Phaser.Class({
         new DeckChoice(this, this.layout.DECKS_LIST_X, this.layout.DECKS_LIST_Y + this.layout.DECKS_LIST_SPACING, "Ta druga talia", "dot_on", "dot_off")];
         this.decksChoices[0].switch(true);
 
-        this.decksList = [DeckBank.getClasicDeck(), DeckBank.getTheSecondDeck()];
+        this.decksList = [DeckBank.classicDeck, DeckBank.secondDeck];
 
         this.userDrone = Network.getUser();
         if (!this.spectator) {

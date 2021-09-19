@@ -17,10 +17,10 @@ let SceneBattle = new Phaser.Class({
     init: function (data) {
         this.userDrone = data.userDrone;
         this.opponentDrone = data.opponentDrone;
-        this.userDeck = DeckBank.assemblyDeck(data.userDeck);
-        this.opponentDeck = DeckBank.assemblyDeck(data.opponentDeck);
-        DeckBank.validateDeck(this.userDeck);
-        DeckBank.validateDeck(this.opponentDeck);
+        this.userDeck = DeckUtils.assembleDeck(data.userDeck);
+        this.opponentDeck = DeckUtils.assembleDeck(data.opponentDeck);
+        DeckUtils.validateDeck(this.userDeck);
+        DeckUtils.validateDeck(this.opponentDeck);
     },
 
     config: {
@@ -36,7 +36,7 @@ let SceneBattle = new Phaser.Class({
         this.load.image('cardWater', 'assets/card_water.png');
 
         //Obrazki z kart
-        let imagesToLoad = DeckBank.getImages(this.userDeck, this.opponentDeck);
+        let imagesToLoad = DeckUtils.getImages(this.userDeck, this.opponentDeck);
 
         for (let image in imagesToLoad) {
             this.load.image(imagesToLoad[image], 'assets/cardImages/' + imagesToLoad[image] + '.png');
@@ -165,8 +165,8 @@ let SceneBattle = new Phaser.Class({
         this.userWon.update(points.user);
         this.enemyWon.update(points.enemy);
 
-        let inturnTable = EffectBank.getInturnEffectsTable(cardData.basic1, cardData.basic1, effects);  //2 pierwsze argumenty to karty bez efektów
-        let afterturnTable = EffectBank.getAfterturnEffectsTable(effects);
+        let inturnTable = EffectUtils.getInturnEffectsTable(cardData.basic1, cardData.basic1, effects);  //2 pierwsze argumenty to karty bez efektów
+        let afterturnTable = EffectUtils.getAfterturnEffectsTable(effects);
         let addTable = [inturnTable.playerAdd, inturnTable.enemyAdd];
         for (let i = 0; i < 2; i++) {
             if (addTable[i] > 0) {

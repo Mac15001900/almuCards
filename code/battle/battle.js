@@ -38,7 +38,7 @@ let Battle = new Phaser.Class({
         for (let i = 0; i < 2; i++)
             this.cardsObjects[i].visual.removeAll(true);
         let score = cardsLogic.getWinner(this.cards[0], this.cards[1], this.effects);
-        this.effects = EffectBank.updateEffects(this.cards[0], this.cards[1], score, this.effects);
+        this.effects = EffectUtils.updateEffects(this.cards[0], this.cards[1], score, this.effects);
         switch (score) {
             case 1:
                 console.log(this.cards[0].displayName + " wins!");
@@ -52,11 +52,11 @@ let Battle = new Phaser.Class({
             case 0: console.log("It's a draw"); break;
         }
         this.scene.updateIcons(this.points, this.effects);
-        this.CheckIfAnyoneWins();
-        EffectBank.addCardsToHands(this.effects, this.playerHand, this.enemyHand);
+        this.checkIfAnyoneWins();
+        EffectUtils.addCardsToHands(this.effects, this.playerHand, this.enemyHand);
         this.cards = [null, null];    //czyszczenie tablicy
 
-        let afterturnTable = EffectBank.getAfterturnEffectsTable(this.effects);   //efekty po turze (głównie modyfikujące rękę)     
+        let afterturnTable = EffectUtils.getAfterturnEffectsTable(this.effects);   //efekty po turze (głównie modyfikujące rękę)     
         if (afterturnTable.playerRemove > 0) //gracz musi wymienić karty
         {
             this.playerHand.replaceCards[1] += afterturnTable.playerRemove;
@@ -77,7 +77,7 @@ let Battle = new Phaser.Class({
         }
     },
 
-    CheckIfAnyoneWins: function () {
+    checkIfAnyoneWins: function () {
         let userVictory = this.checkForVictory(this.points.user);
         let enemyVictory = this.checkForVictory(this.points.enemy);
         if (userVictory && enemyVictory) console.error("Remis 🤔"); //Póki co nie powinno to być możliwe

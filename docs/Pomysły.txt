@@ -169,7 +169,8 @@ Ktulu:
   [PvE] Szuler --> Przeciwnik w następnej rundzie zagrywa losową kartę |
   
 
-  
+Matematyka:
+  Dzielenie przez 0 --> W następnej rundzie nie liczą się wartości | "Czy nieoznaczoność jest większa od nieoznaczoności?"
 
 Trygonometria (ciekawe by były w walce, gdzie obaj gracze mają z tym talie - najlepiej z jakąś lekką możliwością podglądania kart przeciwnika/swoich przyszłych):
   Sinus, Cosinus, Tangens, Kotangens - zwykłe karty bez efektów
