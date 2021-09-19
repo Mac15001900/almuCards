@@ -235,7 +235,6 @@ let cardData = {
     },
 };
 
-//TODO: W sumie to można by to przenieść do cardLogic.js jak go stworzymy, tu powinny być dane a nie tyle logiki
 let DeckBank = {
     MIN_DECK_SIZE: 13 + 5,
 

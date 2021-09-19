@@ -70,7 +70,7 @@ let Network = {
     //Wysyła wiadomość do wszystkich innych graczy w danym pokoju
     sendMessage: function (type, content, room = this.Room.LOBBY) {
         if (debugConfig.disable_messages) return;
-        let message = { type: type, content: content };
+        let message = { type: type, content: content, senderId: this.getUserId() };
         if (this.members.length === 1) receiveMessage(message, this.members[0]); //Nie wysyłamy jeśli nikogo poza nami w grze nie ma
         else this.drone.publish({ room: this.roomNames[room], message: message });
     },
