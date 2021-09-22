@@ -3,21 +3,19 @@ let SceneGallery = new Phaser.Class({
     Extends: Phaser.Scene,
 
     initialize:
-        function SceneGallery()
-        {
-            Phaser.Scene.call(this, { key: 'SceneGallery' });
-        },
+    function SceneGallery() {
+        Phaser.Scene.call(this, { key: 'SceneGallery' });
+    },
 
-    preload: function ()
-    {
+    preload: function () {
         console.log("Preload in gallery");  //ładowanie obrazków tła
         this.load.image('cardFire', 'assets/card_fire.png');
         this.load.image('cardForest', 'assets/card_forest.png');
         this.load.image('cardWater', 'assets/card_water.png');
         this.cards = [];    //tworzenie listy wszystkich kart w grze
         for (let card in cardData)
-            this.cards = this.cards.concat(DeckBank.createCardsFromPrototype(cardData[card]));
-        let imagesToLoad = DeckBank.getImages(this.cards);
+            this.cards = this.cards.concat(DeckUtils.createCardsFromPrototype(cardData[card]));
+        let imagesToLoad = DeckUtils.getImages(this.cards);
         for (let image in imagesToLoad) //ładowanie obrazków kart
         {
             this.load.image(imagesToLoad[image], 'assets/cardImages/' + imagesToLoad[image] + '.png');
@@ -48,21 +46,18 @@ let SceneGallery = new Phaser.Class({
         BIG_CARD_Y: 400,
     },
 
-    create: function ()
-    {
+    create: function () {
         console.log('Gallery open');
         this.buttonLeft = new Button(this, "galleryLeft", this.layout.BUTTON_LEFT_X, this.layout.BUTTOR_LEFT_Y, 0.8, "buttonLeft", null);
         this.buttonRight = new Button(this, "galleryRight", this.layout.BUTTON_RIGHT_X, this.layout.BUTTOR_RIGHT_Y, 0.8, "buttonRight", null);
         this.createPage();
     },
 
-    createPage: function ()
-    {
+    createPage: function () {
         for (let card in this.currentCards)
             this.currentCards[card].visual.removeAll(true);
         this.currentCards = [];
-        for (let i = this.page * this.layout.CARDS_PER_PAGE; i < Math.min(this.cards.length, (this.page + 1) * this.layout.CARDS_PER_PAGE); i++)
-        {
+        for (let i = this.page * this.layout.CARDS_PER_PAGE; i < Math.min(this.cards.length, (this.page + 1) * this.layout.CARDS_PER_PAGE); i++) {
             let j = i - this.page * this.layout.CARDS_PER_PAGE;
             let newCard = new Card(this, this.cards[i], this.layout.FIRST_CARD_X + (j % 8) * this.layout.CARDS_H_SPACING, this.layout.FIRST_CARD_Y + Math.floor(j / 8) * this.layout.CARDS_V_SPACING, this.layout.CARD_SCALE, null);
             newCard.reverseCard(true, false);
